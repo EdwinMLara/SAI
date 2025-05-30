@@ -2,14 +2,16 @@
 
 This service is designed for processing and storing documents for INSOEL.
 
+## Structure
+
+`Client` Contains the frontend of the SAI system, including UI components and client-side logic.
+`Backend` Contains the backend logic for the SAI system, including API endpoints, database connections, and business logic.
+`Shared` Contains code and utilities shared between the client and server, such as constants, types, and helper functions.
+
 ## Installation
 
-1. Clone the repository.
-2. Install the project dependencies:
-
-```bash
-npm install
-```
+1. Clone the repository
+2. Select the branch you decide to collaborate on and start by installing the dependencies of the defined workspace
 
 ### Recommendation
 
