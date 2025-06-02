@@ -6,6 +6,7 @@ import logger from './utils/logger';
 import connectDB from './config/database';
 import RequestMiddlware from './middlewares/Request.middleware';
 import ResponseMiddlware from './middlewares/Response.middleware';
+import router from './routes/api.routes';
 
 dotenv.config();
 
@@ -18,6 +19,8 @@ app.use(RequestMiddlware);
 app.use(ResponseMiddlware);
 
 connectDB();
+
+app.use('/api', router);
 
 const PORT = process.env.PORT || 5001;
 const toListen = process.env.LOCAL_IP || '0.0.0.0';
