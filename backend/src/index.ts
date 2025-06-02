@@ -4,6 +4,8 @@ import cors from 'cors';
 import logger from './utils/logger';
 
 import connectDB from './config/database';
+import RequestMiddlware from './middlewares/Request.middleware';
+import ResponseMiddlware from './middlewares/Response.middleware';
 
 dotenv.config();
 
@@ -11,6 +13,9 @@ const app = express();
 
 app.use(express.json());
 app.use(cors());
+
+app.use(RequestMiddlware);
+app.use(ResponseMiddlware);
 
 connectDB();
 
