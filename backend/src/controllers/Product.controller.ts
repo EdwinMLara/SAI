@@ -25,7 +25,7 @@ const getProduct: RequestHandler = async (req, res): Promise<void> => {
     }
     res.status(200).json({
       message: 'Product found',
-      product: product?.toObject(),
+      product: product.toObject(),
     });
   } catch (error) {
     logger.error('Error while retrieving the product:', error);
