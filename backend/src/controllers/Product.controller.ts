@@ -10,7 +10,7 @@ const getProduct = async (req: Request, res: Response, next: any) => {
     const product = await ProductDocument.findOne({ key });
 
     if (!product) {
-      res.status(404).json({
+      return res.status(404).json({
         message: 'Producto no encontrado',
       });
     }
