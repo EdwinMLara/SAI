@@ -6,7 +6,7 @@ import { Request, Response } from 'express';
 const createInvoice = async (
   req: Request<{}, {}, InvoiceInterface>,
   res: Response
-) => {
+): Promise<void> => {
   try {
     const requestBody = req.body;
 
@@ -15,6 +15,7 @@ const createInvoice = async (
         status: 400,
         message: 'Bad Request. Invoice data is required.',
       });
+      return;
     }
 
     const existingInvoice = await InvoiceDocument.findOne({
@@ -26,6 +27,7 @@ const createInvoice = async (
         status: 409,
         message: 'Invoice already exists.',
       });
+      return;
     }
 
     const newInvoice = new InvoiceDocument(requestBody);
@@ -33,7 +35,6 @@ const createInvoice = async (
     res.status(201).json({
       status: 201,
       message: 'Invoice created successfully.',
-      invoice: newInvoice.toObject(),
     });
   } catch (error) {
     logger.error('Error creating invoice:', error);
