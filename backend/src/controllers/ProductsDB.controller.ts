@@ -7,23 +7,27 @@ import { ProductInterface } from '../interfaces/Product.interfaces';
 const createProduct = async (
   req: Request<{}, {}, ProductInterface>,
   res: Response
-) => {
+): Promise<void> => {
   const requestBody = req.body;
-  if (!requestBody || typeof requestBody !== 'object') {
+  if (
+    !requestBody ||
+    typeof requestBody !== 'object' ||
+    Object.keys(requestBody).length === 0
+  ) {
     res.status(400).json({
       status: 400,
       message: 'Bad Request. Request body must be a valid object.',
     });
+    return;
   }
 
   const modelProduct = new Product(requestBody);
 
   try {
-    const newProduct = await modelProduct.save();
+    await modelProduct.save();
     res.status(201).json({
       status: 201,
       message: 'Product created successfully.',
-      product: newProduct.toObject(),
     });
   } catch (error) {
     logger.error('Error creating product:', error);
