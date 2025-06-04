@@ -32,6 +32,7 @@ const InvoiceSchema: Schema = new Schema<InvoiceInterface>({
     },
   ],
   document: { type: String, required: true, default: null },
+  voucher: { type: String, required: true, default: null },
 });
 
 export default mongoose.model<InvoiceInterface>('Invoices', InvoiceSchema);

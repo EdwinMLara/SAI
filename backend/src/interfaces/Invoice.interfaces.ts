@@ -35,4 +35,5 @@ export interface InvoiceInterface extends Document {
   date: Date;
   products: Product[];
   document: string;
+  voucher: string;
 }
