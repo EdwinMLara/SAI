@@ -11,6 +11,7 @@ Contains the backend logic for the SAI system, including API endpoints, database
 - `controllers/`: Implements the business logic for the application.
 - `models/`: Defines the database schemas and data access logic.
 - `middlewares/`: Contains custom middleware functions for request handling and validation.
+- `tests/`: Includes test cases for controller validation.
 
 ## Setup
 
@@ -19,9 +20,14 @@ Contains the backend logic for the SAI system, including API endpoints, database
 
 ## Documentación
 
-- [Logging](./docs/LOGGING.md): Explains the logging configuration and how to use it.
+- [Logging](./docs/Logging.md): Explains the logging configuration and how to use it.
+- [Testing](./docs/Testing.md): Explains the test configuration and how to use it.
 
 ## Notes
+
+About changes
+
+- When adding a new property to process and store in the database, ensure the changes are reflected in the interfaces and models sections. If needed, adjust the controllers accordingly. After implementing these updates, verify that the tests align with your modifications. Once complete, you may run a test validation using: `npm test`
 
 Ensure the `.env` file is properly configured. At a minimum, it should include:
 

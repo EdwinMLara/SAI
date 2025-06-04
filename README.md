@@ -2,6 +2,8 @@
 
 This service is designed for processing and storing documents for INSOEL.
 
+**Please review the documentation included in each independent folder before attempting any changes.**
+
 ## Structure
 
 `Client` Contains the frontend of the SAI system, including UI components and client-side logic.

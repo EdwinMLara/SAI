@@ -1,8 +1,8 @@
-# Logging with Winston / Registro de logs con Winston
+# Logging Documentation
 
 ### Overview
 
-This project uses [Winston](https://github.com/winstonjs/winston) as the logging library to manage logs effectively across different environments (development, production). Below is a guide to understanding the configuration and usage.
+This project uses [winston](https://github.com/winstonjs/winston) as the logging library to manage logs effectively across different environments (development, production). Below is a guide to understanding the configuration and usage.
 
 ### Configuration
 
