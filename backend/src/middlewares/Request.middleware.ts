@@ -6,6 +6,13 @@ const RequestMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
+  logger.debug(`[Request] Received ${req.method} request at ${req.url}`);
+
+  if (req.method === 'GET' || req.method === 'DELETE') {
+    next();
+    return;
+  }
+
   if (req.is('application/json') || req.is('multipart/form-data')) {
     logger.debug(
       `[Request] Accepted content type: ${req.headers['content-type']}`
