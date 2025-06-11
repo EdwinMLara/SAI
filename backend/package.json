@@ -31,7 +31,8 @@
     "ts-jest": "^29.3.4",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.33.0"
+    "typescript-eslint": "^8.33.0",
+    "zoid": "^9.0.86"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
