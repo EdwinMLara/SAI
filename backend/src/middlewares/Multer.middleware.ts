@@ -1,9 +1,10 @@
-import { Request } from 'express';
 import multer, { FileFilterCallback } from 'multer';
+import { Request } from 'express';
 import logger from '../utils/logger';
 
-const MulterMiddleware = multer({
+const FileFilter = multer({
   storage: multer.memoryStorage(),
+  limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (
     req: Request,
     file: Express.Multer.File,
@@ -19,4 +20,4 @@ const MulterMiddleware = multer({
   },
 });
 
-export default MulterMiddleware.single('file');
+export default FileFilter.single('file');
