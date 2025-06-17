@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
 import { ProductInterface } from '../interfaces/Product.interfaces';
+
 import * as productService from '../services/Product.services';
+import * as productValidations from './validations/Product.validations';
+
 import logger from '../utils/logger';
 
 export async function createProduct(
@@ -8,34 +11,74 @@ export async function createProduct(
   res: Response
 ): Promise<void> {
   try {
-    const result = await productService.createProduct(req.body);
+    const exists = await productValidations.exists(req.body.key as string);
 
-    res.statusMessage = result.message;
-    res.status(result.status).json();
+    if (exists.error) {
+      res.status(500).json({
+        message: 'Internal Server Error. Could not check if product exists',
+      });
+      return;
+    }
+
+    if (exists.pass) {
+      res.status(409).json({
+        message: 'Product already exists',
+      });
+      return;
+    }
+
+    const request = await productService.createProduct(req.body);
+    res.status(request.status).json({
+      message: request.message,
+    });
   } catch (error) {
-    logger.error('Error creating product:', error);
-    res.statusMessage = 'Internal Server Error. Could not create product.';
+    logger.error(error);
+
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
   }
 }
 
-export async function getProduct(
+export async function readProduct(
   req: Request,
   res: Response<{}, ProductInterface>
 ): Promise<void> {
   if (!req.query.key) {
-    res.statusMessage = 'Bad Request. Product key is required.';
-    res.status(400);
+    res.status(400).json({
+      message: 'Bad Request. Product key is required.',
+    });
     return;
   }
 
   try {
-    const result = await productService.getProduct(req.query.key as string);
-    res.statusMessage = result.message;
-    res.status(result.status).json(result.data);
+    const exists = await productValidations.exists(req.query.key as string);
+
+    if (exists.error) {
+      res.status(500).json({
+        message: 'Internal Server Error. Could not check if product exists',
+      });
+      return;
+    }
+
+    if (!exists.pass) {
+      res.status(404).json({
+        message: 'Product not found',
+      });
+      return;
+    }
+
+    const request = await productService.readProduct(req.query.key as string);
+    res.status(request.status).json({
+      message: request.message,
+      product: request.data,
+    });
   } catch (error) {
-    logger.error('Error retrieving product:', error);
-    res.statusMessage = 'Internal Server Error. Could not retrieve product.';
-    res.status(500);
+    logger.error(error);
+
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
   }
 }
 
@@ -43,23 +86,36 @@ export async function updateProduct(
   req: Request<{}, {}, ProductInterface>,
   res: Response
 ): Promise<void> {
-  if (!req.query.key) {
-    res.statusMessage = 'Bad Request. Product key is required.';
-    res.status(400);
-    return;
-  }
-
   try {
-    const result = await productService.updateProduct(
+    const exists = await productValidations.exists(req.body.key as string);
+
+    if (exists.error) {
+      res.status(500).json({
+        message: 'Internal Server Error. Could not check if product exists',
+      });
+      return;
+    }
+
+    if (!exists.pass) {
+      res.status(404).json({
+        message: 'Product does not exist',
+      });
+      return;
+    }
+
+    const request = await productService.updateProduct(
       req.body,
-      req.query.key as string
+      req.body.key as string
     );
-    res.statusMessage = result.message;
-    res.status(result.status).json();
+    res.status(request.status).json({
+      message: request.message,
+    });
   } catch (error) {
-    logger.error('Error updating product:', error);
-    res.statusMessage = 'Internal Server Error. Could not update product.';
-    res.status(500);
+    logger.error(error);
+
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
   }
 }
 
@@ -68,18 +124,56 @@ export async function deleteProduct(
   res: Response
 ): Promise<void> {
   if (!req.query.key) {
-    res.statusMessage = 'Bad Request. Product key is required.';
-    res.status(400);
+    res.status(400).json({
+      message: 'Bad Request. Product key is required.',
+    });
     return;
   }
 
   try {
-    const result = await productService.deleteProduct(req.query.key as string);
-    res.statusMessage = result.message;
-    res.status(result.status).json();
+    const exists = await productValidations.exists(req.query.key as string);
+
+    if (exists.error) {
+      res.status(500).json({
+        message: 'Internal Server Error. Could not check if product exists',
+      });
+      return;
+    }
+
+    if (!exists.pass) {
+      res.status(404).json({
+        message: 'Product does not exist',
+      });
+      return;
+    }
+
+    const request = await productService.deleteProduct(req.query.key as string);
+    res.status(request.status).json({
+      message: request.message,
+    });
   } catch (error) {
-    logger.error('Error deleting product:', error);
-    res.statusMessage = 'Internal Server Error. Could not delete product.';
-    res.status(500);
+    logger.error(error);
+
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
+  }
+}
+
+export async function changeProducts(
+  req: Request<{}, {}, ProductInterface[]>,
+  res: Response
+): Promise<void> {
+  try {
+    const request = await productService.deleteDatabase(req.body);
+    res.status(request.status).json({
+      message: request.message,
+    });
+  } catch (error) {
+    logger.error(error);
+
+    res.status(500).json({
+      message: 'Internal Server Error',
+    });
   }
 }

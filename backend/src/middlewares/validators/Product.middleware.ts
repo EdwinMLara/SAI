@@ -12,9 +12,7 @@ export const validateProduct = async (
     next();
   } catch (error) {
     logger.error('Product validation error:', error);
-    res.status(400).json({
-      status: 400,
-      message: 'Bad Request. Invalid product data.',
-    });
+    res.statusMessage = 'Some fields at Product are invalid.';
+    res.status(400).json();
   }
 };
