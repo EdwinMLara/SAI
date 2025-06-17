@@ -2,7 +2,8 @@ import mongoose, { Schema } from 'mongoose';
 import { InvoiceInterface } from '../interfaces/Invoice.interfaces';
 
 const InvoiceSchema: Schema = new Schema<InvoiceInterface>({
-  invoice: { type: String, required: true, unique: true },
+  id: { type: String, required: true, unique: true },
+  reference: { type: String, default: null },
   date: { type: Date, required: true },
   expiration: { type: Date, required: true },
   products: [
@@ -35,14 +36,14 @@ const InvoiceSchema: Schema = new Schema<InvoiceInterface>({
   payments: [
     {
       user: { type: String, required: true },
-      transaction: { type: String, required: true },
+      transaction: { type: String, required: true, unique: true },
       date: { type: Date, required: true },
       amount: { type: Number, required: true },
       status: { type: String, required: true },
-      voucher: { type: String, required: true, default: null },
+      voucher: { type: String, default: null },
     },
   ],
-  document: { type: String, required: true, default: null },
+  document: { type: String, default: null },
 });
 
 export default mongoose.model<InvoiceInterface>('Invoices', InvoiceSchema);
