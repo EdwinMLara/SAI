@@ -6,7 +6,7 @@ const RequestMiddleware = (
   res: Response,
   next: NextFunction
 ): void => {
-  logger.debug(`[Request] Received ${req.method} request at ${req.url}`);
+  logger.debug(`[Request] Received '${req.method}' request at '${req.url}'`);
 
   if (req.method === 'GET' || req.method === 'DELETE') {
     next();
@@ -14,9 +14,7 @@ const RequestMiddleware = (
   }
 
   if (req.is('application/json') || req.is('multipart/form-data')) {
-    logger.debug(
-      `[Request] Accepted content type: ${req.headers['content-type']}`
-    );
+    logger.debug(`[Request] Content-Type: ${req.headers['content-type']}`);
 
     const methods = ['POST', 'PUT', 'PATCH'];
     if (methods.includes(req.method)) {
@@ -30,15 +28,26 @@ const RequestMiddleware = (
       }
     }
 
+    if (req.is('multipart/form-data')) {
+      if (!req.file) {
+        logger.error(`[Request] Form-data must contain one file.`);
+        res.status(400).json({
+          status: 400,
+          message: 'Bad Request. Form-data must contain one file.',
+        });
+        return;
+      }
+    }
+
     next();
   } else {
     logger.error(
-      `[Request] Unsupported content type: ${req.headers['content-type']}`
+      `[Request] Unsupported Content-Type: ${req.headers['content-type']}`
     );
 
     res.status(415).json({
       status: 415,
-      message: 'Unsupported Media Type in this request.',
+      message: 'Unsupported Content-Type in this request.',
     });
     return;
   }
