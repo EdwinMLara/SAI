@@ -5,17 +5,6 @@ export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
   status: number;
   message: string;
 }> {
-  const existingInvoice = await InvoiceModel.findOne({
-    invoice: invoiceData.invoice,
-  });
-
-  if (existingInvoice) {
-    return {
-      status: 409,
-      message: 'Invoice already exists.',
-    };
-  }
-
   const newInvoice = new InvoiceModel(invoiceData);
   await newInvoice.save();
 
@@ -25,19 +14,12 @@ export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
   };
 }
 
-export async function getInvoice(invoice: string): Promise<{
+export async function getInvoice(id: string): Promise<{
   status: number;
   message: string;
   data?: InvoiceInterface;
 }> {
-  const response = await InvoiceModel.findOne({ invoice });
-
-  if (!response) {
-    return {
-      status: 404,
-      message: 'Invoice not found.',
-    };
-  }
+  const response = await InvoiceModel.findOne({ id });
   return {
     status: 200,
     message: 'Invoice retrieved successfully.',
@@ -47,42 +29,24 @@ export async function getInvoice(invoice: string): Promise<{
 
 export async function updateInvoice(
   body: InvoiceInterface,
-  invoice: string
+  id: string
 ): Promise<{
   status: number;
   message: string;
 }> {
-  const existingInvoice = await InvoiceModel.findOne({ invoice });
-
-  if (!existingInvoice) {
-    return {
-      status: 404,
-      message: 'Invoice not found.',
-    };
-  }
-
-  await InvoiceModel.updateOne({ invoice }, { $set: body });
+  await InvoiceModel.updateOne({ id }, { $set: body });
   return {
     status: 200,
     message: 'Invoice updated successfully.',
   };
 }
 
-export async function deleteInvoice(invoice: string): Promise<{
+export async function deleteInvoice(id: string): Promise<{
   status: number;
   message: string;
 }> {
-  const existingInvoice = await InvoiceModel.findOne({
-    invoice,
-  });
-  if (!existingInvoice) {
-    return {
-      status: 404,
-      message: 'Invoice not found.',
-    };
-  }
   await InvoiceModel.deleteOne({
-    invoice,
+    id,
   });
   return {
     status: 200,
