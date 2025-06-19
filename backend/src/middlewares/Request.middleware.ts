@@ -13,7 +13,8 @@ const RequestMiddleware = (
   }
 
   if (
-    req.path.includes('/invoice/document/') &&
+    (req.path.includes('/invoice/document/') ||
+      req.path.includes('/invoice/ticket/')) &&
     req.is('multipart/form-data')
   ) {
     return next();
