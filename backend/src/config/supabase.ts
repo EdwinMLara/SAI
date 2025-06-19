@@ -5,16 +5,20 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const connectSupabase = () => {
-  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
-    logger.warn('[Supabase] There is an issue with the environment variables.');
+  if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    logger.error('[Supabase] Missing environment variables');
     process.exit(1);
   }
 
   try {
     const supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_KEY
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
+      {
+        auth: { persistSession: false },
+      }
     );
+
     logger.info('[Supabase] Connected Successfully');
     return supabase;
   } catch (error) {
