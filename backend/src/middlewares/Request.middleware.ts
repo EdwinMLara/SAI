@@ -9,48 +9,57 @@ const RequestMiddleware = (
   logger.debug(`[Request] Received '${req.method}' request at '${req.url}'`);
 
   if (req.method === 'GET' || req.method === 'DELETE') {
-    next();
-    return;
+    return next();
   }
 
-  if (req.is('application/json') || req.is('multipart/form-data')) {
-    logger.debug(`[Request] Content-Type: ${req.headers['content-type']}`);
+  if (
+    req.path.includes('/invoice/document/') &&
+    req.is('multipart/form-data')
+  ) {
+    return next();
+  }
 
-    const methods = ['POST', 'PUT', 'PATCH'];
-    if (methods.includes(req.method)) {
+  const contentType = req.headers['content-type'];
+  if (!contentType) {
+    logger.error(`[Request] Missing Content-Type header.`);
+    res.status(400).json({
+      status: 400,
+      message: 'Bad Request. Missing Content-Type header.',
+    });
+  }
+
+  if (req.is('application/json')) {
+    logger.debug(`[Request] Content-Type: ${contentType}`);
+
+    const methodsRequiringBody = ['POST', 'PUT', 'PATCH'];
+    if (methodsRequiringBody.includes(req.method)) {
       if (!req.body || Object.keys(req.body).length === 0) {
         logger.error(`[Request] Empty body in ${req.method} request.`);
         res.status(400).json({
           status: 400,
           message: 'Bad Request. Request body cannot be empty.',
         });
-        return;
       }
     }
-
-    if (req.is('multipart/form-data')) {
-      if (!req.file) {
-        logger.error(`[Request] Form-data must contain one file.`);
-        res.status(400).json({
-          status: 400,
-          message: 'Bad Request. Form-data must contain one file.',
-        });
-        return;
-      }
-    }
-
-    next();
-  } else {
-    logger.error(
-      `[Request] Unsupported Content-Type: ${req.headers['content-type']}`
-    );
-
-    res.status(415).json({
-      status: 415,
-      message: 'Unsupported Content-Type in this request.',
-    });
-    return;
+    return next();
   }
+
+  if (req.is('multipart/form-data')) {
+    if (!req.file) {
+      logger.error(`[Request] Form-data must contain at least one file.`);
+      res.status(400).json({
+        status: 400,
+        message: 'Bad Request. Form-data must contain at least one file.',
+      });
+    }
+    return next();
+  }
+
+  logger.error(`[Request] Unsupported Content-Type: ${contentType}`);
+  res.status(415).json({
+    status: 415,
+    message: 'Unsupported Content-Type in this request.',
+  });
 };
 
 export default RequestMiddleware;
