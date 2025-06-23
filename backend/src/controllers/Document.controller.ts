@@ -1,113 +1,225 @@
-import express, { Request, Response } from 'express';
-import multer, { FileFilterCallback } from 'multer';
-import { createClient } from '@supabase/supabase-js';
-import dotenv from 'dotenv';
+import { Request, Response } from 'express';
+
+import * as documentService from '../services/Document.services';
+import * as documentValidations from './validations/Document.validations';
+import * as invoiceValidations from './validations/Invoice.validations';
+
 import logger from '../utils/logger';
-
-dotenv.config();
-
-const router = express.Router();
-
-if (
-  !process.env.SUPABASE_URL ||
-  !process.env.SUPABASE_KEY ||
-  !process.env.BUCKET_NAME
-) {
-  logger.error('[Supabase] There is an issue with the environment variables.');
-  throw new Error();
-}
-
-const supabase = createClient(
-  process.env.SUPABASE_URL,
-  process.env.SUPABASE_KEY
-);
 
 interface MulterRequest extends Request {
   file?: Express.Multer.File;
 }
 
-interface UploadResponse {
-  url: string;
-  key: string;
-  message: string;
-  filename: string;
-}
-
-interface ErrorResponse {
-  error: string;
-}
-
-const preSave = multer({
-  storage: multer.memoryStorage(),
-  fileFilter: (
-    req: Request,
-    file: Express.Multer.File,
-    call: FileFilterCallback
-  ): void => {
-    if (file.mimetype === 'application/pdf') {
-      call(null, true);
-    } else {
-      call(new Error('Unsupported Media Type.'));
-    }
-  },
-});
-
-const saveDocument = async (
+export async function createDocumentURL(
   req: MulterRequest,
-  res: Response<UploadResponse | ErrorResponse>
-): Promise<void> => {
+  res: Response
+): Promise<void> {
+  if (!req.file || req.file.mimetype !== 'application/pdf') {
+    res.status(415).json({
+      message: 'The request does not contain the required file type.',
+    });
+    return;
+  }
+
   try {
-    if (!req.file) {
-      res.status(400).json({
-        error: 'Bad Request. Request file cannot be empty.',
+    const validate = await documentValidations.integrity(
+      req.query.id as string
+    );
+
+    if (validate.error) {
+      res.status(400).json({ message: validate.message });
+      return;
+    }
+
+    if (!validate.pass) {
+      res.status(404).json({ message: validate.message });
+      return;
+    }
+
+    const id = req.query.id;
+    const filename = `document_${id}.pdf`;
+
+    const checking = await documentService.search(filename);
+
+    if (checking) {
+      res.status(409).json({
+        message: 'The invoice already contains a stored document',
       });
       return;
     }
 
-    if (!process.env.BUCKET_NAME) {
-      logger.error(
-        '[Supabase] There is an issue with the environment variables.'
-      );
-      throw new Error();
-    }
-
-    const order: string = req.body.orderNumber;
-    const filename: string = `invoice_${order}.pdf`;
-    const bucket: string = process.env.BUCKET_NAME;
-
-    const { error } = await supabase.storage
-      .from(bucket)
-      .upload(filename, req.file.buffer, {
-        contentType: 'application/pdf',
-        upsert: true,
-      });
-
-    if (error) {
-      logger.error('Error uploading file:', error);
-      res.status(500).json({
-        error: 'Internal Server Error.',
-      });
-      return;
-    }
-
-    const { data: urlData } = supabase.storage
-      .from(bucket)
-      .getPublicUrl(filename);
+    const generate = await documentService.generateURL(req.file, filename);
 
     res.status(200).json({
-      url: urlData.publicUrl,
-      key: order,
-      message: 'PDF subido correctamente',
-      filename: filename,
+      message: 'The url was successfully generated',
+      url: generate.url,
     });
   } catch (error) {
-    logger.error('Error uploading file:', error);
     res.status(500).json({
-      error: 'Internal Server Error.',
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
     });
   }
-};
+}
 
-router.post('/', preSave.single('pdf'), saveDocument);
+export async function readDocumentURL(
+  req: Request,
+  res: Response
+): Promise<void> {
+  if (!req.query.id) {
+    res.status(400).json({
+      message: 'Bad Request. Invoice id is required.',
+    });
+    return;
+  }
 
-export default router;
+  try {
+    const exists = await invoiceValidations.exists(req.query.id as string);
+
+    if (exists.error) {
+      res.status(500).json({
+        message: exists.message,
+      });
+      return;
+    }
+
+    if (!exists.pass) {
+      res.status(404).json({
+        message: exists.message,
+      });
+      return;
+    }
+
+    const id = req.query.id;
+    const filename = `document_${id}.pdf`;
+
+    const checking = await documentService.search(filename);
+
+    if (!checking) {
+      res.status(404).json({
+        message: 'The document does not exist.',
+      });
+      return;
+    }
+
+    const request = await documentService.searchURL(filename);
+    res.status(200).json({ message: 'URL found', url: request.url });
+  } catch (error) {
+    res.status(500).json({
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    });
+  }
+}
+
+export async function updateDocument(
+  req: MulterRequest,
+  res: Response
+): Promise<void> {
+  if (!req.file || req.file.mimetype !== 'application/pdf') {
+    res.status(415).json({
+      message: 'The request does not contain the required file type.',
+    });
+    return;
+  }
+
+  if (!req.query.id) {
+    res.status(400).json({
+      message: 'Bad Request. Invoice id is required.',
+    });
+    return;
+  }
+
+  try {
+    const exists = await invoiceValidations.exists(req.query.id as string);
+
+    if (exists.error) {
+      res.status(500).json({
+        message: exists.message,
+      });
+      return;
+    }
+
+    if (!exists.pass) {
+      res.status(404).json({
+        message: exists.message,
+      });
+      return;
+    }
+
+    const id = req.query.id;
+    const filename = `document_${id}.pdf`;
+
+    const checking = await documentService.search(filename);
+
+    if (!checking) {
+      res.status(404).json({
+        message: 'The document does not exist.',
+      });
+      return;
+    }
+
+    const request = await documentService.updateFile(req.file, filename);
+    res
+      .status(200)
+      .json({ message: 'Document successfully updated', url: request.url });
+  } catch (error) {
+    logger.error(error);
+
+    res.status(500).json({
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    });
+  }
+}
+
+export async function deleteDocument(
+  req: Request,
+  res: Response
+): Promise<void> {
+  if (!req.query.id) {
+    res.status(400).json({
+      message: 'Bad Request. Invoice id is required.',
+    });
+    return;
+  }
+
+  try {
+    const exists = await invoiceValidations.exists(req.query.id as string);
+
+    if (exists.error) {
+      res.status(500).json({
+        message: exists.message,
+      });
+      return;
+    }
+
+    if (!exists.pass) {
+      res.status(404).json({
+        message: exists.message,
+      });
+      return;
+    }
+
+    const id = req.query.id;
+    const filename = `document_${id}.pdf`;
+
+    const checking = await documentService.search(filename);
+
+    if (!checking) {
+      res.status(404).json({
+        message: 'The document does not exist.',
+      });
+      return;
+    }
+
+    await documentService.deleteFile(filename);
+    res.status(200).json({ message: 'Document successfully deleted' });
+  } catch (error) {
+    logger.error(error);
+    res.status(500).json({
+      message:
+        error instanceof Error ? error.message : 'An unknown error occurred',
+    });
+  }
+}

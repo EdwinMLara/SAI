@@ -30,10 +30,21 @@ interface Product {
   user_config: User[];
 }
 
-export interface InvoiceInterface extends Document {
-  invoice: string;
+interface Payments {
+  user: string;
+  transaction: string;
   date: Date;
-  products: Product[];
-  document: string;
+  amount: number;
+  status: string;
   voucher: string;
+}
+
+export interface InvoiceInterface extends Document {
+  id: string;
+  reference: string;
+  date: Date;
+  expiration: Date;
+  products: Product[];
+  payments: Payments[];
+  document: string;
 }

@@ -5,10 +5,10 @@ const ProductSchema: Schema = new Schema<ProductInterface>({
   key: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   prices: {
-    distribution: { type: Number, required: true },
-    wholesale: { type: Number, required: true },
-    mid_wholesale: { type: Number, required: true },
-    retail: { type: Number, required: true },
+    distribution: { type: Number, required: true, default: 0 },
+    wholesale: { type: Number, required: true, default: 0 },
+    mid_wholesale: { type: Number, required: true, default: 0 },
+    retail: { type: Number, required: true, default: 0 },
   },
 });
 

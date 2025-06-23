@@ -1,10 +1,9 @@
 import { Response, NextFunction, Request } from 'express';
+import logger from '../utils/logger';
 
-interface ApiResponse<T = any> {
-  success: boolean;
+interface ApiResponse<T extends { message: string } = any> {
   status: number;
-  message?: string;
-  data?: T;
+  data: T;
 }
 
 const ResponseMiddleware = (
@@ -14,14 +13,15 @@ const ResponseMiddleware = (
 ) => {
   const originalJson = res.json;
 
-  res.json = function <T>(data?: T): Response {
+  res.json = function <T extends { message: string }>(data: T): Response {
     const formattedResponse: ApiResponse<T> = {
-      success: res.statusCode < 400,
       status: res.statusCode,
-      message:
-        res.statusMessage || (res.statusCode < 400 ? 'Success' : 'Error'),
-      data: data ?? undefined,
+      data: data,
     };
+
+    logger.info(
+      `[Response] ${formattedResponse.status}:${formattedResponse.data.message}`
+    );
 
     return originalJson.call(this, formattedResponse);
   };
