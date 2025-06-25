@@ -1,5 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
 
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.text-main {
+  @apply text-textMain;
+}
+.bg-main {
+  @apply bg-primaryLight;
+}
+.bg-card {
+  @apply bg-white;
+}
+.text-brand {
+  @apply text-primary;
+}
+.bg-brand {
+  @apply bg-primary;
+}
+.bg-brand-light {
+  @apply bg-primaryLight;
+}
+.bg-brand-dark {
+  @apply bg-primaryDark;
+}
+.bg-accent {
+  @apply bg-secondary;
+}
+.bg-accent-light {
+  @apply bg-secondaryLight;
+}
+.bg-accent-dark {
+  @apply bg-secondaryDark;
+}
+.text-accent {
+  @apply text-secondaryDark;
+}
+.text-accent-light {
+  @apply text-secondaryLight;
+}
+.text-accent-dark {
+  @apply text-secondaryDark;
+}
+
 body {
   font-family: 'Inter', sans-serif;
 }
