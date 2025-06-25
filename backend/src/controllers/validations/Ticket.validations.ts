@@ -1,4 +1,4 @@
-import { exists } from './Invoice.validations';
+import { exists } from '@controllers/validations/Invoice.validations';
 
 interface Response {
   pass: boolean;

@@ -1,5 +1,5 @@
 import mongose, { Schema } from 'mongoose';
-import { ProductInterface } from '../interfaces/Product.interfaces';
+import { ProductInterface } from '@interfaces/Product.interfaces';
 
 const ProductSchema: Schema = new Schema<ProductInterface>({
   key: { type: String, required: true, unique: true },

@@ -2,13 +2,24 @@
   "compilerOptions": {
     "target": "es6",
     "module": "commonjs",
-    "rootDir": "../",
+    "rootDir": "src",
     "outDir": "./dist",
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@config/*": ["src/config/*"],
+      "@controllers/*": ["src/controllers/*"],
+      "@interfaces/*": ["src/interfaces/*"],
+      "@middlewares/*": ["src/middlewares/*"],
+      "@models/*": ["src/models/*"],
+      "@routes/*": ["src/routes/*"],
+      "@services/*": ["src/services/*"],
+      "@utils/*": ["src/utils/*"]
+    }
   },
-  "include": ["src", "../shared/validators"],
+  "include": ["src"],
   "exclude": ["node_modules"]
 }

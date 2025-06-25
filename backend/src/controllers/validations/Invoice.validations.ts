@@ -1,4 +1,4 @@
-import InvoiceModel from '../../models/Invoice.model';
+import InvoiceModel from '@models/Invoice.model';
 
 interface Response {
   pass: boolean;

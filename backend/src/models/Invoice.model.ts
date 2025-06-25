@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { InvoiceInterface } from '../interfaces/Invoice.interfaces';
+import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
 
 const InvoiceSchema: Schema = new Schema<InvoiceInterface>({
   id: { type: String, required: true, unique: true },

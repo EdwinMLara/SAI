@@ -1,13 +1,13 @@
 import express from 'express';
 
-import * as InvoiceController from '../controllers/Invoice.controller';
-import * as ProductController from '../controllers/Product.controller';
-import * as DocumentController from '../controllers/Document.controller';
-import * as TicketController from '../controllers/Ticket.controller';
+import * as InvoiceController from '@controllers/Invoice.controller';
+import * as ProductController from '@controllers/Product.controller';
+import * as DocumentController from '@controllers/Document.controller';
+import * as TicketController from '@controllers/Ticket.controller';
 
-import FileFilter from '../middlewares/Multer.middleware';
-import { validateInvoice } from '../middlewares/validators/Invoice.middleware';
-import { validateProduct } from '../middlewares/validators/Product.middleware';
+import FileFilter from '@middlewares/Multer.middleware';
+import { validateInvoice } from '@middlewares/validators/Invoice.middleware';
+import { validateProduct } from '@middlewares/validators/Product.middleware';
 
 const router = express.Router();
 

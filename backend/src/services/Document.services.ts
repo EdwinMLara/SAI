@@ -1,4 +1,4 @@
-import connectSupabase from '../config/supabase';
+import connectSupabase from '@config/supabase';
 const bucket = process.env.BUCKET_VOUCHERS || 'documents';
 
 const supabase = connectSupabase();
