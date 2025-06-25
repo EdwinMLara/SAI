@@ -4,7 +4,7 @@ Contains code and utilities shared between the client and server, such as consta
 
 ## Structure
 
-- `interfaces/`: Shared TypeScript types.
+#
 
 ## Usage
 
