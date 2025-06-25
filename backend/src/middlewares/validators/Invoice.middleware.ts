@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import InvoiceValidator, {
   formatValidationErrors,
-} from '../../../../shared/validators/Invoice.validator';
-import logger from '../../utils/logger';
+} from '../../../../shared/dist/validators/Invoice.validator';
+import logger from '@utils/logger';
 import { ZodError } from 'zod';
 
 export const validateInvoice = async (
@@ -11,9 +11,7 @@ export const validateInvoice = async (
   next: NextFunction
 ): Promise<void> => {
   try {
-    const validatedData = await InvoiceValidator.parseAsync(req.body);
-
-    req.body = validatedData;
+    req.body = await InvoiceValidator.parseAsync(req.body);
     next();
   } catch (error) {
     if (

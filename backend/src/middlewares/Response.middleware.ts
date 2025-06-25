@@ -1,5 +1,5 @@
 import { Response, NextFunction, Request } from 'express';
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 interface ApiResponse<T extends { message: string } = any> {
   status: number;

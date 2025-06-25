@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
 
-import * as invoiceService from '../services/Invoice.services';
-import * as invoiceValidations from './validations/Invoice.validations';
+import * as invoiceService from '@services/Invoice.services';
+import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 export async function createInvoice(
   req: Request,

@@ -1,4 +1,4 @@
-import ProductModel from '../../models/Product.model';
+import ProductModel from '@models/Product.model';
 
 export async function exists(key: string): Promise<{
   pass: boolean;

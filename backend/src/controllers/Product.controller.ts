@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
-import { ProductInterface } from '../interfaces/Product.interfaces';
+import { ProductInterface } from '@interfaces/Product.interfaces';
 
-import * as productService from '../services/Product.services';
-import * as productValidations from './validations/Product.validations';
+import * as productService from '@services/Product.services';
+import * as productValidations from '@controllers/validations/Product.validations';
 
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 export async function createProduct(
   req: Request<{}, {}, ProductInterface>,

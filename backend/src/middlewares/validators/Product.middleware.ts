@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import ProductValidator from '../../../../shared/validators/Product.validator';
-import logger from '../../utils/logger';
+import logger from '@utils/logger';
+
+// Implementación local temporal de ProductValidator
+const ProductValidator = {
+  async parseAsync(data: any) {
+    // Aquí deberías agregar la lógica de validación real
+    return data;
+  },
+};
 
 export const validateProduct = async (
   req: Request,

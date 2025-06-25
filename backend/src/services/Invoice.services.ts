@@ -1,5 +1,5 @@
-import InvoiceModel from '../models/Invoice.model';
-import { InvoiceInterface } from '../interfaces/Invoice.interfaces';
+import InvoiceModel from '@models/Invoice.model';
+import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
 
 export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
   status: number;

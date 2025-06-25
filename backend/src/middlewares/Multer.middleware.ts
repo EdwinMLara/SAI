@@ -1,6 +1,6 @@
 import multer, { FileFilterCallback } from 'multer';
 import { Request } from 'express';
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 const FileFilter = multer({
   storage: multer.memoryStorage(),

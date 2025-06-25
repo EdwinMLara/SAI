@@ -1,10 +1,10 @@
 import { Request, Response } from 'express';
 
-import * as documentService from '../services/Document.services';
-import * as documentValidations from './validations/Document.validations';
-import * as invoiceValidations from './validations/Invoice.validations';
+import * as documentService from '@services/Document.services';
+import * as documentValidations from '@controllers/validations/Document.validations';
+import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
-import logger from '../utils/logger';
+import logger from '@utils/logger';
 
 interface MulterRequest extends Request {
   file?: Express.Multer.File;

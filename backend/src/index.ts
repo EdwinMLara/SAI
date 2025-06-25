@@ -2,13 +2,13 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import express from 'express';
 
-import logger from './utils/logger';
+import logger from '@utils/logger';
 
-import router from './routes/api.routes';
-import * as Mongo from './config/database';
+import router from '@routes/api.routes';
+import * as Mongo from '@config/database';
 
-import RequestMiddleware from './middlewares/Request.middleware';
-import ResponseMiddleware from './middlewares/Response.middleware';
+import RequestMiddleware from '@middlewares/Request.middleware';
+import ResponseMiddleware from '@middlewares/Response.middleware';
 
 dotenv.config();
 

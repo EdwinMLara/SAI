@@ -1,5 +1,5 @@
-import ProductModel from '../models/Product.model';
-import { ProductInterface } from '../interfaces/Product.interfaces';
+import ProductModel from '@models/Product.model';
+import { ProductInterface } from '@interfaces/Product.interfaces';
 
 export async function createProduct(product: ProductInterface): Promise<{
   status: number;
