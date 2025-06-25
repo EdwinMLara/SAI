@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import InvoiceValidator, {
   formatValidationErrors,
-} from '../../validators/Invoice.validator';
+} from '@validators/Invoice.validator';
 import logger from '@utils/logger';
 import { ZodError } from 'zod';
 

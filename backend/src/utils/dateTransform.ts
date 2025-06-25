@@ -1,5 +1,3 @@
-// Copiado desde shared/utils/dateTransform.ts
-
 export function stringToDate(dateString: string): Date {
   return new Date(dateString);
 }
