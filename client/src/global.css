@@ -47,3 +47,31 @@
 body {
   font-family: 'Inter', sans-serif;
 }
+
+.ghost-hover-bg:hover {
+  background-color: #c7daf5 !important;
+  transition: background-color 0.3s;
+}
+
+@keyframes fade-in-out {
+  0% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+  10% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  90% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+}
+
+.animate-fade-in-out {
+  animation: fade-in-out 3.5s both;
+}
