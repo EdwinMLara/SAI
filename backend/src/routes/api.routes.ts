@@ -11,19 +11,16 @@ import { validateProduct } from '@middlewares/validators/Product.middleware';
 
 const router = express.Router();
 
-// Product Routes
 router.post('/product/new', validateProduct, ProductController.createProduct);
 router.get('/product/get', ProductController.readProduct);
 router.put('/product/update', validateProduct, ProductController.updateProduct);
 router.delete('/product/delete', ProductController.deleteProduct);
 
-// Invoice Routes
 router.post('/invoice/new', validateInvoice, InvoiceController.createInvoice);
 router.get('/invoice/get', InvoiceController.readInvoice);
 router.put('/invoice/update', validateInvoice, InvoiceController.updateInvoice);
 router.delete('/invoice/delete', InvoiceController.deleteInvoice);
 
-// Document Routes
 router.post(
   '/invoice/document/upload',
   FileFilter,

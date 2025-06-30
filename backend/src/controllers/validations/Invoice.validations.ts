@@ -1,4 +1,5 @@
 import InvoiceModel from '@models/Invoice.model';
+import responses from '@utils/responses';
 
 interface Response {
   pass: boolean;
@@ -12,15 +13,14 @@ export async function exists(id: string): Promise<Response> {
 
     return {
       pass: !!result,
-      message: result ? 'Invoice exists' : 'Invoice not found',
+      message: result ? responses.ALREADY_EXISTS : responses.NOT_FOUND,
     };
   } catch (error) {
     console.error(`Error checking invoice ${id}:`, error);
 
     return {
       pass: false,
-      message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+      message: responses.INTERNAL_SERVER_ERROR,
       error: true,
     };
   }
@@ -36,7 +36,7 @@ export async function transaction(
     if (!result) {
       return {
         pass: false,
-        message: 'Invoice not found',
+        message: responses.NOT_FOUND,
       };
     }
 
@@ -58,8 +58,7 @@ export async function transaction(
 
     return {
       pass: false,
-      message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+      message: responses.INTERNAL_SERVER_ERROR,
       error: true,
     };
   }

@@ -20,7 +20,7 @@ const ResponseMiddleware = (
     };
 
     logger.info(
-      `[Response] ${formattedResponse.status}:${formattedResponse.data.message}`
+      `[Response] ${formattedResponse.status}: ${formattedResponse.data.message}`
     );
 
     return originalJson.call(this, formattedResponse);

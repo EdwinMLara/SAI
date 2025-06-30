@@ -1,5 +1,6 @@
-import ProductModel from '@models/Product.model';
 import { ProductInterface } from '@interfaces/Product.interfaces';
+import ProductModel from '@models/Product.model';
+import responses from '@utils/responses';
 
 export async function createProduct(product: ProductInterface): Promise<{
   status: number;
@@ -10,7 +11,7 @@ export async function createProduct(product: ProductInterface): Promise<{
 
   return {
     status: 201,
-    message: 'Product created successfully.',
+    message: responses.CREATED,
   };
 }
 
@@ -23,7 +24,7 @@ export async function readProduct(key: string): Promise<{
 
   return {
     status: 200,
-    message: 'Product retrieved successfully.',
+    message: responses.RETRIEVED,
     data: response as ProductInterface,
   };
 }
@@ -38,7 +39,7 @@ export async function updateProduct(
   await ProductModel.updateOne({ key }, { $set: product });
   return {
     status: 200,
-    message: 'Product updated successfully.',
+    message: responses.UPDATED,
   };
 }
 
@@ -50,7 +51,7 @@ export async function deleteProduct(key: string): Promise<{
 
   return {
     status: 200,
-    message: 'Product deleted successfully.',
+    message: responses.DELETED,
   };
 }
 
@@ -64,12 +65,12 @@ export async function deleteDatabase(products: ProductInterface[]): Promise<{
 
     return {
       status: 200,
-      message: 'Update sucessfull database',
+      message: responses.UPDATE_SUCCESS_DB,
     };
   } catch (error) {
     return {
       status: 500,
-      message: 'Internal Server Error. Could not delete products.',
+      message: responses.INTERNAL_SERVER_ERROR,
     };
   }
 }

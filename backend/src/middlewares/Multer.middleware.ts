@@ -1,8 +1,9 @@
 import multer, { FileFilterCallback } from 'multer';
-import { Request } from 'express';
+import { Request, Response, NextFunction } from 'express';
+import responses from '@utils/responses';
 import logger from '@utils/logger';
 
-const FileFilter = multer({
+const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
   fileFilter: (
@@ -15,9 +16,27 @@ const FileFilter = multer({
       callback(null, true);
     } else {
       logger.error(`[Multer] Unsupported file type: ${file.mimetype}`);
-      callback(null, false);
+      callback(new Error(responses.INVALID_FILETYPE));
     }
   },
 });
 
-export default FileFilter.single('file');
+function fileRequiredMiddleware(
+  req: Request,
+  res: Response,
+  next: NextFunction
+) {
+  upload.single('file')(req, res, (err: any) => {
+    if (err) {
+      logger.error(`[Multer] Upload error: ${err.message}`);
+      return res.status(415).json({ message: err.message });
+    }
+    if (!req.file) {
+      logger.error(`[Multer] No file provided in request.`);
+      return res.status(400).json({ message: responses.REQUIRED_FILE });
+    }
+    next();
+  });
+}
+
+export default fileRequiredMiddleware;

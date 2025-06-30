@@ -4,6 +4,7 @@ import InvoiceValidator, {
 } from '@validators/Invoice.validator';
 import logger from '@utils/logger';
 import { ZodError } from 'zod';
+import responses from '@utils/responses';
 
 export const validateInvoice = async (
   req: Request,
@@ -26,22 +27,19 @@ export const validateInvoice = async (
       });
 
       res.status(400).json({
-        message: 'Invoice validation failed',
-        details:
-          'Please review the submitted data. Some fields do not meet the requirements.',
+        message: responses.INTERFACE_VALUE_ERROR,
         errors: formattedErrors,
       });
       return;
     }
 
     logger.error('Unexpected validation error', {
-      error: error instanceof Error ? error.message : String(error),
+      error: responses.INTERNAL_SERVER_ERROR,
       requestId: req.headers['x-request-id'] || 'unknown',
     });
 
     res.status(500).json({
-      message: 'Internal server error during validation',
-      details: 'An unexpected error occurred. Please try again later.',
+      message: responses.INTERFACE_VALUE_ERROR,
     });
     return;
   }

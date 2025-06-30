@@ -5,6 +5,7 @@ import * as ticketValidations from '@controllers/validations/Ticket.validations'
 import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
 import logger from '@utils/logger';
+import responses from '@utils/responses';
 
 interface MulterRequest extends Request {
   file?: Express.Multer.File;
@@ -14,13 +15,6 @@ export async function createTicketURL(
   req: MulterRequest,
   res: Response
 ): Promise<void> {
-  if (!req.file || req.file.mimetype !== 'image/jpeg') {
-    res.status(415).json({
-      message: 'The request does not contain the required file type.',
-    });
-    return;
-  }
-
   try {
     const validate = await ticketValidations.integrity(
       req.query.id as string,
@@ -60,21 +54,20 @@ export async function createTicketURL(
 
     if (checking) {
       res.status(409).json({
-        message: 'The invoice already contains a stored ticket',
+        message: responses.TICKET_ALREADY_ATTACHED,
       });
       return;
     }
 
-    const generate = await ticketService.generateURL(req.file, filename);
+    const generate = await ticketService.generateURL(req.file!, filename);
 
     res.status(200).json({
-      message: 'The url was successfully generated',
+      message: responses.URL_GENERATED,
       url: generate.url,
     });
   } catch (error) {
     res.status(500).json({
-      message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -122,7 +115,7 @@ export async function readTicketURL(
 
     if (!checking) {
       res.status(404).json({
-        message: 'The ticket does not exist.',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
@@ -132,7 +125,9 @@ export async function readTicketURL(
   } catch (error) {
     res.status(500).json({
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error
+          ? error.message
+          : responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -143,7 +138,7 @@ export async function updateTicket(
 ): Promise<void> {
   if (!req.file || req.file.mimetype !== 'image/jpeg') {
     res.status(415).json({
-      message: 'The request does not contain the required file type.',
+      message: responses.INVALID_FILETYPE,
     });
     return;
   }
@@ -186,21 +181,21 @@ export async function updateTicket(
 
     if (!checking) {
       res.status(404).json({
-        message: 'The ticket does not exist.',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
 
-    const request = await ticketService.updateFile(req.file, filename);
-    res
-      .status(200)
-      .json({ message: 'Ticket successfully updated', url: request.url });
+    const request = await ticketService.updateFile(req.file!, filename);
+    res.status(200).json({ message: responses.UPDATED, url: request.url });
   } catch (error) {
     logger.error(error);
 
     res.status(500).json({
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error
+          ? error.message
+          : responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -245,18 +240,20 @@ export async function deleteTicket(req: Request, res: Response): Promise<void> {
 
     if (!checking) {
       res.status(404).json({
-        message: 'The ticket does not exist.',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
 
     await ticketService.deleteFile(filename);
-    res.status(200).json({ message: 'Ticket successfully deleted' });
+    res.status(200).json({ message: responses.DELETED });
   } catch (error) {
     logger.error(error);
     res.status(500).json({
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error
+          ? error.message
+          : responses.INTERNAL_SERVER_ERROR,
     });
   }
 }

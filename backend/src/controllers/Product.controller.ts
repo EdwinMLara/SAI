@@ -5,6 +5,7 @@ import * as productService from '@services/Product.services';
 import * as productValidations from '@controllers/validations/Product.validations';
 
 import logger from '@utils/logger';
+import responses from '@utils/responses';
 
 export async function createProduct(
   req: Request<{}, {}, ProductInterface>,
@@ -15,14 +16,14 @@ export async function createProduct(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if product exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (exists.pass) {
       res.status(409).json({
-        message: 'Product already exists',
+        message: responses.ALREADY_EXISTS,
       });
       return;
     }
@@ -46,7 +47,7 @@ export async function readProduct(
 ): Promise<void> {
   if (!req.query.key) {
     res.status(400).json({
-      message: 'Bad Request. Product key is required.',
+      message: responses.ERROR_DEV,
     });
     return;
   }
@@ -56,14 +57,14 @@ export async function readProduct(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if product exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (!exists.pass) {
       res.status(404).json({
-        message: 'Product not found',
+        message: responses.NOT_FOUND,
       });
       return;
     }
@@ -77,7 +78,7 @@ export async function readProduct(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -91,14 +92,14 @@ export async function updateProduct(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if product exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (!exists.pass) {
       res.status(404).json({
-        message: 'Product does not exist',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
@@ -114,7 +115,7 @@ export async function updateProduct(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -125,7 +126,7 @@ export async function deleteProduct(
 ): Promise<void> {
   if (!req.query.key) {
     res.status(400).json({
-      message: 'Bad Request. Product key is required.',
+      message: responses.ERROR_DEV,
     });
     return;
   }
@@ -135,14 +136,14 @@ export async function deleteProduct(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if product exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (!exists.pass) {
       res.status(404).json({
-        message: 'Product does not exist',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
@@ -155,7 +156,7 @@ export async function deleteProduct(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -173,7 +174,7 @@ export async function changeProducts(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }

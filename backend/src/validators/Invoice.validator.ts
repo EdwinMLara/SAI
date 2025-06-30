@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { stringToDate, dateToString } from '@utils/dateTransform';
+import responses from '@utils/responses';
 
 const VALID_ROLES = ['admin', 'user'] as const;
 const VALID_STATUS = [
@@ -86,7 +87,7 @@ const InvoiceValidator = z
       return true;
     },
     {
-      message: 'Expiration date must be after invoice date',
+      message: responses.EXPIRATION_DATE_ERROR,
       path: ['expiration'],
     }
   );

@@ -4,6 +4,7 @@ import * as invoiceService from '@services/Invoice.services';
 import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
 import logger from '@utils/logger';
+import responses from '@utils/responses';
 
 export async function createInvoice(
   req: Request,
@@ -14,14 +15,14 @@ export async function createInvoice(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if invoice exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (exists.pass) {
       res.status(409).json({
-        message: 'Invoice already exists',
+        message: responses.ALREADY_EXISTS,
       });
       return;
     }
@@ -34,7 +35,7 @@ export async function createInvoice(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -42,7 +43,7 @@ export async function createInvoice(
 export async function readInvoice(req: Request, res: Response): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
-      message: 'Bad Request. Invoice id is required.',
+      message: responses.REQUIRED_INVOICE_ID,
     });
     return;
   }
@@ -52,14 +53,14 @@ export async function readInvoice(req: Request, res: Response): Promise<void> {
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if invoice exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (!exists.pass) {
       res.status(404).json({
-        message: 'Invoice not found',
+        message: responses.NOT_FOUND,
       });
       return;
     }
@@ -73,7 +74,7 @@ export async function readInvoice(req: Request, res: Response): Promise<void> {
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -87,14 +88,14 @@ export async function updateInvoice(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if invoice exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (!exists.pass) {
       res.status(404).json({
-        message: 'Invoice does not exist',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
@@ -110,7 +111,7 @@ export async function updateInvoice(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -121,7 +122,7 @@ export async function deleteInvoice(
 ): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
-      message: 'Bad Request. Invoice id is required.',
+      message: responses.REQUIRED_INVOICE_ID,
     });
     return;
   }
@@ -131,14 +132,14 @@ export async function deleteInvoice(
 
     if (exists.error) {
       res.status(500).json({
-        message: 'Internal Server Error. Could not check if invoice exists',
+        message: responses.INTERNAL_SERVER_ERROR,
       });
       return;
     }
 
     if (!exists.pass) {
       res.status(404).json({
-        message: 'Invoice does not exist',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
@@ -151,7 +152,7 @@ export async function deleteInvoice(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }

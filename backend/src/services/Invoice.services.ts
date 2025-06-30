@@ -1,5 +1,6 @@
 import InvoiceModel from '@models/Invoice.model';
 import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
+import responses from '@utils/responses';
 
 export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
   status: number;
@@ -10,7 +11,7 @@ export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
 
   return {
     status: 201,
-    message: 'Invoice created successfully.',
+    message: responses.CREATED,
   };
 }
 
@@ -22,7 +23,7 @@ export async function getInvoice(id: string): Promise<{
   const response = await InvoiceModel.findOne({ id });
   return {
     status: 200,
-    message: 'Invoice retrieved successfully.',
+    message: responses.RETRIEVED,
     data: response as InvoiceInterface,
   };
 }
@@ -37,7 +38,7 @@ export async function updateInvoice(
   await InvoiceModel.updateOne({ id }, { $set: body });
   return {
     status: 200,
-    message: 'Invoice updated successfully.',
+    message: responses.UPDATED,
   };
 }
 
@@ -50,6 +51,6 @@ export async function deleteInvoice(id: string): Promise<{
   });
   return {
     status: 200,
-    message: 'Invoice deleted successfully.',
+    message: responses.DELETED,
   };
 }

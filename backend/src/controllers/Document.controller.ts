@@ -5,6 +5,7 @@ import * as documentValidations from '@controllers/validations/Document.validati
 import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
 import logger from '@utils/logger';
+import responses from '@utils/responses';
 
 interface MulterRequest extends Request {
   file?: Express.Multer.File;
@@ -14,9 +15,16 @@ export async function createDocumentURL(
   req: MulterRequest,
   res: Response
 ): Promise<void> {
-  if (!req.file || req.file.mimetype !== 'application/pdf') {
+  if (!req.file) {
+    res.status(400).json({
+      message: responses.REQUIRED_FILE,
+    });
+    return;
+  }
+
+  if (req.file.mimetype !== 'application/pdf') {
     res.status(415).json({
-      message: 'The request does not contain the required file type.',
+      message: responses.INVALID_FILETYPE,
     });
     return;
   }
@@ -43,21 +51,20 @@ export async function createDocumentURL(
 
     if (checking) {
       res.status(409).json({
-        message: 'The invoice already contains a stored document',
+        message: responses.DOCUMENT_ALREADY_ATTACHED,
       });
       return;
     }
 
-    const generate = await documentService.generateURL(req.file, filename);
+    const generate = await documentService.generateURL(req.file!, filename);
 
     res.status(200).json({
-      message: 'The url was successfully generated',
+      message: responses.URL_GENERATED,
       url: generate.url,
     });
   } catch (error) {
     res.status(500).json({
-      message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -68,7 +75,7 @@ export async function readDocumentURL(
 ): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
-      message: 'Bad Request. Invoice id is required.',
+      message: responses.REQUIRED_INVOICE_ID,
     });
     return;
   }
@@ -97,7 +104,7 @@ export async function readDocumentURL(
 
     if (!checking) {
       res.status(404).json({
-        message: 'The document does not exist.',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
@@ -107,7 +114,9 @@ export async function readDocumentURL(
   } catch (error) {
     res.status(500).json({
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error
+          ? error.message
+          : responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -118,14 +127,14 @@ export async function updateDocument(
 ): Promise<void> {
   if (!req.file || req.file.mimetype !== 'application/pdf') {
     res.status(415).json({
-      message: 'The request does not contain the required file type.',
+      message: responses.INVALID_FILETYPE,
     });
     return;
   }
 
   if (!req.query.id) {
     res.status(400).json({
-      message: 'Bad Request. Invoice id is required.',
+      message: responses.REQUIRED_INVOICE_ID,
     });
     return;
   }
@@ -154,21 +163,21 @@ export async function updateDocument(
 
     if (!checking) {
       res.status(404).json({
-        message: 'The document does not exist.',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
 
-    const request = await documentService.updateFile(req.file, filename);
-    res
-      .status(200)
-      .json({ message: 'Document successfully updated', url: request.url });
+    const request = await documentService.updateFile(req.file!, filename);
+    res.status(200).json({ message: responses.UPDATED, url: request.url });
   } catch (error) {
     logger.error(error);
 
     res.status(500).json({
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error
+          ? error.message
+          : responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -179,7 +188,7 @@ export async function deleteDocument(
 ): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
-      message: 'Bad Request. Invoice id is required.',
+      message: responses.REQUIRED_INVOICE_ID,
     });
     return;
   }
@@ -208,18 +217,20 @@ export async function deleteDocument(
 
     if (!checking) {
       res.status(404).json({
-        message: 'The document does not exist.',
+        message: responses.DOES_NOT_EXIST,
       });
       return;
     }
 
     await documentService.deleteFile(filename);
-    res.status(200).json({ message: 'Document successfully deleted' });
+    res.status(200).json({ message: responses.DELETED });
   } catch (error) {
     logger.error(error);
     res.status(500).json({
       message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+        error instanceof Error
+          ? error.message
+          : responses.INTERNAL_SERVER_ERROR,
     });
   }
 }

@@ -1,4 +1,5 @@
 import { exists } from '@controllers/validations/Invoice.validations';
+import responses from '@utils/responses';
 
 interface Response {
   pass: boolean;
@@ -10,7 +11,7 @@ export async function integrity(query: string): Promise<Response> {
   if (!query) {
     return {
       pass: false,
-      message: 'Invoice ID is missing in the query request',
+      message: responses.BAD_REQUEST,
       error: true,
     };
   }
@@ -28,8 +29,7 @@ export async function integrity(query: string): Promise<Response> {
 
     return {
       pass: false,
-      message:
-        error instanceof Error ? error.message : 'An unknown error occurred',
+      message: responses.INTERNAL_SERVER_ERROR,
       error: true,
     };
   }
