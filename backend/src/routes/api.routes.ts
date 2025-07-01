@@ -5,6 +5,9 @@ import * as ProductController from '@controllers/Product.controller';
 import * as DocumentController from '@controllers/Document.controller';
 import * as TicketController from '@controllers/Ticket.controller';
 
+import * as UserController from '@controllers/User.controller';
+import { validateUser } from '@middlewares/validators/User.middleware';
+
 import FileFilter from '@middlewares/Multer.middleware';
 import { validateInvoice } from '@middlewares/validators/Invoice.middleware';
 import { validateProduct } from '@middlewares/validators/Product.middleware';
@@ -42,5 +45,11 @@ router.post(
 router.get('/invoice/ticket/get', TicketController.readTicketURL);
 router.put('/invoice/ticket/update', FileFilter, TicketController.updateTicket);
 router.delete('/invoice/ticket/delete', TicketController.deleteTicket);
+
+// User routes
+router.post('/user/new', validateUser, UserController.createUser);
+router.get('/user/get', UserController.readUser);
+router.put('/user/update', validateUser, UserController.updateUser);
+router.delete('/user/delete', UserController.deleteUser);
 
 export default router;

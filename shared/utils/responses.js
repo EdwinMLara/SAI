@@ -1,6 +1,7 @@
 const responses = {
   // Autenticación y validación
   INVALID_EMAIL: 'El correo electrónico no está registrado en el sistema.',
+  EMAIL_ALREADY_EXISTS: 'El correo electónico ya esta asociado a ima',
   INVALID_PASSWORD: 'La contraseña ingresada es incorrecta.',
   BAD_REQUEST: 'La solicitud enviada no es válida.',
   REQUIRED_FILE: 'Debes adjuntar el archivo requerido en la solicitud.',
