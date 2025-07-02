@@ -1,18 +1,27 @@
 import { ProductInterface } from '@interfaces/Product.interfaces';
 import ProductModel from '@models/Product.model';
 import responses from '@utils/responses';
+import logger from '@utils/logger';
 
 export async function createProduct(product: ProductInterface): Promise<{
   status: number;
   message: string;
 }> {
-  const newProduct = new ProductModel(product);
-  await newProduct.save();
+  try {
+    const newProduct = new ProductModel(product);
+    await newProduct.save();
 
-  return {
-    status: 201,
-    message: responses.CREATED,
-  };
+    return {
+      status: 201,
+      message: responses.CREATED,
+    };
+  } catch (error) {
+    logger.error('Error creating product:', error);
+    return {
+      status: 500,
+      message: responses.INTERNAL_SERVER_ERROR,
+    };
+  }
 }
 
 export async function readProduct(key: string): Promise<{
@@ -20,13 +29,28 @@ export async function readProduct(key: string): Promise<{
   message: string;
   data?: ProductInterface;
 }> {
-  const response = await ProductModel.findOne({ key });
+  try {
+    const response = await ProductModel.findOne({ key });
 
-  return {
-    status: 200,
-    message: responses.RETRIEVED,
-    data: response as ProductInterface,
-  };
+    if (!response) {
+      return {
+        status: 404,
+        message: responses.NOT_FOUND,
+      };
+    }
+
+    return {
+      status: 200,
+      message: responses.RETRIEVED,
+      data: response as ProductInterface,
+    };
+  } catch (error) {
+    logger.error('Error reading product:', error);
+    return {
+      status: 500,
+      message: responses.INTERNAL_SERVER_ERROR,
+    };
+  }
 }
 
 export async function updateProduct(
@@ -36,23 +60,54 @@ export async function updateProduct(
   status: number;
   message: string;
 }> {
-  await ProductModel.updateOne({ key }, { $set: product });
-  return {
-    status: 200,
-    message: responses.UPDATED,
-  };
+  try {
+    const result = await ProductModel.updateOne({ key }, { $set: product });
+
+    if (result.matchedCount === 0) {
+      return {
+        status: 404,
+        message: responses.NOT_FOUND,
+      };
+    }
+
+    return {
+      status: 200,
+      message: responses.UPDATED,
+    };
+  } catch (error) {
+    logger.error('Error updating product:', error);
+    return {
+      status: 500,
+      message: responses.INTERNAL_SERVER_ERROR,
+    };
+  }
 }
 
 export async function deleteProduct(key: string): Promise<{
   status: number;
   message: string;
 }> {
-  await ProductModel.deleteOne({ key });
+  try {
+    const result = await ProductModel.deleteOne({ key });
 
-  return {
-    status: 200,
-    message: responses.DELETED,
-  };
+    if (result.deletedCount === 0) {
+      return {
+        status: 404,
+        message: responses.NOT_FOUND,
+      };
+    }
+
+    return {
+      status: 200,
+      message: responses.DELETED,
+    };
+  } catch (error) {
+    logger.error('Error deleting product:', error);
+    return {
+      status: 500,
+      message: responses.INTERNAL_SERVER_ERROR,
+    };
+  }
 }
 
 export async function deleteDatabase(products: ProductInterface[]): Promise<{
@@ -68,6 +123,7 @@ export async function deleteDatabase(products: ProductInterface[]): Promise<{
       message: responses.UPDATE_SUCCESS_DB,
     };
   } catch (error) {
+    logger.error('Error updating database:', error);
     return {
       status: 500,
       message: responses.INTERNAL_SERVER_ERROR,
