@@ -1,15 +1,15 @@
 import { z } from 'zod';
 
 const Prices = z.object({
-  distribution: z.number().positive(),
-  wholesale: z.number().positive(),
-  mid_wholesale: z.number().positive(),
-  retail: z.number().positive(),
+  distribution: z.number().min(0, 'Distribution price must be non-negative'),
+  wholesale: z.number().min(0, 'Wholesale price must be non-negative'),
+  mid_wholesale: z.number().min(0, 'Mid wholesale price must be non-negative'),
+  retail: z.number().min(0, 'Retail price must be non-negative'),
 });
 
 const ProductValidator = z.object({
-  key: z.string(),
-  description: z.string(),
+  key: z.string().min(1, 'Key is required'),
+  description: z.string().min(1, 'Description is required'),
   prices: Prices,
 });
 
