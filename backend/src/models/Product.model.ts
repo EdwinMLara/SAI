@@ -1,4 +1,4 @@
-import mongose, { Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 import { ProductInterface } from '@interfaces/Product.interfaces';
 
 const ProductSchema: Schema = new Schema<ProductInterface>({
@@ -12,4 +12,4 @@ const ProductSchema: Schema = new Schema<ProductInterface>({
   },
 });
 
-export default mongose.model<ProductInterface>('Products', ProductSchema);
+export default mongoose.model<ProductInterface>('Products', ProductSchema);
