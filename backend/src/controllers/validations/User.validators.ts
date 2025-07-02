@@ -1,6 +1,7 @@
 import UserModel from '@models/User.model';
 import responses from '@utils/responses';
 import * as auth from '@services/auth/crypt';
+import logger from '@utils/logger';
 
 interface Response {
   pass: boolean;
@@ -22,7 +23,7 @@ export async function exists(email: string): Promise<Response> {
       message: responses.NOT_FOUND,
     };
   } catch (error) {
-    console.error(`Error checking user existence for ${email}:`, error);
+    logger.error(`Error checking user existence for ${email}:`, error);
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,
@@ -49,7 +50,7 @@ export async function validatePassword(
       message: result ? responses.OK : responses.INVALID_PASSWORD,
     };
   } catch (error) {
-    console.error(`Error checking password`, error);
+    logger.error(`Error checking password`, error);
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,

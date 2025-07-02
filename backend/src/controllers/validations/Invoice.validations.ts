@@ -1,5 +1,6 @@
 import InvoiceModel from '@models/Invoice.model';
 import responses from '@utils/responses';
+import logger from '@utils/logger';
 
 interface Response {
   pass: boolean;
@@ -16,7 +17,7 @@ export async function exists(id: string): Promise<Response> {
       message: result ? responses.ALREADY_EXISTS : responses.NOT_FOUND,
     };
   } catch (error) {
-    console.error(`Error checking invoice ${id}:`, error);
+    logger.error(`Error checking invoice ${id}:`, error);
 
     return {
       pass: false,
@@ -51,7 +52,7 @@ export async function transaction(
         : 'Transaction not found in the invoice',
     };
   } catch (error) {
-    console.error(
+    logger.error(
       `Error checking transaction ${transaction} in invoice ${id}:`,
       error
     );

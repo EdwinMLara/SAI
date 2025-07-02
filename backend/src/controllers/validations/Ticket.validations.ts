@@ -1,5 +1,6 @@
 import { exists } from '@controllers/validations/Invoice.validations';
 import responses from '@utils/responses';
+import logger from '@utils/logger';
 
 interface Response {
   pass: boolean;
@@ -22,7 +23,7 @@ export async function integrity(
   if (!transaction) {
     return {
       pass: false,
-      message: responses.REQUIRED_INVOICE_ID,
+      message: responses.REQUIRED_TRANSACTION_ID,
       error: true,
     };
   }
@@ -36,7 +37,7 @@ export async function integrity(
       error: invoice.error,
     };
   } catch (error) {
-    console.error('An error occurred during integrity check:', error);
+    logger.error('An error occurred during integrity check:', error);
 
     return {
       pass: false,

@@ -1,5 +1,6 @@
 import ProductModel from '@models/Product.model';
 import responses from '@utils/responses';
+import logger from '@utils/logger';
 
 export interface ProductValidationResponse {
   pass: boolean;
@@ -12,14 +13,14 @@ export async function exists(key: string): Promise<ProductValidationResponse> {
     const result = await ProductModel.findOne({ key });
     return {
       pass: !!result,
-      error: !result,
       message: result ? responses.ALREADY_EXISTS : responses.NOT_FOUND,
     };
-  } catch {
+  } catch (error) {
+    logger.error('Error checking product existence:', error);
     return {
       pass: false,
       error: true,
-      message: responses.SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     };
   }
 }
