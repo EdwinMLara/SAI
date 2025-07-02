@@ -1,5 +1,6 @@
 import { exists } from '@controllers/validations/Invoice.validations';
 import responses from '@utils/responses';
+import logger from '@utils/logger';
 
 interface Response {
   pass: boolean;
@@ -25,7 +26,7 @@ export async function integrity(query: string): Promise<Response> {
       error: invoice.error,
     };
   } catch (error) {
-    console.error('An error occurred during integrity check:', error);
+    logger.error('An error occurred during integrity check:', error);
 
     return {
       pass: false,
