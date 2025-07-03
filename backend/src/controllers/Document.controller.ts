@@ -59,7 +59,7 @@ export async function createDocumentURL(
     const generate = await documentService.generateURL(req.file!, filename);
 
     res.status(200).json({
-      message: responses.URL_GENERATED,
+      message: responses.DOCUMENT_URL_GENERATED,
       url: generate.url,
     });
   } catch (error) {
@@ -104,13 +104,15 @@ export async function readDocumentURL(
 
     if (!checking) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.DOCUMENT_NOT_FOUND,
       });
       return;
     }
 
     const request = await documentService.searchURL(filename);
-    res.status(200).json({ message: 'URL found', url: request.url });
+    res
+      .status(200)
+      .json({ message: responses.DOCUMENT_FOUND, url: request.url });
   } catch (error) {
     res.status(500).json({
       message:
@@ -163,13 +165,15 @@ export async function updateDocument(
 
     if (!checking) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.DOCUMENT_NOT_FOUND,
       });
       return;
     }
 
     const request = await documentService.updateFile(req.file!, filename);
-    res.status(200).json({ message: responses.UPDATED, url: request.url });
+    res
+      .status(200)
+      .json({ message: responses.DOCUMENT_UPDATED, url: request.url });
   } catch (error) {
     logger.error(error);
 
@@ -217,13 +221,13 @@ export async function deleteDocument(
 
     if (!checking) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.DOCUMENT_NOT_FOUND,
       });
       return;
     }
 
     await documentService.deleteFile(filename);
-    res.status(200).json({ message: responses.DELETED });
+    res.status(200).json({ message: responses.DOCUMENT_DELETED });
   } catch (error) {
     logger.error(error);
     res.status(500).json({

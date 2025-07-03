@@ -62,7 +62,7 @@ export async function createTicketURL(
     const generate = await ticketService.generateURL(req.file!, filename);
 
     res.status(200).json({
-      message: responses.URL_GENERATED,
+      message: responses.TICKET_URL_GENERATED,
       url: generate.url,
     });
   } catch (error) {
@@ -115,13 +115,13 @@ export async function readTicketURL(
 
     if (!checking) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.TICKET_NOT_FOUND,
       });
       return;
     }
 
     const request = await ticketService.searchURL(filename);
-    res.status(200).json({ message: 'URL found', url: request.url });
+    res.status(200).json({ message: responses.TICKET_FOUND, url: request.url });
   } catch (error) {
     res.status(500).json({
       message:
@@ -181,13 +181,15 @@ export async function updateTicket(
 
     if (!checking) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.TICKET_NOT_FOUND,
       });
       return;
     }
 
     const request = await ticketService.updateFile(req.file!, filename);
-    res.status(200).json({ message: responses.UPDATED, url: request.url });
+    res
+      .status(200)
+      .json({ message: responses.TICKET_UPDATED, url: request.url });
   } catch (error) {
     logger.error(error);
 
@@ -240,13 +242,13 @@ export async function deleteTicket(req: Request, res: Response): Promise<void> {
 
     if (!checking) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.TICKET_NOT_FOUND,
       });
       return;
     }
 
     await ticketService.deleteFile(filename);
-    res.status(200).json({ message: responses.DELETED });
+    res.status(200).json({ message: responses.TICKET_DELETED });
   } catch (error) {
     logger.error(error);
     res.status(500).json({

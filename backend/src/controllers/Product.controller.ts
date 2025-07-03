@@ -23,7 +23,7 @@ export async function createProduct(
 
     if (exists.pass) {
       res.status(409).json({
-        message: responses.ALREADY_EXISTS,
+        message: responses.PRODUCT_ALREADY_EXISTS,
       });
       return;
     }
@@ -36,7 +36,7 @@ export async function createProduct(
     logger.error(error);
 
     res.status(500).json({
-      message: 'Internal Server Error',
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -47,7 +47,7 @@ export async function readProduct(
 ): Promise<void> {
   if (!req.query.key) {
     res.status(400).json({
-      message: responses.ERROR_DEV,
+      message: responses.BAD_REQUEST,
     });
     return;
   }
@@ -64,7 +64,7 @@ export async function readProduct(
 
     if (!exists.pass) {
       res.status(404).json({
-        message: responses.NOT_FOUND,
+        message: responses.PRODUCT_NOT_FOUND,
       });
       return;
     }
@@ -99,7 +99,7 @@ export async function updateProduct(
 
     if (!exists.pass) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.PRODUCT_NOT_FOUND,
       });
       return;
     }
@@ -126,7 +126,7 @@ export async function deleteProduct(
 ): Promise<void> {
   if (!req.query.key) {
     res.status(400).json({
-      message: responses.ERROR_DEV,
+      message: responses.BAD_REQUEST,
     });
     return;
   }
@@ -143,7 +143,7 @@ export async function deleteProduct(
 
     if (!exists.pass) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.PRODUCT_NOT_FOUND,
       });
       return;
     }

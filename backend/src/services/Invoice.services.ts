@@ -13,7 +13,7 @@ export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
 
     return {
       status: 201,
-      message: responses.CREATED,
+      message: responses.INVOICE_CREATED,
     };
   } catch (error) {
     logger.error('Error creating invoice:', error);
@@ -35,13 +35,13 @@ export async function getInvoice(id: string): Promise<{
     if (!response) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.INVOICE_NOT_FOUND,
       };
     }
 
     return {
       status: 200,
-      message: responses.RETRIEVED,
+      message: responses.INVOICE_FOUND,
       data: response as InvoiceInterface,
     };
   } catch (error) {
@@ -66,13 +66,13 @@ export async function updateInvoice(
     if (result.matchedCount === 0) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.INVOICE_NOT_FOUND,
       };
     }
 
     return {
       status: 200,
-      message: responses.UPDATED,
+      message: responses.INVOICE_UPDATED,
     };
   } catch (error) {
     logger.error('Error updating invoice:', error);
@@ -93,13 +93,13 @@ export async function deleteInvoice(id: string): Promise<{
     if (result.deletedCount === 0) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.INVOICE_NOT_FOUND,
       };
     }
 
     return {
       status: 200,
-      message: responses.DELETED,
+      message: responses.INVOICE_DELETED,
     };
   } catch (error) {
     logger.error('Error deleting invoice:', error);

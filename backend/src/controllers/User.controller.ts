@@ -30,8 +30,8 @@ export async function createUser(
     const result = await userService.createUser(req.body);
     res.status(result.status).json({ message: result.message });
   } catch (error) {
-    logger.error('User validation failed', error);
-    res.status(400).json({ message: 'Invalid user data' });
+    logger.error('User creation failed', error);
+    res.status(400).json({ message: responses.INVALID_DATA });
     return;
   }
 }
@@ -48,7 +48,7 @@ export async function readUser(req: Request, res: Response): Promise<void> {
       return;
     }
     if (!exists.pass) {
-      res.status(404).json({ message: responses.NOT_FOUND });
+      res.status(404).json({ message: responses.USER_NOT_FOUND });
       return;
     }
     const user = await userService.readUser(req.query.email as string);
@@ -70,7 +70,7 @@ export async function updateUser(
       return;
     }
     if (!exists.pass) {
-      res.status(404).json({ message: responses.DOES_NOT_EXIST });
+      res.status(404).json({ message: responses.USER_NOT_FOUND });
       return;
     }
     if (req.body.password) {
@@ -96,7 +96,7 @@ export async function deleteUser(req: Request, res: Response): Promise<void> {
       return;
     }
     if (!exists.pass) {
-      res.status(404).json({ message: responses.DOES_NOT_EXIST });
+      res.status(404).json({ message: responses.USER_NOT_FOUND });
       return;
     }
     const result = await userService.deleteUser(req.query.email as string);

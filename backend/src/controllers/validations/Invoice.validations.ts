@@ -48,8 +48,8 @@ export async function transaction(
     return {
       pass: !!transactionExists,
       message: transactionExists
-        ? 'Transaction exists in the invoice'
-        : 'Transaction not found in the invoice',
+        ? 'Transacción encontrada en la factura.'
+        : 'Transacción no encontrada en la factura.',
     };
   } catch (error) {
     logger.error(

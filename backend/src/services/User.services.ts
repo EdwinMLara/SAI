@@ -11,7 +11,7 @@ export async function createUser(user: UserInterface): Promise<{
     await newUser.save();
     return {
       status: 201,
-      message: responses.CREATED,
+      message: responses.USER_CREATED,
     };
   } catch (error) {
     return {
@@ -31,12 +31,12 @@ export async function readUser(email: string): Promise<{
     if (!user) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.USER_NOT_FOUND,
       };
     }
     return {
       status: 200,
-      message: responses.RETRIEVED,
+      message: responses.USER_FOUND,
       data: user,
     };
   } catch (error) {
@@ -61,12 +61,12 @@ export async function updateUser(
     if (!updated) {
       return {
         status: 404,
-        message: responses.DOES_NOT_EXIST,
+        message: responses.USER_NOT_FOUND,
       };
     }
     return {
       status: 200,
-      message: responses.UPDATED,
+      message: responses.USER_UPDATED,
     };
   } catch (error) {
     return {
@@ -85,12 +85,12 @@ export async function deleteUser(email: string): Promise<{
     if (!deleted) {
       return {
         status: 404,
-        message: responses.DOES_NOT_EXIST,
+        message: responses.USER_NOT_FOUND,
       };
     }
     return {
       status: 200,
-      message: responses.DELETED,
+      message: responses.USER_DELETED,
     };
   } catch (error) {
     return {

@@ -25,7 +25,7 @@ const RequestMiddleware = (
   if (!contentType) {
     logger.error(`[Request] Missing Content-Type header.`);
     res.status(500).json({
-      message: responses.ERROR_DEV,
+      message: responses.BAD_REQUEST,
     });
     return;
   }
@@ -38,7 +38,7 @@ const RequestMiddleware = (
       if (!req.body || Object.keys(req.body).length === 0) {
         logger.error(`[Request] Empty body in ${req.method} request.`);
         res.status(400).json({
-          message: responses.ERROR_DEV,
+          message: responses.BAD_REQUEST,
         });
       }
     }
@@ -49,7 +49,7 @@ const RequestMiddleware = (
     if (!req.file) {
       logger.error(`[Request] Form-data must contain at least one file.`);
       res.status(400).json({
-        message: responses.ERROR_DEV,
+        message: responses.REQUIRED_FILE,
       });
     }
     return next();
@@ -57,7 +57,7 @@ const RequestMiddleware = (
 
   logger.error(`[Request] Unsupported Content-Type: ${contentType}`);
   res.status(415).json({
-    message: responses.ERROR_DEV,
+    message: responses.INVALID_FILETYPE,
   });
 };
 

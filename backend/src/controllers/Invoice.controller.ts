@@ -22,7 +22,7 @@ export async function createInvoice(
 
     if (exists.pass) {
       res.status(409).json({
-        message: responses.ALREADY_EXISTS,
+        message: responses.INVOICE_ALREADY_EXISTS,
       });
       return;
     }
@@ -60,7 +60,7 @@ export async function readInvoice(req: Request, res: Response): Promise<void> {
 
     if (!exists.pass) {
       res.status(404).json({
-        message: responses.NOT_FOUND,
+        message: responses.INVOICE_NOT_FOUND,
       });
       return;
     }
@@ -95,7 +95,7 @@ export async function updateInvoice(
 
     if (!exists.pass) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.INVOICE_NOT_FOUND,
       });
       return;
     }
@@ -139,7 +139,7 @@ export async function deleteInvoice(
 
     if (!exists.pass) {
       res.status(404).json({
-        message: responses.DOES_NOT_EXIST,
+        message: responses.INVOICE_NOT_FOUND,
       });
       return;
     }

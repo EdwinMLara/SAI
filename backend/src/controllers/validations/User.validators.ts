@@ -47,7 +47,7 @@ export async function validatePassword(
     const result = await auth.compareHash(password as string, user.password);
     return {
       pass: result,
-      message: result ? responses.OK : responses.INVALID_PASSWORD,
+      message: result ? responses.PASSWORD_VALID : responses.INVALID_PASSWORD,
     };
   } catch (error) {
     logger.error(`Error checking password`, error);

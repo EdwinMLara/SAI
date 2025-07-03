@@ -13,7 +13,7 @@ export async function createProduct(product: ProductInterface): Promise<{
 
     return {
       status: 201,
-      message: responses.CREATED,
+      message: responses.PRODUCT_CREATED,
     };
   } catch (error) {
     logger.error('Error creating product:', error);
@@ -35,13 +35,13 @@ export async function readProduct(key: string): Promise<{
     if (!response) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.PRODUCT_NOT_FOUND,
       };
     }
 
     return {
       status: 200,
-      message: responses.RETRIEVED,
+      message: responses.PRODUCT_FOUND,
       data: response as ProductInterface,
     };
   } catch (error) {
@@ -66,13 +66,13 @@ export async function updateProduct(
     if (result.matchedCount === 0) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.PRODUCT_NOT_FOUND,
       };
     }
 
     return {
       status: 200,
-      message: responses.UPDATED,
+      message: responses.PRODUCT_UPDATED,
     };
   } catch (error) {
     logger.error('Error updating product:', error);
@@ -93,13 +93,13 @@ export async function deleteProduct(key: string): Promise<{
     if (result.deletedCount === 0) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.PRODUCT_NOT_FOUND,
       };
     }
 
     return {
       status: 200,
-      message: responses.DELETED,
+      message: responses.PRODUCT_DELETED,
     };
   } catch (error) {
     logger.error('Error deleting product:', error);
@@ -120,7 +120,7 @@ export async function deleteDatabase(products: ProductInterface[]): Promise<{
 
     return {
       status: 200,
-      message: responses.UPDATE_SUCCESS_DB,
+      message: responses.PRODUCTS_DATABASE_UPDATED,
     };
   } catch (error) {
     logger.error('Error updating database:', error);
