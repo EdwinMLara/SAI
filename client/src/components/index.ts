@@ -6,3 +6,4 @@ export { default as Notification } from './ui/Notification';
 export { default as Modal } from './ui/Modal';
 export { default as Table } from './ui/Table';
 export { default as InputFile } from './ui/InputFile';
+export { default as Input } from './ui/Input';
