@@ -4,6 +4,12 @@ const UserValidator = z.object({
   image: z.string().optional(),
   name: z.string().min(1, 'El nombre es obligatorio'),
   userName: z.string().min(1, 'El nombre de usuario es obligatorio'),
+  phone: z
+    .string()
+    .regex(
+      /^\d{10}$/,
+      'El teléfono debe tener exactamente 10 dígitos numéricos'
+    ),
   email: z.string().email('Formato de correo electrónico inválido'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
   role: z.enum(['admin', 'user'], {
