@@ -36,29 +36,6 @@ export async function createUser(
   }
 }
 
-export async function readUser(req: Request, res: Response): Promise<void> {
-  if (!req.query.email) {
-    res.status(400).json({ message: responses.BAD_REQUEST });
-    return;
-  }
-  try {
-    const exists = await userValidations.exists(req.query.email as string);
-    if (exists.error) {
-      res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
-      return;
-    }
-    if (!exists.pass) {
-      res.status(404).json({ message: responses.USER_NOT_FOUND });
-      return;
-    }
-    const user = await userService.readUser(req.query.email as string);
-    res.status(user.status).json({ message: user.message, user: user.data });
-  } catch (error) {
-    logger.error(error);
-    res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
-  }
-}
-
 export async function updateUser(
   req: Request<{}, {}, UserInterface>,
   res: Response
