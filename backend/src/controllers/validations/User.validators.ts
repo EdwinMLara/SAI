@@ -31,30 +31,3 @@ export async function exists(email: string): Promise<Response> {
     };
   }
 }
-
-export async function validatePassword(
-  email: string,
-  password: string
-): Promise<Response> {
-  try {
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      return {
-        pass: false,
-        message: responses.NOT_FOUND,
-      };
-    }
-    const result = await auth.compareHash(password as string, user.password);
-    return {
-      pass: result,
-      message: result ? responses.PASSWORD_VALID : responses.INVALID_PASSWORD,
-    };
-  } catch (error) {
-    logger.error(`Error checking password`, error);
-    return {
-      pass: false,
-      message: responses.INTERNAL_SERVER_ERROR,
-      error: true,
-    };
-  }
-}

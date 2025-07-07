@@ -2,6 +2,14 @@ import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.JWT_Secret;
 
+export function decodeToken(token: string): any | null {
+  try {
+    return jwt.decode(token);
+  } catch (error) {
+    return null;
+  }
+}
+
 export function verifyToken(tokenToVerify: string): boolean {
   if (!jwtSecret) {
     return false;
