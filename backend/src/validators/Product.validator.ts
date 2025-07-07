@@ -1,19 +1,16 @@
 import { z } from 'zod';
+import responses from '@utils/responses';
 
 const Prices = z.object({
-  distribution: z
-    .number()
-    .min(0, 'El precio de distribución debe ser no negativo'),
-  wholesale: z.number().min(0, 'El precio mayorista debe ser no negativo'),
-  mid_wholesale: z
-    .number()
-    .min(0, 'El precio medio mayorista debe ser no negativo'),
-  retail: z.number().min(0, 'El precio minorista debe ser no negativo'),
+  distribution: z.number().min(0, responses.VAL_ONLY_POSITIVE),
+  wholesale: z.number().min(0, responses.VAL_ONLY_POSITIVE),
+  mid_wholesale: z.number().min(0, responses.VAL_ONLY_POSITIVE),
+  retail: z.number().min(0, responses.VAL_ONLY_POSITIVE),
 });
 
 const ProductValidator = z.object({
-  key: z.string().min(1, 'La clave es obligatoria'),
-  description: z.string().min(1, 'La descripción es obligatoria'),
+  key: z.string().min(1, responses.VAL_REQUIRED),
+  description: z.string().min(1, responses.VAL_REQUIRED),
   prices: Prices,
 });
 

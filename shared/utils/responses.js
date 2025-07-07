@@ -78,6 +78,20 @@ const responses = {
 
   INTERFACE_VALUE_ERROR:
     'Los datos proporcionados no cumplen con el formato requerido.',
+
+  // Validaciones
+  VAL_SERVER_ERROR: 'Ocurrió un error en la validación',
+  VAL_REQUIRED: 'Este campo es obligatorio',
+  VAL_MIN_LENGTH: 'Debe tener al menos {min} caracteres',
+  VAL_MAX_LENGTH: 'No debe exceder de {max} caracteres',
+  VAL_ONLY_NUMBERS: 'Solo se permiten números',
+  VAL_ONLY_LETTERS: 'Solo se permiten letras',
+  VAL_ONLY_LETTERS: 'Solo se permiten letras, números y guion bajo',
+  VAL_INVALID_EMAIL: 'El formato del email no es válido',
+  VAL_INVALID_PHONE: 'El número de teléfono debe tener 10 dígitos',
+  VAL_INVALID_PASSWORD: 'La contraseña debe tener al menos 6 caracteres',
+  VAL_USERNAME_LENGTH: 'El username debe tener entre 4 y 16 caracteres',
+  VAL_ONLY_POSITIVE: 'El valor debe ser positivo',
 };
 
 module.exports = responses;

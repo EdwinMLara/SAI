@@ -1,10 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import InvoiceValidator, {
-  formatValidationErrors,
-} from '@validators/Invoice.validator';
+import InvoiceValidator from '@validators/Invoice.validator';
 import logger from '@utils/logger';
 import { ZodError } from 'zod';
 import responses from '@utils/responses';
+import FormatErrors from '@validators/FormatError.utils';
 
 export const validateInvoice = async (
   req: Request,
@@ -19,7 +18,7 @@ export const validateInvoice = async (
       error instanceof ZodError ||
       (error as { name?: string })?.name === 'ZodError'
     ) {
-      const formattedErrors = formatValidationErrors(error as ZodError);
+      const formattedErrors = FormatErrors(error as ZodError);
 
       logger.error('Invoice validation failed', {
         errors: formattedErrors,
