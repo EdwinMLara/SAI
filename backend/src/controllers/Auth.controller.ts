@@ -1,11 +1,46 @@
 import { Request, Response } from 'express';
+import { UserInterface } from '@interfaces/User.interfaces';
+import * as userService from '@services/User.services';
+import * as userValidations from '@controllers/validations/User.validators';
+import * as inviteService from '@services/Invite.services';
+import * as auth from '@services/auth/crypt';
+import logger from '@utils/logger';
+import responses from '@utils/responses';
+
 import {
   Login,
   CheckingToken,
   refreshToken as RefreshTokenService,
 } from '@services/Auth.services';
-import logger from '@utils/logger';
-import responses from '@utils/responses';
+
+export async function register(
+  req: Request<{}, {}, UserInterface>,
+  res: Response
+): Promise<void> {
+  try {
+    const invite = await inviteService.hasInvite(req.body.email);
+    if (!invite.exists) {
+      res.status(403).json({ message: 'Email not invited' });
+      return;
+    }
+    const exists = await userValidations.exists(req.body.email);
+    if (exists.error) {
+      res.status(400).json({ message: exists.message });
+      return;
+    }
+    if (exists.pass) {
+      res.status(409).json({ message: responses.EMAIL_ALREADY_EXISTS });
+      return;
+    }
+    req.body.password = await auth.encrypt(req.body.password);
+    const result = await userService.createUser(req.body);
+    res.status(result.status).json({ message: result.message });
+  } catch (error) {
+    logger.error('User registration failed', error);
+    res.status(400).json({ message: responses.INVALID_DATA });
+    return;
+  }
+}
 
 export async function login(req: Request, res: Response): Promise<void> {
   try {

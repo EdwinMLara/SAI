@@ -8,34 +8,6 @@ import * as auth from '@services/auth/crypt';
 import logger from '@utils/logger';
 import responses from '@utils/responses';
 
-export async function createUser(
-  req: Request<{}, {}, UserInterface>,
-  res: Response
-): Promise<void> {
-  try {
-    const exists = await userValidations.exists(req.body.email);
-
-    if (exists.error) {
-      res.status(400).json({ message: exists.message });
-      return;
-    }
-
-    if (exists.pass) {
-      res.status(409).json({ message: responses.EMAIL_ALREADY_EXISTS });
-      return;
-    }
-
-    req.body.password = await auth.encrypt(req.body.password);
-
-    const result = await userService.createUser(req.body);
-    res.status(result.status).json({ message: result.message });
-  } catch (error) {
-    logger.error('User creation failed', error);
-    res.status(400).json({ message: responses.INVALID_DATA });
-    return;
-  }
-}
-
 export async function updateUser(
   req: Request<{}, {}, UserInterface>,
   res: Response

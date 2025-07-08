@@ -1,6 +1,7 @@
 import { Router } from 'express';
 
 import loginRoutes from './modules/login.routes';
+import registerRoutes from './modules/register.routes';
 import productRoutes from './modules/product.routes';
 import invoiceRoutes from './modules/invoice.routes';
 import documentRoutes from './modules/document.routes';
@@ -11,6 +12,7 @@ import inviteRoutes from './modules/invite.routes';
 const router = Router();
 
 router.use('/login', loginRoutes);
+router.use('/register', registerRoutes);
 router.use('/product', productRoutes);
 router.use('/invoice', invoiceRoutes);
 router.use('/document', documentRoutes);
