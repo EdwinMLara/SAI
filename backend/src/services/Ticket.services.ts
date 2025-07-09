@@ -1,5 +1,6 @@
 import connectSupabase from '@config/supabase';
 import logger from '@utils/logger';
+import responses from '@utils/responses';
 
 const bucket = process.env.BUCKET_TICKETS || 'tickets';
 const supabase = connectSupabase();
@@ -18,7 +19,7 @@ export async function generateURL(
 
     if (error) {
       logger.error('Error uploading ticket to Supabase:', error);
-      throw new Error(error.message);
+      throw new Error(responses.INTERNAL_SERVER_ERROR);
     }
 
     const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
@@ -57,7 +58,7 @@ export async function deleteFile(filename: string): Promise<void> {
 
     if (error) {
       logger.error('Error deleting ticket from Supabase:', error);
-      throw new Error(`Error deleting ticket: ${error.message}`);
+      throw new Error(responses.INTERNAL_SERVER_ERROR);
     }
   } catch (error) {
     logger.error(`Error deleting ticket ${filename}:`, error);

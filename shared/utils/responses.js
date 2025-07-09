@@ -92,6 +92,9 @@ const responses = {
   VAL_INVALID_PASSWORD: 'La contraseña debe tener al menos 6 caracteres',
   VAL_USERNAME_LENGTH: 'El username debe tener entre 4 y 16 caracteres',
   VAL_ONLY_POSITIVE: 'El valor debe ser positivo',
+  // Auth custom
+  EMAIL_NOT_INVITED: 'El correo electrónico no ha sido invitado.',
+  TOKEN_NOT_PROVIDED: 'Token no proporcionado.',
 };
 
 module.exports = responses;

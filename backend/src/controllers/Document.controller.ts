@@ -115,10 +115,7 @@ export async function readDocumentURL(
       .json({ message: responses.DOCUMENT_FOUND, url: request.url });
   } catch (error) {
     res.status(500).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : responses.INTERNAL_SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -175,13 +172,10 @@ export async function updateDocument(
       .status(200)
       .json({ message: responses.DOCUMENT_UPDATED, url: request.url });
   } catch (error) {
-    logger.error(error);
+    logger.error('Document creation failed', error);
 
     res.status(500).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : responses.INTERNAL_SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -229,12 +223,9 @@ export async function deleteDocument(
     await documentService.deleteFile(filename);
     res.status(200).json({ message: responses.DOCUMENT_DELETED });
   } catch (error) {
-    logger.error(error);
+    logger.error('Get documents failed', error);
     res.status(500).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : responses.INTERNAL_SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }

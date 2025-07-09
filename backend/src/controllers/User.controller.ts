@@ -28,7 +28,7 @@ export async function updateUser(
     const result = await userService.updateUser(req.body, req.body.email);
     res.status(result.status).json({ message: result.message });
   } catch (error) {
-    logger.error(error);
+    logger.error('User creation failed', error);
     res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
   }
 }
@@ -51,7 +51,7 @@ export async function deleteUser(req: Request, res: Response): Promise<void> {
     const result = await userService.deleteUser(req.query.email as string);
     res.status(result.status).json({ message: result.message });
   } catch (error) {
-    logger.error(error);
+    logger.error('Get users failed', error);
     res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
   }
 }

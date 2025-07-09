@@ -20,7 +20,7 @@ export async function register(
   try {
     const invite = await inviteService.hasInvite(req.body.email);
     if (!invite.exists) {
-      res.status(403).json({ message: 'Email not invited' });
+      res.status(403).json({ message: responses.EMAIL_NOT_INVITED });
       return;
     }
     const exists = await userValidations.exists(req.body.email);
@@ -57,7 +57,7 @@ export async function login(req: Request, res: Response): Promise<void> {
       });
     }
   } catch (error) {
-    logger.error('Error en login:', error);
+    logger.error('Login failed', error);
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
     });
@@ -69,7 +69,7 @@ export async function verifyToken(req: Request, res: Response): Promise<void> {
     const token = req.headers.authorization?.replace('Bearer ', '');
     if (!token) {
       res.status(401).json({
-        message: 'Token no proporcionado',
+        message: responses.TOKEN_NOT_PROVIDED,
       });
       return;
     }
@@ -85,7 +85,7 @@ export async function verifyToken(req: Request, res: Response): Promise<void> {
       });
     }
   } catch (error) {
-    logger.error('Error en verificación de token:', error);
+    logger.error('Token verification failed', error);
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
     });
@@ -107,7 +107,7 @@ export async function refreshToken(req: Request, res: Response): Promise<void> {
       });
     }
   } catch (error) {
-    logger.error('Error en refresh token:', error);
+    logger.error('Refresh token failed', error);
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
     });

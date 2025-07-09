@@ -124,10 +124,7 @@ export async function readTicketURL(
     res.status(200).json({ message: responses.TICKET_FOUND, url: request.url });
   } catch (error) {
     res.status(500).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : responses.INTERNAL_SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -191,13 +188,10 @@ export async function updateTicket(
       .status(200)
       .json({ message: responses.TICKET_UPDATED, url: request.url });
   } catch (error) {
-    logger.error(error);
+    logger.error('Ticket creation failed', error);
 
     res.status(500).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : responses.INTERNAL_SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }
@@ -250,12 +244,9 @@ export async function deleteTicket(req: Request, res: Response): Promise<void> {
     await ticketService.deleteFile(filename);
     res.status(200).json({ message: responses.TICKET_DELETED });
   } catch (error) {
-    logger.error(error);
+    logger.error('Get tickets failed', error);
     res.status(500).json({
-      message:
-        error instanceof Error
-          ? error.message
-          : responses.INTERNAL_SERVER_ERROR,
+      message: responses.INTERNAL_SERVER_ERROR,
     });
   }
 }

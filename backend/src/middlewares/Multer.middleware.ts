@@ -29,7 +29,7 @@ function fileRequiredMiddleware(
   upload.single('file')(req, res, (err: any) => {
     if (err) {
       logger.error(`[Multer] Upload error: ${err.message}`);
-      return res.status(415).json({ message: err.message });
+      return res.status(415).json({ message: responses.INVALID_FILETYPE });
     }
     if (!req.file) {
       logger.error(`[Multer] No file provided in request.`);

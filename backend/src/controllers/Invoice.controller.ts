@@ -32,7 +32,7 @@ export async function createInvoice(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Invoice creation failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -71,7 +71,7 @@ export async function readInvoice(req: Request, res: Response): Promise<void> {
       invoice: request.data,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Get invoice failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -108,7 +108,7 @@ export async function updateInvoice(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Update invoice failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -149,7 +149,7 @@ export async function deleteInvoice(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Delete invoice failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,

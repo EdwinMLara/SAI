@@ -47,15 +47,10 @@ export async function transaction(
 
     return {
       pass: !!transactionExists,
-      message: transactionExists
-        ? 'Transacción encontrada en la factura.'
-        : 'Transacción no encontrada en la factura.',
+      message: transactionExists ? responses.RETRIEVED : responses.NOT_FOUND,
     };
   } catch (error) {
-    logger.error(
-      `Error checking transaction ${transaction} in invoice ${id}:`,
-      error
-    );
+    logger.error('An error occurred during integrity check:', error);
 
     return {
       pass: false,

@@ -33,7 +33,7 @@ export async function createProduct(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Product creation failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -75,7 +75,7 @@ export async function readProduct(
       product: request.data,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Get products failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -112,7 +112,7 @@ export async function updateProduct(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Update product failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -153,7 +153,7 @@ export async function deleteProduct(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Delete product failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,
@@ -171,7 +171,7 @@ export async function changeProducts(
       message: request.message,
     });
   } catch (error) {
-    logger.error(error);
+    logger.error('Get product by id failed', error);
 
     res.status(500).json({
       message: responses.INTERNAL_SERVER_ERROR,

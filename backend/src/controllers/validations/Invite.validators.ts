@@ -22,7 +22,7 @@ export async function exists(email: string): Promise<Response> {
       message: responses.NOT_FOUND,
     };
   } catch (error) {
-    logger.error(`Error checking invite existence for ${email}:`, error);
+    logger.error('An error occurred during exists check:', error);
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,
