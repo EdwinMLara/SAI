@@ -4,18 +4,22 @@ import responses from '@utils/responses';
 
 export async function createInvite(
   invitedBy: string,
-  email: string
+  email: string,
+  role: 'admin' | 'user'
 ): Promise<{
   status: number;
   message: string;
 }> {
   try {
-    const invite = { invitedBy, email };
+    const invite = { invitedBy, email, role };
     const newInvite = new InviteModel(invite);
     await newInvite.save();
+    let message = responses.INVITE_CREATED;
+    if (role === 'admin') message = responses.INVITE_CREATED;
+    if (role === 'user') message = responses.INVITE_CREATED;
     return {
       status: 201,
-      message: responses.CREATED,
+      message,
     };
   } catch (error) {
     return {
