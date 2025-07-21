@@ -1,6 +1,7 @@
-import { UserInterface } from '@interfaces/User.interfaces';
 import UserModel from '@models/User.model';
+import { UserInterface } from '@interfaces/User.interfaces';
 import responses from '@utils/responses';
+import AppError from '@utils/AppError';
 
 export async function createUser(user: UserInterface): Promise<{
   status: number;
@@ -14,10 +15,7 @@ export async function createUser(user: UserInterface): Promise<{
       message: responses.USER_CREATED,
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -29,21 +27,15 @@ export async function readUser(email: string): Promise<{
   try {
     const user = await UserModel.findOne({ email });
     if (!user) {
-      return {
-        status: 404,
-        message: responses.USER_NOT_FOUND,
-      };
+      throw new AppError('Error en la transacción de la base de datos');
     }
     return {
       status: 200,
-      message: responses.USER_FOUND,
+      message: 'Operación exitosa',
       data: user,
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -55,24 +47,16 @@ export async function updateUser(
   message: string;
 }> {
   try {
-    const updated = await UserModel.findOneAndUpdate({ email }, user, {
-      new: true,
-    });
+    const updated = await UserModel.findOneAndUpdate({ email }, user);
     if (!updated) {
-      return {
-        status: 404,
-        message: responses.USER_NOT_FOUND,
-      };
+      throw new AppError('Error en la transacción de la base de datos');
     }
     return {
       status: 200,
-      message: responses.USER_UPDATED,
+      message: 'Usuario actualizado',
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -83,19 +67,13 @@ export async function deleteUser(email: string): Promise<{
   try {
     const deleted = await UserModel.findOneAndDelete({ email });
     if (!deleted) {
-      return {
-        status: 404,
-        message: responses.USER_NOT_FOUND,
-      };
+      throw new AppError('Error en la transacción de la base de datos');
     }
     return {
       status: 200,
-      message: responses.USER_DELETED,
+      message: 'Usuario eliminado',
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }

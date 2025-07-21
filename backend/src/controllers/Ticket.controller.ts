@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import * as ticketService from '@services/Ticket.services';
 import * as ticketValidations from '@controllers/validations/Ticket.validations';
 import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
-import logger from '@utils/logger';
 import responses from '@utils/responses';
 
 interface MulterRequest extends Request {
@@ -13,7 +12,8 @@ interface MulterRequest extends Request {
 
 export async function createTicketURL(
   req: MulterRequest,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const validate = await ticketValidations.integrity(
@@ -66,15 +66,14 @@ export async function createTicketURL(
       url: generate.url,
     });
   } catch (error) {
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function readTicketURL(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const validate = await ticketValidations.integrity(
@@ -123,15 +122,14 @@ export async function readTicketURL(
     const request = await ticketService.searchURL(filename);
     res.status(200).json({ message: responses.TICKET_FOUND, url: request.url });
   } catch (error) {
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function updateTicket(
   req: MulterRequest,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.file || req.file.mimetype !== 'image/jpeg') {
     res.status(415).json({
@@ -188,15 +186,15 @@ export async function updateTicket(
       .status(200)
       .json({ message: responses.TICKET_UPDATED, url: request.url });
   } catch (error) {
-    logger.error('Ticket creation failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
-export async function deleteTicket(req: Request, res: Response): Promise<void> {
+export async function deleteTicket(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const validate = await ticketValidations.integrity(
       req.query.id as string,
@@ -244,9 +242,6 @@ export async function deleteTicket(req: Request, res: Response): Promise<void> {
     await ticketService.deleteFile(filename);
     res.status(200).json({ message: responses.TICKET_DELETED });
   } catch (error) {
-    logger.error('Get tickets failed', error);
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }

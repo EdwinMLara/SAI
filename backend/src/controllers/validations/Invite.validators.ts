@@ -1,6 +1,5 @@
 import Invite from '@models/Invite.model';
 import responses from '@utils/responses';
-import logger from '@utils/logger';
 
 interface Response {
   pass: boolean;
@@ -22,7 +21,6 @@ export async function exists(email: string): Promise<Response> {
       message: responses.NOT_FOUND,
     };
   } catch (error) {
-    logger.error('An error occurred during exists check:', error);
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,

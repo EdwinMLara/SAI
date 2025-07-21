@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import * as userValidations from '@controllers/validations/User.validators';
 import { Invite } from '@interfaces/Invite.interfaces';
 import * as inviteValidations from '../controllers/validations/Invite.validators';
 import * as InviteService from '@services/Invite.services';
-import logger from '@utils/logger';
 import responses from '@utils/responses';
 
 export async function createInvite(
   req: Request<{}, {}, Invite>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const { invitedBy, email, role } = req.body;
@@ -29,13 +29,15 @@ export async function createInvite(
       role,
     });
   } catch (error) {
-    logger.error('Invite creation failed', error);
-    res.status(400).json({ message: responses.INVALID_DATA });
-    return;
+    next(error);
   }
 }
 
-export async function getInvites(req: Request, res: Response): Promise<void> {
+export async function getInvites(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const { user } = req.query;
     const list = await InviteService.getInvites(user as string);
@@ -48,13 +50,15 @@ export async function getInvites(req: Request, res: Response): Promise<void> {
       invites: list.data,
     });
   } catch (error) {
-    logger.error('Get invites failed', error);
-    res.status(400).json({ message: responses.INVALID_DATA });
-    return;
+    next(error);
   }
 }
 
-export async function removeInvite(req: Request, res: Response): Promise<void> {
+export async function removeInvite(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const { email } = req.body;
     if (!email) {
@@ -76,8 +80,6 @@ export async function removeInvite(req: Request, res: Response): Promise<void> {
       email,
     });
   } catch (error) {
-    logger.error('Remove invite failed', error);
-    res.status(400).json({ message: responses.INVALID_DATA });
-    return;
+    next(error);
   }
 }

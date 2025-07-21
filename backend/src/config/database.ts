@@ -10,8 +10,7 @@ export const connect = async () => {
     await mongoose.connect(process.env.MONGO_URI);
     logger.info('[Mongo] Connected Successfully');
   } catch (error) {
-    logger.error('[Mongo] DB connection failed', error);
-    process.exit(1);
+    throw error;
   }
 };
 
@@ -20,7 +19,6 @@ export const disconnect = async () => {
     await mongoose.disconnect();
     logger.info('[Mongo] Disconnected Successfully');
   } catch (error) {
-    logger.error('[Mongo] Disconnection failed', error);
-    process.exit(1);
+    throw error;
   }
 };

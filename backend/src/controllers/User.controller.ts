@@ -1,16 +1,16 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { UserInterface } from '@interfaces/User.interfaces';
 
 import * as userService from '@services/User.services';
 import * as userValidations from '@controllers/validations/User.validators';
 
-import * as auth from '@services/auth/crypt';
-import logger from '@utils/logger';
+import * as auth from '@utils/auth/crypt';
 import responses from '@utils/responses';
 
 export async function updateUser(
   req: Request<{}, {}, UserInterface>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const exists = await userValidations.exists(req.body.email);
@@ -28,12 +28,15 @@ export async function updateUser(
     const result = await userService.updateUser(req.body, req.body.email);
     res.status(result.status).json({ message: result.message });
   } catch (error) {
-    logger.error('User creation failed', error);
-    res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
+    next(error);
   }
 }
 
-export async function deleteUser(req: Request, res: Response): Promise<void> {
+export async function deleteUser(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   if (!req.query.email) {
     res.status(400).json({ message: responses.BAD_REQUEST });
     return;
@@ -51,7 +54,6 @@ export async function deleteUser(req: Request, res: Response): Promise<void> {
     const result = await userService.deleteUser(req.query.email as string);
     res.status(result.status).json({ message: result.message });
   } catch (error) {
-    logger.error('Get users failed', error);
-    res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
+    next(error);
   }
 }

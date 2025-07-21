@@ -1,6 +1,5 @@
 import InvoiceModel from '@models/Invoice.model';
 import responses from '@utils/responses';
-import logger from '@utils/logger';
 
 interface Response {
   pass: boolean;
@@ -17,8 +16,6 @@ export async function exists(id: string): Promise<Response> {
       message: result ? responses.ALREADY_EXISTS : responses.NOT_FOUND,
     };
   } catch (error) {
-    logger.error(`Error checking invoice ${id}:`, error);
-
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,
@@ -50,8 +47,6 @@ export async function transaction(
       message: transactionExists ? responses.RETRIEVED : responses.NOT_FOUND,
     };
   } catch (error) {
-    logger.error('An error occurred during integrity check:', error);
-
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,

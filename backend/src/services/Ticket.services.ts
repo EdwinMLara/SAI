@@ -1,9 +1,13 @@
-import connectSupabase from '@config/supabase';
+import supabase from '@config/supabase';
 import logger from '@utils/logger';
 import responses from '@utils/responses';
+import AppError from '@utils/AppError';
 
-const bucket = process.env.BUCKET_TICKETS || 'tickets';
-const supabase = connectSupabase();
+const bucket: string = process.env.BUCKET_TICKETS as string;
+
+if (!bucket) {
+  throw new AppError('No se encontró el bucket de tickets');
+}
 
 export async function generateURL(
   file: Express.Multer.File,
@@ -18,8 +22,7 @@ export async function generateURL(
       });
 
     if (error) {
-      logger.error('Error uploading ticket to Supabase:', error);
-      throw new Error(responses.INTERNAL_SERVER_ERROR);
+      throw new Error(responses.SERVER_ERROR);
     }
 
     const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
@@ -28,7 +31,6 @@ export async function generateURL(
       url: data.publicUrl,
     };
   } catch (error) {
-    logger.error(`Error generating URL for ticket: ${error}`);
     throw error;
   }
 }
@@ -40,14 +42,13 @@ export async function searchURL(filename: string): Promise<{
     const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
 
     if (!data || !data.publicUrl) {
-      throw new Error('Failed to retrieve the ticket URL');
+      throw new Error(responses.SERVER_ERROR);
     }
 
     return {
       url: data.publicUrl,
     };
   } catch (error) {
-    logger.error(`Error searching URL for ticket ${filename}:`, error);
     throw error;
   }
 }
@@ -57,11 +58,9 @@ export async function deleteFile(filename: string): Promise<void> {
     const { error } = await supabase.storage.from(bucket).remove([filename]);
 
     if (error) {
-      logger.error('Error deleting ticket from Supabase:', error);
-      throw new Error(responses.INTERNAL_SERVER_ERROR);
+      throw new Error(responses.SERVER_ERROR);
     }
   } catch (error) {
-    logger.error(`Error deleting ticket ${filename}:`, error);
     throw error;
   }
 }
@@ -75,7 +74,6 @@ export async function updateFile(
     const generate = await generateURL(file, filename);
     return { url: generate.url };
   } catch (error) {
-    logger.error(`Error updating ticket: ${error}`);
     throw error;
   }
 }
@@ -85,7 +83,6 @@ export async function search(filename: string): Promise<boolean> {
     const { data } = await supabase.storage.from(bucket).exists(filename);
     return data || false;
   } catch (error) {
-    logger.error(`Error checking ticket existence for ${filename}:`, error);
-    return false;
+    throw error;
   }
 }

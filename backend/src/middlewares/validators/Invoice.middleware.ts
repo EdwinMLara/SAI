@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
 import InvoiceValidator from '@validators/Invoice.validator';
-import logger from '@utils/logger';
 import { ZodError } from 'zod';
 import responses from '@utils/responses';
 import FormatErrors from '@validators/FormatError.utils';
@@ -20,22 +19,12 @@ export const validateInvoice = async (
     ) {
       const formattedErrors = FormatErrors(error as ZodError);
 
-      logger.error('Invoice validation failed', {
-        errors: formattedErrors,
-        requestId: req.headers['x-request-id'] || 'unknown',
-      });
-
       res.status(400).json({
         message: responses.INTERFACE_VALUE_ERROR,
         errors: formattedErrors,
       });
       return;
     }
-
-    logger.error('Unexpected validation error', {
-      error: responses.INTERNAL_SERVER_ERROR,
-      requestId: req.headers['x-request-id'] || 'unknown',
-    });
 
     res.status(500).json({
       message: responses.INTERFACE_VALUE_ERROR,

@@ -16,11 +16,7 @@ export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
       message: responses.INVOICE_CREATED,
     };
   } catch (error) {
-    logger.error('Error creating invoice:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -45,11 +41,7 @@ export async function getInvoice(id: string): Promise<{
       data: response as InvoiceInterface,
     };
   } catch (error) {
-    logger.error('Error getting invoice:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -75,11 +67,7 @@ export async function updateInvoice(
       message: responses.INVOICE_UPDATED,
     };
   } catch (error) {
-    logger.error('Error updating invoice:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -102,10 +90,6 @@ export async function deleteInvoice(id: string): Promise<{
       message: responses.INVOICE_DELETED,
     };
   } catch (error) {
-    logger.error('Error deleting invoice:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }

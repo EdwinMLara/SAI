@@ -1,8 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import * as authService from '@services/Auth.services';
-import { decodeToken } from '@services/auth/tokens';
+import { decodeToken } from '@utils/auth/tokens';
 import responses from '@utils/responses';
-import logger from '@utils/logger';
 
 export interface AuthenticatedUser {
   email: string;
@@ -57,9 +56,7 @@ export const authenticateToken =
       req.user = decoded;
       next();
     } catch (error) {
-      logger.error('Token authentication failed', error);
-      res.status(401).json({ message: responses.LOGIN_REQUIRED });
-      return;
+      next(error);
     }
   };
 

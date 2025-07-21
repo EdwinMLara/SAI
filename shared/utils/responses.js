@@ -95,9 +95,7 @@ const responses = {
 
   // Invitaciones personalizadas
   INVITE_CREATED: 'Invitación enviada exitosamente.',
-
   INVITE_ALREADY_EXISTS: 'Ya existe una invitación para este correo.',
-  INVITE_NOT_FOUND: 'No se encontró la invitación.',
   EMAIL_NOT_INVITED: 'El correo electrónico no ha sido invitado.',
   TOKEN_NOT_PROVIDED: 'Token no proporcionado.',
 };

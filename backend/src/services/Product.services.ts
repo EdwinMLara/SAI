@@ -1,7 +1,7 @@
 import { ProductInterface } from '@interfaces/Product.interfaces';
 import ProductModel from '@models/Product.model';
 import responses from '@utils/responses';
-import logger from '@utils/logger';
+import AppError from '@utils/AppError';
 
 export async function createProduct(product: ProductInterface): Promise<{
   status: number;
@@ -16,11 +16,7 @@ export async function createProduct(product: ProductInterface): Promise<{
       message: responses.PRODUCT_CREATED,
     };
   } catch (error) {
-    logger.error('Error creating product:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -45,11 +41,7 @@ export async function readProduct(key: string): Promise<{
       data: response as ProductInterface,
     };
   } catch (error) {
-    logger.error('Error reading product:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -75,11 +67,7 @@ export async function updateProduct(
       message: responses.PRODUCT_UPDATED,
     };
   } catch (error) {
-    logger.error('Error updating product:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -102,11 +90,7 @@ export async function deleteProduct(key: string): Promise<{
       message: responses.PRODUCT_DELETED,
     };
   } catch (error) {
-    logger.error('Error deleting product:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -123,10 +107,6 @@ export async function deleteDatabase(products: ProductInterface[]): Promise<{
       message: responses.PRODUCTS_DATABASE_UPDATED,
     };
   } catch (error) {
-    logger.error('Error updating database:', error);
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }

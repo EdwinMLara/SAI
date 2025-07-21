@@ -1,14 +1,14 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import * as invoiceService from '@services/Invoice.services';
 import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
-import logger from '@utils/logger';
 import responses from '@utils/responses';
 
 export async function createInvoice(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const exists = await invoiceValidations.exists(req.body.id as string);
@@ -32,15 +32,15 @@ export async function createInvoice(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Invoice creation failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
-export async function readInvoice(req: Request, res: Response): Promise<void> {
+export async function readInvoice(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
       message: responses.REQUIRED_INVOICE_ID,
@@ -71,17 +71,14 @@ export async function readInvoice(req: Request, res: Response): Promise<void> {
       invoice: request.data,
     });
   } catch (error) {
-    logger.error('Get invoice failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function updateInvoice(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const exists = await invoiceValidations.exists(req.body.id);
@@ -108,17 +105,14 @@ export async function updateInvoice(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Update invoice failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function deleteInvoice(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
@@ -149,10 +143,6 @@ export async function deleteInvoice(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Delete invoice failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }

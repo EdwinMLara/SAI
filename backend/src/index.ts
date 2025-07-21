@@ -6,9 +6,11 @@ import logger from '@utils/logger';
 
 import router from '@routes/api.routes';
 import * as Mongo from '@config/database';
+import supabase from '@config/supabase';
 
 import RequestMiddleware from '@middlewares/Request.middleware';
 import ResponseMiddleware from '@middlewares/Response.middleware';
+import ErrorMiddleware from '@middlewares/Error.middleware';
 
 dotenv.config();
 
@@ -23,6 +25,7 @@ app.use(ResponseMiddleware);
 Mongo.connect();
 
 app.use('/api', router);
+app.use(ErrorMiddleware);
 
 const PORT = process.env.PORT || 5001;
 const toListen = process.env.LOCAL_IP || '0.0.0.0';

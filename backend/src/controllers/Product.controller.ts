@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { ProductInterface } from '@interfaces/Product.interfaces';
 
 import * as productService from '@services/Product.services';
 import * as productValidations from '@controllers/validations/Product.validations';
 
-import logger from '@utils/logger';
 import responses from '@utils/responses';
 
 export async function createProduct(
   req: Request<{}, {}, ProductInterface>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const exists = await productValidations.exists(req.body.key as string);
@@ -33,17 +33,14 @@ export async function createProduct(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Product creation failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function readProduct(
   req: Request,
-  res: Response<{}, ProductInterface>
+  res: Response<{}, ProductInterface>,
+  next: NextFunction
 ): Promise<void> {
   if (!req.query.key) {
     res.status(400).json({
@@ -75,17 +72,14 @@ export async function readProduct(
       product: request.data,
     });
   } catch (error) {
-    logger.error('Get products failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function updateProduct(
   req: Request<{}, {}, ProductInterface>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const exists = await productValidations.exists(req.body.key as string);
@@ -112,17 +106,14 @@ export async function updateProduct(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Update product failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function deleteProduct(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.query.key) {
     res.status(400).json({
@@ -153,17 +144,14 @@ export async function deleteProduct(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Delete product failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function changeProducts(
   req: Request<{}, {}, ProductInterface[]>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const request = await productService.deleteDatabase(req.body);
@@ -171,10 +159,6 @@ export async function changeProducts(
       message: request.message,
     });
   } catch (error) {
-    logger.error('Get product by id failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }

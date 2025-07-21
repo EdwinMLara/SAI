@@ -1,10 +1,9 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import * as documentService from '@services/Document.services';
 import * as documentValidations from '@controllers/validations/Document.validations';
 import * as invoiceValidations from '@controllers/validations/Invoice.validations';
 
-import logger from '@utils/logger';
 import responses from '@utils/responses';
 
 interface MulterRequest extends Request {
@@ -13,7 +12,8 @@ interface MulterRequest extends Request {
 
 export async function createDocumentURL(
   req: MulterRequest,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.file) {
     res.status(400).json({
@@ -63,15 +63,14 @@ export async function createDocumentURL(
       url: generate.url,
     });
   } catch (error) {
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function readDocumentURL(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
@@ -114,15 +113,14 @@ export async function readDocumentURL(
       .status(200)
       .json({ message: responses.DOCUMENT_FOUND, url: request.url });
   } catch (error) {
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function updateDocument(
   req: MulterRequest,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.file || req.file.mimetype !== 'application/pdf') {
     res.status(415).json({
@@ -172,17 +170,14 @@ export async function updateDocument(
       .status(200)
       .json({ message: responses.DOCUMENT_UPDATED, url: request.url });
   } catch (error) {
-    logger.error('Document creation failed', error);
-
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
 export async function deleteDocument(
   req: Request,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   if (!req.query.id) {
     res.status(400).json({
@@ -223,9 +218,6 @@ export async function deleteDocument(
     await documentService.deleteFile(filename);
     res.status(200).json({ message: responses.DOCUMENT_DELETED });
   } catch (error) {
-    logger.error('Get documents failed', error);
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }

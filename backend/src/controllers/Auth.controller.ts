@@ -1,21 +1,16 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 import { UserInterface } from '@interfaces/User.interfaces';
 import * as userService from '@services/User.services';
 import * as userValidations from '@controllers/validations/User.validators';
 import * as inviteService from '@services/Invite.services';
-import * as auth from '@services/auth/crypt';
-import logger from '@utils/logger';
+import * as authServices from '@services/Auth.services';
+import * as auth from '@utils/auth/crypt';
 import responses from '@utils/responses';
-
-import {
-  Login,
-  CheckingToken,
-  refreshToken as RefreshTokenService,
-} from '@services/Auth.services';
 
 export async function register(
   req: Request<{}, {}, UserInterface>,
-  res: Response
+  res: Response,
+  next: NextFunction
 ): Promise<void> {
   try {
     const invite = await inviteService.hasInvite(req.body.email);
@@ -36,16 +31,18 @@ export async function register(
     const result = await userService.createUser(req.body);
     res.status(result.status).json({ message: result.message });
   } catch (error) {
-    logger.error('User registration failed', error);
-    res.status(400).json({ message: responses.INVALID_DATA });
-    return;
+    next(error);
   }
 }
 
-export async function login(req: Request, res: Response): Promise<void> {
+export async function login(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const { email, password } = req.body;
-    const result = await Login(email, password);
+    const result = await authServices.Login(email, password);
     if (result.status === 200) {
       res.status(200).json({
         message: result.message,
@@ -57,14 +54,15 @@ export async function login(req: Request, res: Response): Promise<void> {
       });
     }
   } catch (error) {
-    logger.error('Login failed', error);
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
-export async function verifyToken(req: Request, res: Response): Promise<void> {
+export async function verifyToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const token = req.headers.authorization?.replace('Bearer ', '');
     if (!token) {
@@ -73,7 +71,7 @@ export async function verifyToken(req: Request, res: Response): Promise<void> {
       });
       return;
     }
-    const result = await CheckingToken(token);
+    const result = await authServices.CheckingToken(token);
     if (result.status === 200) {
       res.status(200).json({
         message: result.message,
@@ -85,17 +83,18 @@ export async function verifyToken(req: Request, res: Response): Promise<void> {
       });
     }
   } catch (error) {
-    logger.error('Token verification failed', error);
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }
 
-export async function refreshToken(req: Request, res: Response): Promise<void> {
+export async function refreshToken(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
   try {
     const { refreshToken } = req.body;
-    const result = await RefreshTokenService(refreshToken);
+    const result = await authServices.RefreshToken(refreshToken);
     if (result.status === 200) {
       res.status(200).json({
         message: result.message,
@@ -107,9 +106,6 @@ export async function refreshToken(req: Request, res: Response): Promise<void> {
       });
     }
   } catch (error) {
-    logger.error('Refresh token failed', error);
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
+    next(error);
   }
 }

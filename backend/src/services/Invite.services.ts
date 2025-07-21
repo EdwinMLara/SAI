@@ -48,10 +48,7 @@ export async function getInvites(user: string): Promise<{
       data: emails,
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -63,18 +60,15 @@ export async function removeInvite(
     if (!deleted) {
       return {
         status: 404,
-        message: responses.NOT_FOUND,
+        message: responses.EMAIL_NOT_INVITED,
       };
     }
     return {
       status: 200,
-      message: responses.SUCCESS,
+      message: responses.INVITE_CREATED,
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
@@ -84,10 +78,10 @@ export async function hasInvite(
   try {
     const found = await InviteModel.findOne({ email }).lean();
     if (found) {
-      return { exists: true, message: responses.ALREADY_EXISTS };
+      return { exists: true, message: responses.INVITE_ALREADY_EXISTS };
     }
-    return { exists: false, message: responses.NOT_FOUND };
+    return { exists: false, message: responses.EMAIL_NOT_INVITED };
   } catch (error) {
-    return { exists: false, message: responses.INTERNAL_SERVER_ERROR };
+    throw error;
   }
 }

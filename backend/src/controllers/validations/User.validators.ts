@@ -1,7 +1,6 @@
 import UserModel from '@models/User.model';
 import responses from '@utils/responses';
-import * as auth from '@services/auth/crypt';
-import logger from '@utils/logger';
+import * as auth from '@utils/auth/crypt';
 
 interface Response {
   pass: boolean;
@@ -23,7 +22,6 @@ export async function exists(email: string): Promise<Response> {
       message: responses.NOT_FOUND,
     };
   } catch (error) {
-    logger.error('An error occurred during user existence:', error);
     return {
       pass: false,
       message: responses.INTERNAL_SERVER_ERROR,

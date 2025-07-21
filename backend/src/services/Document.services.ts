@@ -1,9 +1,8 @@
-import connectSupabase from '@config/supabase';
+import supabase from '@config/supabase';
 import logger from '@utils/logger';
 import responses from '@utils/responses';
 
 const bucket = process.env.BUCKET_VOUCHERS || 'documents';
-const supabase = connectSupabase();
 
 export async function generateURL(
   file: Express.Multer.File,
@@ -19,7 +18,7 @@ export async function generateURL(
 
     if (error) {
       logger.error('Error uploading file to Supabase:', error);
-      throw new Error(responses.INTERNAL_SERVER_ERROR);
+      throw new Error(responses.SERVER_ERROR);
     }
 
     const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
@@ -28,7 +27,6 @@ export async function generateURL(
       url: data.publicUrl,
     };
   } catch (error) {
-    logger.error(`Error generating URL: ${error}`);
     throw error;
   }
 }
@@ -47,7 +45,6 @@ export async function searchURL(filename: string): Promise<{
       url: data.publicUrl,
     };
   } catch (error) {
-    logger.error(`Error searching URL for ${filename}:`, error);
     throw error;
   }
 }
@@ -58,10 +55,9 @@ export async function deleteFile(filename: string): Promise<void> {
 
     if (error) {
       logger.error('Error deleting file from Supabase:', error);
-      throw new Error(responses.INTERNAL_SERVER_ERROR);
+      throw new Error(responses.SERVER_ERROR);
     }
   } catch (error) {
-    logger.error(`Error deleting file ${filename}:`, error);
     throw error;
   }
 }
@@ -75,7 +71,6 @@ export async function updateFile(
     const generate = await generateURL(file, filename);
     return { url: generate.url };
   } catch (error) {
-    logger.error(`Error updating file: ${error}`);
     throw error;
   }
 }
@@ -85,7 +80,6 @@ export async function search(filename: string): Promise<boolean> {
     const { data } = await supabase.storage.from(bucket).exists(filename);
     return data || false;
   } catch (error) {
-    logger.error(`Error checking file existence for ${filename}:`, error);
-    return false;
+    throw error;
   }
 }

@@ -1,6 +1,6 @@
 import User from '@models/User.model';
-import { encrypt, compareHash } from './auth/crypt';
-import { generateToken, verifyToken, decodeToken } from '@services/auth/tokens';
+import { encrypt, compareHash } from '../utils/auth/crypt';
+import { generateToken, verifyToken, decodeToken } from '@utils/auth/tokens';
 import { UserInterface } from '@interfaces/User.interfaces';
 import responses from '@utils/responses';
 
@@ -60,10 +60,7 @@ export async function Login(
       },
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: 'Error interno del servidor',
-    };
+    throw error;
   }
 }
 
@@ -112,14 +109,11 @@ export async function CheckingToken(token: string): Promise<{
       data: { user: userData },
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
-export async function refreshToken(refreshToken: string): Promise<{
+export async function RefreshToken(refreshToken: string): Promise<{
   status: number;
   message: string;
   data?: any;
@@ -162,9 +156,6 @@ export async function refreshToken(refreshToken: string): Promise<{
       data: { accessToken: newAccessToken },
     };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
