@@ -2,12 +2,9 @@ import supabase from '@config/supabase';
 import logger from '@utils/logger';
 import responses from '@utils/responses';
 import AppError from '@utils/AppError';
+import env from '@utils/env';
 
-const bucket: string = process.env.BUCKET_TICKETS as string;
-
-if (!bucket) {
-  throw new AppError('No se encontró el bucket de tickets');
-}
+const bucket = env.BUCKET_TICKET;
 
 export async function generateURL(
   file: Express.Multer.File,

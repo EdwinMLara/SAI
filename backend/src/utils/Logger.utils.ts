@@ -1,10 +1,11 @@
 import winston from 'winston';
 import Transport from 'winston-transport';
 import { LogMetadata } from '../interfaces/Logs.interfaces';
+import env from './env';
 
 import LogModel from '../models/Logs.model';
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = env.NODE_ENV === 'production';
 
 let logger: winston.Logger;
 

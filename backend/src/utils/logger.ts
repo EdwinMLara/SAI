@@ -1,7 +1,8 @@
 import winston from 'winston';
+import env from '@utils/env';
 
 const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'production' ? 'info' : 'debug',
+  level: env.NODE_ENV === 'production' ? 'info' : 'debug',
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(

@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
+import env from '@utils/env';
 
-const jwtSecret = process.env.JWT_Secret;
+const jwtSecret = env.JWT_SECRET;
 
 export function decodeToken(token: string): any | null {
   try {
@@ -11,9 +12,6 @@ export function decodeToken(token: string): any | null {
 }
 
 export function verifyToken(tokenToVerify: string): boolean {
-  if (!jwtSecret) {
-    return false;
-  }
   try {
     jwt.verify(tokenToVerify, jwtSecret);
     return true;
@@ -23,8 +21,5 @@ export function verifyToken(tokenToVerify: string): boolean {
 }
 
 export function generateToken(payload: object): string {
-  if (!jwtSecret) {
-    throw new Error('JWT secret is not defined');
-  }
   return jwt.sign(payload, jwtSecret, { expiresIn: '30d' });
 }

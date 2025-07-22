@@ -1,8 +1,9 @@
 import supabase from '@config/supabase';
 import logger from '@utils/logger';
 import responses from '@utils/responses';
+import env from '@utils/env';
 
-const bucket = process.env.BUCKET_VOUCHERS || 'documents';
+const bucket = env.BUCKET_DOCS;
 
 export async function generateURL(
   file: Express.Multer.File,
