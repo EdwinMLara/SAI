@@ -1,7 +1,7 @@
-import { Document } from 'mongoose';
+import { Document, ObjectId } from 'mongoose';
 
-export interface Invite extends Document {
-  invitedBy: string;
+export interface InviteInterface extends Document {
+  ref: ObjectId;
   email: string;
   role: 'admin' | 'user';
 }

@@ -1,8 +1,8 @@
 import mongoose, { Schema } from 'mongoose';
-import { Invite } from '../interfaces/Invite.interfaces';
+import { InviteInterface } from '../interfaces/Invite.interfaces';
 
-const InviteSchema: Schema = new Schema<Invite>({
-  invitedBy: { type: String, required: true },
+const InviteSchema: Schema = new Schema<InviteInterface>({
+  ref: { type: Schema.Types.ObjectId, required: true, ref: 'users' },
   email: { type: String, required: true, unique: true },
   role: {
     type: String,
@@ -11,4 +11,4 @@ const InviteSchema: Schema = new Schema<Invite>({
   },
 });
 
-export default mongoose.model<Invite>('invites', InviteSchema);
+export default mongoose.model<InviteInterface>('invites', InviteSchema);
