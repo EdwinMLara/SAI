@@ -21,7 +21,8 @@
       "@auth/*": ["src/utils/auth/*"],
       "@types": ["src/types/index.ts"],
       "@responses": ["src/utils/responses/index.responses.ts"],
-      "@validators/*": ["src/validators/*"]
+      "@validators/*": ["src/validators/*"],
+      "@helpers/*": ["src/helpers/*"]
     }
   },
   "include": ["src"],
