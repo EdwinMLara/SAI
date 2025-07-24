@@ -4,7 +4,7 @@ import express from 'express';
 import logger from '@utils/logger';
 import env from '@utils/env';
 
-import router from '@routes/api.routes';
+import router from '@routes';
 import * as Mongo from '@config/database';
 import cookieParser from 'cookie-parser';
 
