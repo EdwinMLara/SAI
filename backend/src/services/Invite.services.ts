@@ -1,86 +1,47 @@
-import { Invite } from '@interfaces/Invite.interfaces';
+import { ObjectId } from 'mongoose';
+
 import InviteModel from '@models/Invite.model';
-import responses from '@utils/responses';
+import { InviteInterface } from '@interfaces/Invite.interfaces';
+
+/* ------------------ Code ------------------ */
 
 export async function createInvite(
-  invitedBy: string,
+  ref: ObjectId,
   email: string,
   role: 'admin' | 'user'
-): Promise<{
-  status: number;
-  message: string;
-}> {
+): Promise<void> {
   try {
-    const invite = { invitedBy, email, role };
+    const invite = { ref, email, role };
     const newInvite = new InviteModel(invite);
     await newInvite.save();
-    let message = responses.INVITE_CREATED;
-    if (role === 'admin') message = responses.INVITE_CREATED;
-    if (role === 'user') message = responses.INVITE_CREATED;
-    return {
-      status: 201,
-      message,
-    };
   } catch (error) {
-    return {
-      status: 500,
-      message: responses.INTERNAL_SERVER_ERROR,
-    };
+    throw error;
   }
 }
 
-export async function getInvites(user: string): Promise<{
-  status: number;
-  message: string;
-  data?: string[];
+export async function getInvites(user: ObjectId): Promise<{
+  data?: InviteInterface[];
 }> {
   try {
-    const results = await InviteModel.find({
-      $or: [
-        { invitedBy: { $regex: user, $options: 'i' } },
-        { email: { $regex: user, $options: 'i' } },
-      ],
-    }).lean();
-    const emails = results.map((invite: any) => invite.email).filter(Boolean);
-    return {
-      status: 200,
-      message: responses.SUCCESS,
-      data: emails,
-    };
+    const invites = await InviteModel.find({ ref: user }).lean();
+    return { data: invites as InviteInterface[] };
   } catch (error) {
     throw error;
   }
 }
 
-export async function removeInvite(
-  email: string
-): Promise<{ status: number; message: string }> {
+export async function removeInvite(email: string): Promise<void> {
   try {
-    const deleted = await InviteModel.findOneAndDelete({ email });
-    if (!deleted) {
-      return {
-        status: 404,
-        message: responses.EMAIL_NOT_INVITED,
-      };
-    }
-    return {
-      status: 200,
-      message: responses.INVITE_CREATED,
-    };
+    await InviteModel.findOneAndDelete({ email });
   } catch (error) {
     throw error;
   }
 }
 
-export async function hasInvite(
-  email: string
-): Promise<{ exists: boolean; message: string }> {
+export async function hasInvite(email: string): Promise<boolean> {
   try {
     const found = await InviteModel.findOne({ email }).lean();
-    if (found) {
-      return { exists: true, message: responses.INVITE_ALREADY_EXISTS };
-    }
-    return { exists: false, message: responses.EMAIL_NOT_INVITED };
+    return !!found;
   } catch (error) {
     throw error;
   }
