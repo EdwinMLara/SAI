@@ -3,6 +3,8 @@ import { UserInterface } from '@interfaces/User.interfaces';
 import responses from '@utils/responses';
 import AppError from '@utils/AppError';
 
+import { ObjectId } from 'mongoose';
+
 export async function createUser(user: UserInterface): Promise<{
   status: number;
   message: string;
@@ -76,4 +78,12 @@ export async function deleteUser(email: string): Promise<{
   } catch (error) {
     throw error;
   }
+}
+
+export async function getIdUser(email: string): Promise<ObjectId> {
+  const user = await UserModel.findOne({ email });
+  if (!user) {
+    throw new AppError('Error en la transacción de la base de datos');
+  }
+  return user._id as ObjectId;
 }
