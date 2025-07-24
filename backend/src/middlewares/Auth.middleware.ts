@@ -22,7 +22,13 @@ const Identity = (req: Request, next: NextFunction): void => {
     validators.verifyToken(accessToken);
     validators.verifyToken(refreshToken);
 
-    req.user = services.userData(accessToken);
+    const user = services.userData(accessToken);
+
+    if (!user || user.email) {
+      throw new AppError('No autorizado', 401);
+    }
+
+    req.user = user;
     next();
   } catch (error) {
     if (error instanceof AppError) {
