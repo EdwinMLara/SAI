@@ -9,8 +9,7 @@
   "scripts": {
     "lint": "eslint 'src/**/*.{js,ts}'",
     "dev": "nodemon --watch src --ext ts --exec ts-node -r tsconfig-paths/register src/index.ts",
-    "start": "node -r tsconfig-paths/register dist/index.js",
-    "test": "jest"
+    "start": "node -r tsconfig-paths/register dist/index.js"
   },
   "keywords": [],
   "author": "",
@@ -19,6 +18,7 @@
   "devDependencies": {
     "@eslint/js": "^9.27.0",
     "@types/bcrypt": "^5.0.2",
+    "@types/cookie-parser": "^1.4.9",
     "@types/cors": "^2.8.18",
     "@types/dotenv": "^6.1.1",
     "@types/express": "^5.0.2",
@@ -39,6 +39,7 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.49.8",
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.5.0",
     "express": "^5.1.0",

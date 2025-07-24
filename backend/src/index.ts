@@ -6,6 +6,7 @@ import env from '@utils/env';
 
 import router from '@routes/api.routes';
 import * as Mongo from '@config/database';
+import cookieParser from 'cookie-parser';
 
 import RequestMiddleware from '@middlewares/Request.middleware';
 import ResponseMiddleware from '@middlewares/Response.middleware';
@@ -14,6 +15,7 @@ import ErrorMiddleware from '@middlewares/Error.middleware';
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 app.use(RequestMiddleware);
