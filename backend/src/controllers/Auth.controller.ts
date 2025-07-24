@@ -14,16 +14,16 @@ export async function register(
 ): Promise<void> {
   try {
     const invite = await inviteService.hasInvite(req.body.email);
-    if (!invite.exists) {
+    if (!invite) {
       res.status(403).json({ message: responses.EMAIL_NOT_INVITED });
       return;
     }
     const exists = await userValidations.exists(req.body.email);
-    if (exists.error) {
-      res.status(400).json({ message: exists.message });
+    if (exists) {
+      res.status(400).json({ message: exists });
       return;
     }
-    if (exists.pass) {
+    if (exists) {
       res.status(409).json({ message: responses.EMAIL_ALREADY_EXISTS });
       return;
     }
