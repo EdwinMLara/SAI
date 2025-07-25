@@ -23,3 +23,11 @@ export function verifyToken(tokenToVerify: string): boolean {
 export function generateToken(payload: object): string {
   return jwt.sign(payload, jwtSecret, { expiresIn: '30d' });
 }
+
+export function getPayload(token: string): any | null {
+  try {
+    return jwt.verify(token, jwtSecret);
+  } catch (error) {
+    return null;
+  }
+}
