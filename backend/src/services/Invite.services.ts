@@ -46,3 +46,12 @@ export async function hasInvite(email: string): Promise<boolean> {
     throw error;
   }
 }
+
+export async function getInvite(email: string): Promise<InviteInterface> {
+  try {
+    const invite = await InviteModel.findOne({ email }).lean();
+    return invite as InviteInterface;
+  } catch (error) {
+    throw error;
+  }
+}
