@@ -4,3 +4,7 @@ export interface UserInfoAtToken {
   role: string;
   email: string;
 }
+
+export interface RefreshTokenInfo {
+  id: string;
+}
