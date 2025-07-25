@@ -24,7 +24,7 @@ const Identity = (req: Request, next: NextFunction): void => {
 
     const user = services.userData(accessToken);
 
-    if (!user || user.email) {
+    if (!user || !user.email) {
       throw new AppError('No autorizado', 401);
     }
 
