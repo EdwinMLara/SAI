@@ -1,89 +1,47 @@
-import UserModel from '@models/User.model';
-import { UserInterface } from '@interfaces/User.interfaces';
-import responses from '@utils/responses';
-import AppError from '@utils/AppError';
-
 import { ObjectId } from 'mongoose';
 
-export async function createUser(user: UserInterface): Promise<{
-  status: number;
-  message: string;
-}> {
+import UserModel from '@models/User.model';
+import { UserChanges, UserInterface } from '@interfaces/User.interfaces';
+
+import responses from '@responses';
+import AppError from '@utils/AppError';
+
+/* ------------------ Code ------------------ */
+
+export async function createUser(user: UserInterface): Promise<void> {
   try {
     const newUser = new UserModel(user);
     await newUser.save();
-    return {
-      status: 201,
-      message: responses.USER_CREATED,
-    };
   } catch (error) {
     throw error;
   }
 }
 
-export async function readUser(email: string): Promise<{
-  status: number;
-  message: string;
-  data?: UserInterface | null;
-}> {
+export async function updatedUser(
+  user: string,
+  updates: Partial<UserChanges>
+): Promise<UserInterface> {
   try {
-    const user = await UserModel.findOne({ email });
-    if (!user) {
-      throw new AppError('Error en la transacción de la base de datos');
-    }
-    return {
-      status: 200,
-      message: 'Operación exitosa',
-      data: user,
-    };
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function updateUser(
-  user: UserInterface,
-  email: string
-): Promise<{
-  status: number;
-  message: string;
-}> {
-  try {
-    const updated = await UserModel.findOneAndUpdate({ email }, user);
+    const updated = await UserModel.findOneAndUpdate({ _id: user }, updates, {
+      new: true,
+    });
     if (!updated) {
       throw new AppError('Error en la transacción de la base de datos');
     }
-    return {
-      status: 200,
-      message: 'Usuario actualizado',
-    };
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function deleteUser(email: string): Promise<{
-  status: number;
-  message: string;
-}> {
-  try {
-    const deleted = await UserModel.findOneAndDelete({ email });
-    if (!deleted) {
-      throw new AppError('Error en la transacción de la base de datos');
-    }
-    return {
-      status: 200,
-      message: 'Usuario eliminado',
-    };
+    return updated as UserInterface;
   } catch (error) {
     throw error;
   }
 }
 
 export async function getIdUser(email: string): Promise<ObjectId> {
-  const user = await UserModel.findOne({ email });
-  if (!user) {
-    throw new AppError('Error en la transacción de la base de datos');
+  try {
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      throw new AppError(responses.User.notfound, 404);
+    }
+    return user._id as ObjectId;
+  } catch (error) {
+    throw error;
   }
-  return user._id as ObjectId;
 }

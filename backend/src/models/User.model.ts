@@ -5,7 +5,7 @@ const UserSchema: Schema = new Schema<UserInterface>({
   image: { type: String, required: false },
   name: { type: String, required: true },
   userName: { type: String, required: true },
-  phone: { type: Number, required: true, unique: true, index: true },
+  phone: { type: String, required: true, unique: true, index: true },
   email: { type: String, required: true, unique: true, index: true },
   password: { type: String, required: true },
   role: {

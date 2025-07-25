@@ -1,59 +1,61 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserInterface } from '@interfaces/User.interfaces';
+import { UserInterface, UserChanges } from '@interfaces/User.interfaces';
 
-import * as userService from '@services/User.services';
-import * as userValidations from '@controllers/validations/User.validators';
+import * as helpers from '@helpers/User.helpers';
+import * as services from '@services/User.services';
 
-import * as auth from '@utils/auth/crypt';
-import responses from '@utils/responses';
+import responses from '@responses';
+import * as auth from '@auth/crypt';
+import AppError from '@utils/AppError';
 
-export async function updateUser(
+/* ------------------ Code ------------------ */
+
+export async function createUser(
   req: Request<{}, {}, UserInterface>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const exists = await userValidations.exists(req.body.email);
-    if (exists.error) {
-      res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
-      return;
+    const user = await helpers.existsUserByEmail(req.body.email);
+
+    if (user) {
+      throw new AppError(responses.User.alreadyexists, 409);
     }
-    if (!exists.pass) {
-      res.status(404).json({ message: responses.USER_NOT_FOUND });
-      return;
-    }
-    if (req.body.password) {
-      req.body.password = await auth.encrypt(req.body.password);
-    }
-    const result = await userService.updateUser(req.body, req.body.email);
-    res.status(result.status).json({ message: result.message });
+    await helpers.comprobeInvite(req.body.email);
+    req.body.password = await auth.encrypt(req.body.password);
+    req.body.role = await helpers.findRole(req.body.email);
+    await services.createUser(req.body);
+
+    res.status(201).json({
+      message: responses.User.created,
+      user: await helpers.returnUser(req.body),
+    });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
 
-export async function deleteUser(
-  req: Request,
+export async function updateUser(
+  req: Request<{}, {}, Partial<UserChanges>>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (!req.query.email) {
-    res.status(400).json({ message: responses.BAD_REQUEST });
-    return;
-  }
   try {
-    const exists = await userValidations.exists(req.query.email as string);
-    if (exists.error) {
-      res.status(500).json({ message: responses.INTERNAL_SERVER_ERROR });
-      return;
-    }
-    if (!exists.pass) {
-      res.status(404).json({ message: responses.USER_NOT_FOUND });
-      return;
-    }
-    const result = await userService.deleteUser(req.query.email as string);
-    res.status(result.status).json({ message: result.message });
+    const updates: Partial<UserChanges> = req.body;
+    await helpers.validateUserChanges(updates);
+    const changes = await services.updatedUser(req.user.id, updates);
+
+    res.status(200).json({
+      message: responses.User.updated,
+      user: await helpers.returnUser(changes),
+    });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
