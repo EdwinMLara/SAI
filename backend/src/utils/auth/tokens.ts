@@ -20,6 +20,14 @@ export function verifyToken(tokenToVerify: string): boolean {
   }
 }
 
+export function generateAccessToken(payload: object): string {
+  return jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
+}
+
+export function generateRefreshToken(payload: object): string {
+  return jwt.sign(payload, jwtSecret, { expiresIn: '15d' });
+}
+
 export function generateToken(payload: object): string {
   return jwt.sign(payload, jwtSecret, { expiresIn: '30d' });
 }
