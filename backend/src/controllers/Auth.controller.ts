@@ -1,13 +1,47 @@
 import { Request, Response, NextFunction } from 'express';
 
+import * as auth from '@auth/crypt';
 import * as services from '@services/Auth.services';
+import * as userHelpers from '@helpers/User.helpers';
+import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
-import * as User from '@services/User.services';
+
+import { UserInterface } from '@interfaces/User.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
 
 /* ------------------ Code ------------------ */
+
+export async function register(
+  req: Request<{}, {}, UserInterface>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const user = await userHelpers.existsUserByEmail(req.body.email);
+
+    if (user) {
+      throw new AppError(responses.User.alreadyexists, 409);
+    }
+    await userHelpers.comprobeInvite(req.body.email);
+    req.body.password = await auth.encrypt(req.body.password);
+    req.body.role = await userHelpers.findRole(req.body.email);
+    await userServices.createUser(req.body);
+    await cookies.setAuthToken(res, req.body);
+    await cookies.setRefreshToken(res, req.body);
+
+    res.status(201).json({
+      message: responses.User.created,
+      user: await userHelpers.returnUser(req.body),
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
 
 export async function login(
   req: Request,
@@ -19,7 +53,9 @@ export async function login(
     if (!email || !password) {
       throw new AppError(responses.System.missingFieldBody, 400);
     }
-    const user = await User.getUserByObject(await User.getIdUser(email));
+    const user = await userServices.getUserByObject(
+      await userServices.getIdUser(email)
+    );
     await services.login(user, password);
     await cookies.setAuthToken(res, user);
     await cookies.setRefreshToken(res, user);
@@ -39,7 +75,7 @@ export async function refreshToken(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = await User.getUserById(req.user.id);
+    const user = await userServices.getUserById(req.user.id);
     await cookies.setAuthToken(res, user);
     res.status(200).json({ message: responses.System.ok });
   } catch (error) {
