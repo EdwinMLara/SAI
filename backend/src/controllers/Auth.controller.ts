@@ -1,39 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { UserInterface } from '@interfaces/User.interfaces';
-import * as userService from '@services/User.services';
-import * as userValidations from '@controllers/validations/User.validators';
-import * as inviteService from '@services/Invite.services';
-import * as authServices from '@services/Auth.services';
-import * as auth from '@utils/auth/crypt';
-import responses from '@utils/responses';
 
-export async function register(
-  req: Request<{}, {}, UserInterface>,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const invite = await inviteService.hasInvite(req.body.email);
-    if (!invite) {
-      res.status(403).json({ message: responses.EMAIL_NOT_INVITED });
-      return;
-    }
-    const exists = await userValidations.exists(req.body.email);
-    if (exists) {
-      res.status(400).json({ message: exists });
-      return;
-    }
-    if (exists) {
-      res.status(409).json({ message: responses.EMAIL_ALREADY_EXISTS });
-      return;
-    }
-    req.body.password = await auth.encrypt(req.body.password);
-    const result = await userService.createUser(req.body);
-    res.status(result.status).json({ message: result.message });
-  } catch (error) {
-    next(error);
-  }
-}
+import * as services from '@services/Auth.services';
+import * as cookies from '@utils/cookies/manageCookies';
+import * as User from '@services/User.services';
+
+import responses from '@responses';
+import AppError from '@utils/AppError';
+
+/* ------------------ Code ------------------ */
 
 export async function login(
   req: Request,
@@ -42,48 +16,20 @@ export async function login(
 ): Promise<void> {
   try {
     const { email, password } = req.body;
-    const result = await authServices.Login(email, password);
-    if (result.status === 200) {
-      res.status(200).json({
-        message: result.message,
-        data: result.data,
-      });
-    } else {
-      res.status(result.status).json({
-        message: result.message,
-      });
+    if (!email || !password) {
+      throw new AppError(responses.System.missingFieldBody, 400);
     }
-  } catch (error) {
-    next(error);
-  }
-}
+    const user = await User.getUserByObject(await User.getIdUser(email));
+    await services.login(user, password);
+    await cookies.setAuthToken(res, user);
+    await cookies.setRefreshToken(res, user);
 
-export async function verifyToken(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const token = req.headers.authorization?.replace('Bearer ', '');
-    if (!token) {
-      res.status(401).json({
-        message: responses.TOKEN_NOT_PROVIDED,
-      });
-      return;
-    }
-    const result = await authServices.CheckingToken(token);
-    if (result.status === 200) {
-      res.status(200).json({
-        message: result.message,
-        data: result.data,
-      });
-    } else {
-      res.status(result.status).json({
-        message: result.message,
-      });
-    }
+    res.status(200).json({ message: responses.System.ok });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
 
@@ -93,19 +39,30 @@ export async function refreshToken(
   next: NextFunction
 ): Promise<void> {
   try {
-    const { refreshToken } = req.body;
-    const result = await authServices.RefreshToken(refreshToken);
-    if (result.status === 200) {
-      res.status(200).json({
-        message: result.message,
-        data: result.data,
-      });
-    } else {
-      res.status(result.status).json({
-        message: result.message,
-      });
-    }
+    const user = await User.getUserById(req.user.id);
+    await cookies.setAuthToken(res, user);
+    res.status(200).json({ message: responses.System.ok });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
+export async function logout(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    res.clearCookie('accessToken', { path: '/' });
+    res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
+    res.status(200).json({ message: responses.System.ok });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
