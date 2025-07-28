@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
 
 const InvoiceSchema: Schema = new Schema<InvoiceInterface>({
-  id: { type: String, required: true, unique: true },
+  invoiceId: { type: String, required: true, unique: true },
   reference: { type: String, default: null },
   date: { type: Date, required: true },
   expiration: { type: Date, required: true },

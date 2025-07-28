@@ -69,7 +69,7 @@ const Payments = z.object({
 
 const InvoiceValidator = z
   .object({
-    id: z
+    invoiceId: z
       .string()
       .min(3, responses.VAL_MIN_LENGTH.replace('{min}', '3'))
       .max(50, responses.VAL_MAX_LENGTH.replace('{max}', '50')),
