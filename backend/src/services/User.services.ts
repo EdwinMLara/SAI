@@ -45,3 +45,29 @@ export async function getIdUser(email: string): Promise<ObjectId> {
     throw error;
   }
 }
+
+export async function getUserByObject(
+  userId: ObjectId
+): Promise<UserInterface> {
+  try {
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      throw new AppError(responses.User.notfound, 404);
+    }
+    return user as UserInterface;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getUserById(userId: string): Promise<UserInterface> {
+  try {
+    const user = await UserModel.findOne({ _id: userId });
+    if (!user) {
+      throw new AppError(responses.User.notfound, 404);
+    }
+    return user as UserInterface;
+  } catch (error) {
+    throw error;
+  }
+}
