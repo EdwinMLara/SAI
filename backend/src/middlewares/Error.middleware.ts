@@ -1,6 +1,9 @@
 import { Request, Response } from 'express';
-import AppError from '../utils/AppError';
+
 import log from '@utils/Logger.utils';
+import AppError from '../utils/AppError';
+
+/* ------------------ Code ------------------ */
 
 const ErrorMiddleware = (err: Error, req: Request, res: Response) => {
   const returnCode = err instanceof AppError ? err.statusCode || 500 : 500;

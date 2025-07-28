@@ -3,6 +3,7 @@ import InvoiceValidator from '@validators/Invoice.validator';
 import { ZodError } from 'zod';
 import responses from '@utils/responses';
 import FormatErrors from '@validators/FormatError.utils';
+import AppError from '@utils/AppError';
 
 export const validateInvoice = async (
   req: Request,
@@ -18,17 +19,10 @@ export const validateInvoice = async (
       (error as { name?: string })?.name === 'ZodError'
     ) {
       const formattedErrors = FormatErrors(error as ZodError);
-
-      res.status(400).json({
-        message: responses.INTERFACE_VALUE_ERROR,
-        errors: formattedErrors,
-      });
-      return;
+      return next(
+        new AppError(responses.INTERFACE_VALUE_ERROR, 400, formattedErrors)
+      );
     }
-
-    res.status(500).json({
-      message: responses.INTERFACE_VALUE_ERROR,
-    });
-    return;
+    return next(new AppError(responses.INTERNAL_SERVER_ERROR, 500, error));
   }
 };
