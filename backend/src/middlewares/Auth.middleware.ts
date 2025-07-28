@@ -1,9 +1,6 @@
 import { Request, NextFunction, Response } from 'express';
 
-import * as tokens from '@utils/auth/tokens';
-import * as validators from '@middlewares/validators/Auth.validators';
-
-import { UserInfoAtToken } from '../types/index';
+import * as helpers from '@helpers/Auth.helpers';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -21,9 +18,9 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
       throw new AppError(responses.System.authenticationError, 401);
     }
 
-    validators.verifyToken(accessToken);
+    helpers.verifyToken(accessToken);
 
-    const user = userData(accessToken);
+    const user = helpers.userData(accessToken);
 
     if (!user || !user.email) {
       throw new AppError(responses.System.authenticationError, 401);
@@ -39,7 +36,7 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
   }
 };
 
-const Auth = (...allow: string[]) => {
+const Authorize = (...allow: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
       const userRole = req.user.role.toLowerCase();
@@ -61,21 +58,5 @@ const Auth = (...allow: string[]) => {
   };
 };
 
-function userData(token: string): UserInfoAtToken {
-  try {
-    const data = tokens.getPayload(token);
-    if (!data) {
-      throw new AppError(responses.System.authenticationError, 500);
-    }
-
-    return data as UserInfoAtToken;
-  } catch (error) {
-    if (error instanceof AppError) {
-      throw error;
-    }
-    throw new AppError(responses.System.serverError, 500, error);
-  }
-}
-
 export default Identity;
-export { Auth };
+export { Authorize };
