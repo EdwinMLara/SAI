@@ -8,9 +8,7 @@ const ErrorMiddleware = (err: Error, req: Request, res: Response) => {
   log({
     level: 'error',
     message: err.message,
-    origin: 'Middleware errors',
     metadata: {
-      from: '-',
       user: req.user?.name || 'Undefined',
       clientIp: req.ip as string,
       stackTrace: err.stack as string,

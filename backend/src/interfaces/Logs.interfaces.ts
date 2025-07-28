@@ -1,7 +1,6 @@
 import { Document } from 'mongoose';
 
 export interface LogMetadata {
-  from: string;
   user: string;
   clientIp: string;
   stackTrace: string;
@@ -14,6 +13,5 @@ export interface LogInterface extends Document {
   timestamp: Date;
   level: string;
   message: string;
-  origin: string;
   metadata?: LogMetadata;
 }

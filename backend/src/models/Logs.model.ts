@@ -3,7 +3,6 @@ import { LogInterface, LogMetadata } from '@interfaces/Logs.interfaces';
 
 const MetadataSchema: Schema = new Schema<LogMetadata>(
   {
-    from: { type: String, required: true },
     user: { type: String, required: true },
     clientIp: { type: String, required: true },
     stackTrace: { type: String, required: true },
@@ -22,7 +21,6 @@ const LogSchema: Schema = new Schema<LogInterface>(
     timestamp: { type: Date, required: true },
     level: { type: String, required: true },
     message: { type: String, required: true },
-    origin: { type: String, required: true },
     metadata: { type: MetadataSchema, required: false },
   },
   {

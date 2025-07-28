@@ -31,7 +31,6 @@ if (isProduction) {
         timestamp: ts,
         level,
         message,
-        origin,
         metadata: meta,
       });
       log.save();
@@ -66,25 +65,22 @@ if (isProduction) {
 type LogBase = {
   level: string;
   message: string;
-  origin: string;
 };
 
 type LogInput = LogBase & { metadata?: LogMetadata };
 
-function log({ level, message, origin, metadata }: LogInput) {
+function log({ level, message, metadata }: LogInput) {
   if (isProduction) {
     if (!metadata) return;
     logger.log({
       level,
       message,
-      origin,
       metadata,
     });
   } else {
     logger.log({
       level,
       message,
-      origin,
     });
   }
 }
