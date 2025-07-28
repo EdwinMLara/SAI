@@ -9,7 +9,7 @@ const ErrorMiddleware = (err: Error, req: Request, res: Response) => {
     level: 'error',
     message: err.message,
     metadata: {
-      user: req.user?.name || 'Undefined',
+      user: req.user.name || 'Undefined',
       clientIp: req.ip as string,
       stackTrace: err.stack as string,
       endpoint: req.path,
