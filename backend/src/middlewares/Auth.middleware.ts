@@ -1,8 +1,9 @@
 import { Request, NextFunction, Response } from 'express';
 
 import * as tokens from '@utils/auth/tokens';
-import { UserInfoAtToken } from '../types/index';
 import * as validators from '@middlewares/validators/Auth.validators';
+
+import { UserInfoAtToken } from '../types/index';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -10,11 +11,7 @@ import AppError from '@utils/AppError';
 /* ------------------ Code ------------------ */
 
 const Identity = (req: Request, res: Response, next: NextFunction): void => {
-  if (
-    req.url === '/api/login' ||
-    req.url === '/api/register' ||
-    req.url === '/api/logout'
-  ) {
+  if (req.url.startsWith('/api/auth/')) {
     return next();
   }
   try {

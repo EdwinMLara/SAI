@@ -1,23 +1,21 @@
 import { Router } from 'express';
 
-import loginRoutes from './modules/login.routes';
-import registerRoutes from './modules/register.routes';
-import productRoutes from './modules/product.routes';
-import invoiceRoutes from './modules/invoice.routes';
+import authRoutes from './modules/auth.routes';
+import adminRoutes from './modules/admin.routes';
 import documentRoutes from './modules/document.routes';
 import ticketRoutes from './modules/ticket.routes';
+import invoiceRoutes from './modules/user.routes';
+import productRoutes from './modules/product.routes';
 import userRoutes from './modules/user.routes';
-import inviteRoutes from './modules/invite.routes';
 
 const router = Router();
 
-router.use('/login', loginRoutes);
-router.use('/register', registerRoutes);
-router.use('/product', productRoutes);
-router.use('/invoice', invoiceRoutes);
-router.use('/document', documentRoutes);
-router.use('/ticket', ticketRoutes);
+router.use('/auth', authRoutes);
+router.use('/admin', adminRoutes);
+router.use('/documents', documentRoutes);
+router.use('/tickets', ticketRoutes);
+router.use('/invoices', invoiceRoutes);
+router.use('/products', productRoutes);
 router.use('/user', userRoutes);
-router.use('/invite', inviteRoutes);
 
 export default router;
