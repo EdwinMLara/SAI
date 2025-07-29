@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from 'express';
 
 import * as auth from '@auth/crypt';
 import * as services from '@services/Auth.services';
-import * as userHelpers from '@helpers/User.helpers';
+import * as helpers from '@helpers/User.helpers';
 import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 
@@ -19,21 +19,21 @@ export async function register(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = await userHelpers.existsUserByEmail(req.body.email);
+    const user = await helpers.existsUserByEmail(req.body.email);
 
     if (user) {
       throw new AppError(responses.User.alreadyexists, 409);
     }
-    await userHelpers.comprobeInvite(req.body.email);
+    await helpers.comprobeInvite(req.body.email);
     req.body.password = await auth.encrypt(req.body.password);
-    req.body.role = await userHelpers.findRole(req.body.email);
+    req.body.role = await helpers.findRole(req.body.email);
     await userServices.createUser(req.body);
     await cookies.setAuthToken(res, req.body);
     await cookies.setRefreshToken(res, req.body);
 
-    res.status(201).json({
+    res.status(200).json({
       message: responses.User.created,
-      user: await userHelpers.returnUser(req.body),
+      user: await helpers.returnUser(req.body),
     });
   } catch (error) {
     if (error instanceof AppError) {

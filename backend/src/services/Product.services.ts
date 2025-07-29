@@ -1,111 +1,49 @@
-import { ProductInterface } from '@interfaces/Product.interfaces';
 import ProductModel from '@models/Product.model';
-import responses from '@utils/responses';
+
+import { ProductInterface } from '@interfaces/Product.interfaces';
+
+import responses from '@responses';
 import AppError from '@utils/AppError';
 
-export async function createProduct(product: ProductInterface): Promise<{
-  status: number;
-  message: string;
-}> {
+/* ------------------ Code ------------------ */
+
+export async function createProduct(product: ProductInterface): Promise<void> {
   try {
     const newProduct = new ProductModel(product);
     await newProduct.save();
-
-    return {
-      status: 201,
-      message: responses.PRODUCT_CREATED,
-    };
   } catch (error) {
     throw error;
   }
 }
 
-export async function readProduct(key: string): Promise<{
-  status: number;
-  message: string;
-  data?: ProductInterface;
-}> {
+export async function getProduct(
+  keyProduct: string
+): Promise<ProductInterface> {
   try {
-    const response = await ProductModel.findOne({ key });
+    const response = await ProductModel.findOne({ key: keyProduct });
 
     if (!response) {
-      return {
-        status: 404,
-        message: responses.PRODUCT_NOT_FOUND,
-      };
+      throw new AppError(responses.Product.notFound, 404);
     }
 
-    return {
-      status: 200,
-      message: responses.PRODUCT_FOUND,
-      data: response as ProductInterface,
-    };
+    return response as ProductInterface;
   } catch (error) {
     throw error;
   }
 }
 
-export async function updateProduct(
-  product: ProductInterface,
-  key: string
-): Promise<{
-  status: number;
-  message: string;
-}> {
+export async function deleteProduct(keyProduct: string): Promise<void> {
   try {
-    const result = await ProductModel.updateOne({ key }, { $set: product });
-
-    if (result.matchedCount === 0) {
-      return {
-        status: 404,
-        message: responses.PRODUCT_NOT_FOUND,
-      };
-    }
-
-    return {
-      status: 200,
-      message: responses.PRODUCT_UPDATED,
-    };
+    await ProductModel.deleteOne({ key: keyProduct });
   } catch (error) {
     throw error;
   }
 }
 
-export async function deleteProduct(key: string): Promise<{
-  status: number;
-  message: string;
-}> {
+export async function existProduct(keyProduct: string): Promise<boolean> {
   try {
-    const result = await ProductModel.deleteOne({ key });
-
-    if (result.deletedCount === 0) {
-      return {
-        status: 404,
-        message: responses.PRODUCT_NOT_FOUND,
-      };
-    }
-
-    return {
-      status: 200,
-      message: responses.PRODUCT_DELETED,
-    };
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function deleteDatabase(products: ProductInterface[]): Promise<{
-  status: number;
-  message: string;
-}> {
-  try {
-    await ProductModel.deleteMany({});
-    await ProductModel.insertMany(products);
-
-    return {
-      status: 200,
-      message: responses.PRODUCTS_DATABASE_UPDATED,
-    };
+    const product = await ProductModel.findOne({ key: keyProduct });
+    return !!product;
   } catch (error) {
     throw error;
   }

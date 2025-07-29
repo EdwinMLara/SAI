@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import { getIdUser } from '@services/User.services';
+import * as userServices from '@services/User.services';
 import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
 
@@ -39,7 +39,7 @@ export async function getInvites(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = await getIdUser(req.user.email);
+    const user = await userServices.getIdUser(req.user.email);
     const list = await services.getInvites(user);
 
     res.status(200).json({

@@ -1,45 +1,32 @@
 import InvoiceModel from '@models/Invoice.model';
-import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
-import responses from '@utils/responses';
-import logger from '@utils/logger';
 
-export async function createInvoice(invoiceData: InvoiceInterface): Promise<{
-  status: number;
-  message: string;
-}> {
+import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
+
+import responses from '@responses';
+import AppError from '@utils/AppError';
+
+/* ------------------ Code ------------------ */
+
+export async function createInvoice(
+  invoiceData: InvoiceInterface
+): Promise<void> {
   try {
     const newInvoice = new InvoiceModel(invoiceData);
     await newInvoice.save();
-
-    return {
-      status: 201,
-      message: responses.INVOICE_CREATED,
-    };
   } catch (error) {
     throw error;
   }
 }
 
-export async function getInvoice(id: string): Promise<{
-  status: number;
-  message: string;
-  data?: InvoiceInterface;
-}> {
+export async function getInvoice(invoiceId: string): Promise<InvoiceInterface> {
   try {
-    const response = await InvoiceModel.findOne({ id });
+    const invoice = await InvoiceModel.findOne({ invoiceId });
 
-    if (!response) {
-      return {
-        status: 404,
-        message: responses.INVOICE_NOT_FOUND,
-      };
+    if (!invoice) {
+      throw new AppError(responses.Invoice.notFound, 404);
     }
 
-    return {
-      status: 200,
-      message: responses.INVOICE_FOUND,
-      data: response as InvoiceInterface,
-    };
+    return invoice as InvoiceInterface;
   } catch (error) {
     throw error;
   }
@@ -47,48 +34,35 @@ export async function getInvoice(id: string): Promise<{
 
 export async function updateInvoice(
   body: InvoiceInterface,
-  id: string
-): Promise<{
-  status: number;
-  message: string;
-}> {
+  invoiceId: string
+): Promise<void> {
   try {
-    const result = await InvoiceModel.updateOne({ id }, { $set: body });
+    const result = await InvoiceModel.updateOne({ invoiceId }, { $set: body });
 
     if (result.matchedCount === 0) {
-      return {
-        status: 404,
-        message: responses.INVOICE_NOT_FOUND,
-      };
+      throw new AppError(responses.Invoice.notFound, 404);
     }
-
-    return {
-      status: 200,
-      message: responses.INVOICE_UPDATED,
-    };
   } catch (error) {
     throw error;
   }
 }
 
-export async function deleteInvoice(id: string): Promise<{
-  status: number;
-  message: string;
-}> {
+export async function deleteInvoice(invoiceId: string): Promise<void> {
   try {
-    const result = await InvoiceModel.deleteOne({ id });
+    const result = await InvoiceModel.deleteOne({ invoiceId });
 
     if (result.deletedCount === 0) {
-      return {
-        status: 404,
-        message: responses.INVOICE_NOT_FOUND,
-      };
+      throw new AppError(responses.Invoice.notFound, 404);
     }
+  } catch (error) {
+    throw error;
+  }
+}
 
-    return {
-      status: 200,
-      message: responses.INVOICE_DELETED,
-    };
+export async function existInvoice(invoiceId: string): Promise<boolean> {
+  try {
+    const invoice = await InvoiceModel.findOne({ invoiceId });
+    return !!invoice;
   } catch (error) {
     throw error;
   }

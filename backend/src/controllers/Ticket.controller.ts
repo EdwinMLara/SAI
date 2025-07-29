@@ -1,72 +1,37 @@
 import { Request, Response, NextFunction } from 'express';
 
-import * as ticketService from '@services/Ticket.services';
-import * as ticketValidations from '@controllers/validations/Ticket.validations';
-import * as invoiceValidations from '@controllers/validations/Invoice.validations';
+import * as services from '@services/Ticket.services';
+import * as helpers from '@helpers/Ticket.helpers';
 
-import responses from '@utils/responses';
+import responses from '@responses';
+import AppError from '@utils/AppError';
+
+/* ------------------ Code ------------------ */
 
 interface MulterRequest extends Request {
-  file?: Express.Multer.File;
+  file: Express.Multer.File;
 }
 
-export async function createTicketURL(
+export async function uploadFile(
   req: MulterRequest,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const validate = await ticketValidations.integrity(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (validate.error) {
-      res.status(400).json({ message: validate.message });
-      return;
-    }
-
-    if (!validate.pass) {
-      res.status(404).json({ message: validate.message });
-      return;
-    }
-
-    const payment = await invoiceValidations.transaction(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (payment.error) {
-      res.status(400).json({ message: payment.message });
-      return;
-    }
-
-    if (!payment.pass) {
-      res.status(404).json({ message: payment.message });
-      return;
-    }
-
-    const id = req.query.id;
-    const transaction = req.query.transaction;
-    const filename = `ticket_${id}_${transaction}.jpeg`;
-
-    const checking = await ticketService.search(filename);
-
-    if (checking) {
-      res.status(409).json({
-        message: responses.TICKET_ALREADY_ATTACHED,
-      });
-      return;
-    }
-
-    const generate = await ticketService.generateURL(req.file!, filename);
+    const ticketId = helpers.getQuery(req.query.ticketId);
+    const filename = `ticket_${ticketId}.pdf`;
+    await helpers.comprobeInexistence(filename);
+    const url = await services.uploadFile(req.file, filename);
 
     res.status(200).json({
-      message: responses.TICKET_URL_GENERATED,
-      url: generate.url,
+      message: responses.Ticket.generated,
+      url: url,
     });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
 
@@ -76,53 +41,16 @@ export async function readTicketURL(
   next: NextFunction
 ): Promise<void> {
   try {
-    const validate = await ticketValidations.integrity(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (validate.error) {
-      res.status(400).json({ message: validate.message });
-      return;
-    }
-
-    if (!validate.pass) {
-      res.status(404).json({ message: validate.message });
-      return;
-    }
-
-    const payment = await invoiceValidations.transaction(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (payment.error) {
-      res.status(400).json({ message: payment.message });
-      return;
-    }
-
-    if (!payment.pass) {
-      res.status(404).json({ message: payment.message });
-      return;
-    }
-
-    const id = req.query.id;
-    const transaction = req.query.transaction;
-    const filename = `ticket_${id}_${transaction}.jpeg`;
-
-    const checking = await ticketService.search(filename);
-
-    if (!checking) {
-      res.status(404).json({
-        message: responses.TICKET_NOT_FOUND,
-      });
-      return;
-    }
-
-    const request = await ticketService.searchURL(filename);
-    res.status(200).json({ message: responses.TICKET_FOUND, url: request.url });
+    const ticketId = helpers.getQuery(req.query.ticketId);
+    const filename = `ticket_${ticketId}.pdf`;
+    await helpers.comprobeExistence(filename);
+    const url = await services.getUrlFile(filename);
+    res.status(200).json({ message: responses.System.ok, url: url });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
 
@@ -131,62 +59,17 @@ export async function updateTicket(
   res: Response,
   next: NextFunction
 ): Promise<void> {
-  if (!req.file || req.file.mimetype !== 'image/jpeg') {
-    res.status(415).json({
-      message: responses.INVALID_FILETYPE,
-    });
-    return;
-  }
   try {
-    const validate = await ticketValidations.integrity(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (validate.error) {
-      res.status(400).json({ message: validate.message });
-      return;
-    }
-
-    if (!validate.pass) {
-      res.status(404).json({ message: validate.message });
-      return;
-    }
-
-    const payment = await invoiceValidations.transaction(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (payment.error) {
-      res.status(400).json({ message: payment.message });
-      return;
-    }
-
-    if (!payment.pass) {
-      res.status(404).json({ message: payment.message });
-      return;
-    }
-
-    const id = req.query.id;
-    const transaction = req.query.transaction;
-    const filename = `ticket_${id}_${transaction}.jpeg`;
-
-    const checking = await ticketService.search(filename);
-
-    if (!checking) {
-      res.status(404).json({
-        message: responses.TICKET_NOT_FOUND,
-      });
-      return;
-    }
-
-    const request = await ticketService.updateFile(req.file!, filename);
-    res
-      .status(200)
-      .json({ message: responses.TICKET_UPDATED, url: request.url });
+    const ticketId = helpers.getQuery(req.query.ticketId);
+    const filename = `ticket_${ticketId}.pdf`;
+    await helpers.comprobeExistence(filename);
+    const url = await services.updateFile(req.file, filename);
+    res.status(200).json({ message: responses.Ticket.updated, url: url });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
 
@@ -196,52 +79,15 @@ export async function deleteTicket(
   next: NextFunction
 ): Promise<void> {
   try {
-    const validate = await ticketValidations.integrity(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (validate.error) {
-      res.status(400).json({ message: validate.message });
-      return;
-    }
-
-    if (!validate.pass) {
-      res.status(404).json({ message: validate.message });
-      return;
-    }
-
-    const payment = await invoiceValidations.transaction(
-      req.query.id as string,
-      req.query.transaction as string
-    );
-
-    if (payment.error) {
-      res.status(400).json({ message: payment.message });
-      return;
-    }
-
-    if (!payment.pass) {
-      res.status(404).json({ message: payment.message });
-      return;
-    }
-
-    const id = req.query.id;
-    const transaction = req.query.transaction;
-    const filename = `ticket_${id}_${transaction}.jpeg`;
-
-    const checking = await ticketService.search(filename);
-
-    if (!checking) {
-      res.status(404).json({
-        message: responses.TICKET_NOT_FOUND,
-      });
-      return;
-    }
-
-    await ticketService.deleteFile(filename);
-    res.status(200).json({ message: responses.TICKET_DELETED });
+    const ticketId = helpers.getQuery(req.query.ticketId);
+    const filename = `ticket_${ticketId}.pdf`;
+    await helpers.comprobeExistence(filename);
+    await services.deleteFile(filename);
+    res.status(200).json({ message: responses.Ticket.deleted });
   } catch (error) {
-    next(error);
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
   }
 }
