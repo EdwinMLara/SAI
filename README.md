@@ -7,8 +7,7 @@ This service is designed for processing and storing documents for INSOEL.
 ## Structure
 
 `Client` Contains the frontend of the SAI system, including UI components and client-side logic.  
-`Backend` Contains the backend logic for the SAI system, including API endpoints, database connections, and business logic.  
-`Shared` Contains code and utilities shared between the client and server, such as constants, types, and helper functions.
+`Backend` Contains the backend logic for the SAI system, including API endpoints, database connections, and business logic.
 
 ## Node Version
 
