@@ -1,11 +1,14 @@
 import mongoose from 'mongoose';
-import logger from '@utils/logger';
 import env from '@utils/env';
+import log from '@utils/Logger.utils';
 
 export const connect = async () => {
   try {
     await mongoose.connect(env.MONGO_URI);
-    logger.info('[Mongo] Connected Successfully');
+    log({
+      level: 'debug',
+      message: 'MongoDB connection established successfully',
+    });
   } catch (error) {
     throw error;
   }
@@ -14,7 +17,6 @@ export const connect = async () => {
 export const disconnect = async () => {
   try {
     await mongoose.disconnect();
-    logger.info('[Mongo] Disconnected Successfully');
   } catch (error) {
     throw error;
   }

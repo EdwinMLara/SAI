@@ -1,11 +1,14 @@
 import { createClient } from '@supabase/supabase-js';
-import logger from '@utils/logger';
+import log from '@utils/Logger.utils';
 import env from '@utils/env';
 
 const supabase = createClient(env.SUPA_URL, env.SUPA_KEY, {
   auth: { persistSession: false },
 });
 
-logger.info('[Supabase] Connected Successfully');
+log({
+  level: 'debug',
+  message: 'Supabase connection established successfully',
+});
 
 export default supabase;
