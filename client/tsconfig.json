@@ -20,8 +20,9 @@
     "paths": {
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
-      "@services/*": ["src/services/*"],
-      "@interfaces/*": ["src/interfaces/*"],
+      "@services/*": ["src/core/services/*"],
+      "@interfaces/*": ["src/core/interfaces/*"],
+      "@common/*": ["src/core/common/*"],
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
       "@hooks/*": ["src/hooks/*"],

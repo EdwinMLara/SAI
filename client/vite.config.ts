@@ -12,8 +12,9 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
       '@components': resolve(__dirname, './src/components'),
-      '@services': resolve(__dirname, './src/services'),
-      '@interfaces': resolve(__dirname, './src/interfaces'),
+      '@services': resolve(__dirname, './src/core/services'),
+      '@interfaces': resolve(__dirname, './src/core/interfaces'),
+      '@common': resolve(__dirname, './src/core/common'),
       '@utils': resolve(__dirname, './src/utils'),
       '@pages': resolve(__dirname, './src/pages'),
       '@hooks': resolve(__dirname, './src/hooks'),
@@ -25,7 +26,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: `http://${process.env.SERVER_IP}:${process.env.SERVER_PORT}`,
         changeOrigin: true,
       },
     },
