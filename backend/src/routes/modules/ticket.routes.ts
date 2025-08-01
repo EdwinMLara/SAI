@@ -5,7 +5,7 @@ import FileFilter from '@middlewares/Multer.middleware';
 
 const router = Router();
 
-router.post('/', FileFilter, Ticket.createTicketURL);
+router.post('/', FileFilter, Ticket.uploadFile);
 router.get('/', Ticket.readTicketURL);
 router.put('/', FileFilter, Ticket.updateTicket);
 router.delete('/', Ticket.deleteTicket);
