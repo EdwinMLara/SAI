@@ -8,12 +8,8 @@ import AppError from '@utils/AppError';
 
 /* ------------------ Code ------------------ */
 
-interface MulterRequest extends Request {
-  file: Express.Multer.File;
-}
-
 export async function uploadFile(
-  req: MulterRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -21,8 +17,8 @@ export async function uploadFile(
     const ticketId = helpers.getQuery(req.query.ticketId);
     const filename = `ticket_${ticketId}.pdf`;
     await helpers.comprobeInexistence(filename);
-    const url = await services.uploadFile(req.file, filename);
-
+    const file = (req as any).file as Express.Multer.File;
+    const url = await services.uploadFile(file, filename);
     res.status(200).json({
       message: responses.Ticket.generated,
       url: url,
@@ -55,7 +51,7 @@ export async function readTicketURL(
 }
 
 export async function updateTicket(
-  req: MulterRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -63,7 +59,8 @@ export async function updateTicket(
     const ticketId = helpers.getQuery(req.query.ticketId);
     const filename = `ticket_${ticketId}.pdf`;
     await helpers.comprobeExistence(filename);
-    const url = await services.updateFile(req.file, filename);
+    const file = (req as any).file as Express.Multer.File;
+    const url = await services.updateFile(file, filename);
     res.status(200).json({ message: responses.Ticket.updated, url: url });
   } catch (error) {
     if (error instanceof AppError) {
