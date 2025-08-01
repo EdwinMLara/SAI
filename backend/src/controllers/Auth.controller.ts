@@ -59,8 +59,9 @@ export async function login(
     await services.login(user, password);
     await cookies.setAuthToken(res, user);
     await cookies.setRefreshToken(res, user);
+    const publicUser = await helpers.returnUser(user);
 
-    res.status(200).json({ message: responses.System.ok });
+    res.status(200).json({ message: responses.System.ok, user: publicUser });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
