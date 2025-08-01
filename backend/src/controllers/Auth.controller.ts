@@ -59,9 +59,8 @@ export async function login(
     await services.login(user, password);
     await cookies.setAuthToken(res, user);
     await cookies.setRefreshToken(res, user);
-    const publicUser = await helpers.returnUser(user);
 
-    res.status(200).json({ message: responses.System.ok, user: publicUser });
+    res.status(200).json({ message: responses.System.ok });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
@@ -96,6 +95,27 @@ export async function logout(
     res.clearCookie('accessToken', { path: '/' });
     res.clearCookie('refreshToken', { path: '/api/auth/refresh' });
     res.status(200).json({ message: responses.System.ok });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
+export async function sessionState(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const user = await userServices.getUserById(req.user.id);
+    const publicUser = await helpers.returnUser(user);
+    res.status(200).json({
+      message: responses.System.ok,
+      autenticate: true,
+      user: publicUser,
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
