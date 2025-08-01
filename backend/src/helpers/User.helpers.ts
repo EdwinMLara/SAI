@@ -4,7 +4,6 @@ import { hasInvite, getInvite } from '@services/Invite.services';
 import UserModel from '@models/User.model';
 import AppError from '@utils/AppError';
 import responses from '@responses';
-import UserValidator from '@validators/User.validator';
 import {
   UserChanges,
   UserInterface,
@@ -49,19 +48,6 @@ export async function findRole(email: string): Promise<'admin' | 'user'> {
       throw new AppError(responses.Invite.notWasInvite, 401);
     }
     return invite.role;
-  } catch (error) {
-    throw error;
-  }
-}
-
-export async function validateUserChanges(
-  changes: Partial<UserChanges>
-): Promise<void> {
-  try {
-    const result = UserValidator.partial().safeParse(changes);
-    if (!result.success) {
-      throw new AppError(responses.User.formatError, 400);
-    }
   } catch (error) {
     throw error;
   }

@@ -18,7 +18,6 @@ export async function updateUser(
 ): Promise<void> {
   try {
     const updates: Partial<UserChanges> = req.body;
-    await helpers.validateUserChanges(updates);
     const changes = await services.updatedUser(req.user.id, updates);
     await cookies.setAuthToken(res, changes);
 
