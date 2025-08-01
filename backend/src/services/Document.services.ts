@@ -1,13 +1,17 @@
-import connectSupabase from '@config/supabase';
-import logger from '@utils/logger';
+import env from '@utils/env';
+import supabase from '@config/supabase';
 
-const bucket = process.env.BUCKET_VOUCHERS || 'documents';
-const supabase = connectSupabase();
+import responses from '@responses';
+import AppError from '@utils/AppError';
 
-export async function generateURL(
+/* ------------------ Code ------------------ */
+
+const bucket = env.BUCKET_DOCS;
+
+export async function uploadFile(
   file: Express.Multer.File,
   filename: string
-): Promise<{ url: string }> {
+): Promise<string> {
   try {
     const { error } = await supabase.storage
       .from(bucket)
@@ -17,36 +21,11 @@ export async function generateURL(
       });
 
     if (error) {
-      logger.error('Error uploading file to Supabase:', error);
-      throw new Error(error.message);
+      throw new AppError(responses.Document.uploadError, 500, error);
     }
-
     const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
-
-    return {
-      url: data.publicUrl,
-    };
+    return data.publicUrl;
   } catch (error) {
-    logger.error(`Error generating URL: ${error}`);
-    throw error;
-  }
-}
-
-export async function searchURL(filename: string): Promise<{
-  url: string;
-}> {
-  try {
-    const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
-
-    if (!data || !data.publicUrl) {
-      throw new Error('Failed to retrieve the URL');
-    }
-
-    return {
-      url: data.publicUrl,
-    };
-  } catch (error) {
-    logger.error(`Error searching URL for ${filename}:`, error);
     throw error;
   }
 }
@@ -54,13 +33,10 @@ export async function searchURL(filename: string): Promise<{
 export async function deleteFile(filename: string): Promise<void> {
   try {
     const { error } = await supabase.storage.from(bucket).remove([filename]);
-
     if (error) {
-      logger.error('Error deleting file from Supabase:', error);
-      throw new Error(`Error deleting file: ${error.message}`);
+      throw new AppError(responses.Document.uploadError, 500, error);
     }
   } catch (error) {
-    logger.error(`Error deleting file ${filename}:`, error);
     throw error;
   }
 }
@@ -68,23 +44,30 @@ export async function deleteFile(filename: string): Promise<void> {
 export async function updateFile(
   file: Express.Multer.File,
   filename: string
-): Promise<{ url: string }> {
+): Promise<string> {
   try {
     await deleteFile(filename);
-    const generate = await generateURL(file, filename);
-    return { url: generate.url };
+    const url = await uploadFile(file, filename);
+    return url;
   } catch (error) {
-    logger.error(`Error updating file: ${error}`);
     throw error;
   }
 }
 
-export async function search(filename: string): Promise<boolean> {
+export async function exists(filename: string): Promise<boolean> {
   try {
     const { data } = await supabase.storage.from(bucket).exists(filename);
-    return data || false;
+    return data;
   } catch (error) {
-    logger.error(`Error checking file existence for ${filename}:`, error);
-    return false;
+    throw error;
+  }
+}
+
+export async function getUrlFile(filename: string): Promise<string> {
+  try {
+    const { data } = supabase.storage.from(bucket).getPublicUrl(filename);
+    return data.publicUrl;
+  } catch (error) {
+    throw error;
   }
 }

@@ -4,10 +4,10 @@ import responses from '@utils/responses';
 
 const VALID_ROLES = ['admin', 'user'] as const;
 const VALID_STATUS = [
-  'received',
+  'recibido',
   'backorder',
-  'cancelled',
-  'returned',
+  'cancelado',
+  'devolución',
 ] as const;
 const VALID_PAYMENT_STATUS = [
   'paid',
@@ -23,7 +23,10 @@ const Destination = z.object({
 });
 
 const User = z.object({
-  name: z.string().min(2).default('default_user'),
+  name: z
+    .string()
+    .min(2, responses.VAL_MIN_LENGTH.replace('{min}', '2'))
+    .default('default_user'),
   role: z.enum(VALID_ROLES).default('user'),
   needs: z.number().positive().default(1),
   use: Destination.default({}),
@@ -40,19 +43,24 @@ const Prices = z.object({
 const Product = z.object({
   key: z
     .string()
-    .regex(/^\d{1,10}$/, 'Product key must contain only numbers (1-10 digits)')
-    .min(1, 'Product key must have at least 1 digit')
-    .max(10, 'Product key cannot exceed 10 digits'),
-  description: z.string().min(3).default(''),
+    .regex(/^\d{1,10}$/, responses.VAL_ONLY_NUMBERS)
+    .min(1, responses.VAL_MIN_LENGTH.replace('{min}', '1'))
+    .max(10, responses.VAL_MAX_LENGTH.replace('{max}', '10')),
+  description: z
+    .string()
+    .min(3, responses.VAL_MIN_LENGTH.replace('{min}', '3'))
+    .default(''),
   quantity: z.number().positive().int().default(1),
-  status: z.enum(VALID_STATUS).default('received'),
+  status: z.enum(VALID_STATUS).default('recibido'),
   prices: Prices.default({}),
   user_config: z.array(User).optional().default([]),
 });
 
 const Payments = z.object({
-  user: z.string().min(2),
-  transaction: z.string().min(3),
+  user: z.string().min(2, responses.VAL_MIN_LENGTH.replace('{min}', '2')),
+  transaction: z
+    .string()
+    .min(3, responses.VAL_MIN_LENGTH.replace('{min}', '3')),
   date: z.string().transform(stringToDate),
   amount: z.number().positive(),
   status: z.enum(VALID_PAYMENT_STATUS),
@@ -61,8 +69,13 @@ const Payments = z.object({
 
 const InvoiceValidator = z
   .object({
-    id: z.string().min(3).max(50),
-    reference: z.string().min(3),
+    invoiceId: z
+      .string()
+      .min(3, responses.VAL_MIN_LENGTH.replace('{min}', '3'))
+      .max(50, responses.VAL_MAX_LENGTH.replace('{max}', '50')),
+    reference: z
+      .string()
+      .min(3, responses.VAL_MIN_LENGTH.replace('{min}', '3')),
     date: z
       .string()
       .transform(stringToDate)
@@ -75,7 +88,7 @@ const InvoiceValidator = z
         date.setDate(date.getDate() + 30);
         return dateToString(date);
       }),
-    products: z.array(Product).min(1, 'At least one product is required'),
+    products: z.array(Product).min(1, responses.VAL_REQUIRED),
     payments: z.array(Payments).optional().default([]),
     document: z.string().default(''),
   })
@@ -91,13 +104,6 @@ const InvoiceValidator = z
       path: ['expiration'],
     }
   );
-
-export function formatValidationErrors(error: z.ZodError) {
-  return error.errors.map((err) => ({
-    path: err.path.join('.'),
-    message: err.message,
-  }));
-}
 
 export type InvoiceType = z.infer<typeof InvoiceValidator>;
 export default InvoiceValidator;

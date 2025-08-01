@@ -15,10 +15,14 @@
       "@interfaces/*": ["src/interfaces/*"],
       "@middlewares/*": ["src/middlewares/*"],
       "@models/*": ["src/models/*"],
-      "@routes/*": ["src/routes/*"],
+      "@routes": ["src/routes/api.routes.ts"],
       "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"],
-      "@validators/*": ["src/validators/*"]
+      "@auth/*": ["src/utils/auth/*"],
+      "@types": ["src/types/index.ts"],
+      "@responses": ["src/utils/responses/index.responses.ts"],
+      "@validators/*": ["src/validators/*"],
+      "@helpers/*": ["src/helpers/*"]
     }
   },
   "include": ["src"],

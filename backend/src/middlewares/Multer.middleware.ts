@@ -1,7 +1,10 @@
 import multer, { FileFilterCallback } from 'multer';
 import { Request, Response, NextFunction } from 'express';
-import responses from '@utils/responses';
-import logger from '@utils/logger';
+
+import responses from '@responses';
+import AppError from '@utils/AppError';
+
+/* ------------------ Code ------------------ */
 
 const upload = multer({
   storage: multer.memoryStorage(),
@@ -12,31 +15,31 @@ const upload = multer({
     callback: FileFilterCallback
   ): void => {
     if (file.mimetype === 'application/pdf' || file.mimetype === 'image/jpeg') {
-      logger.info(`[Multer] File accepted: ${file.originalname}`);
       callback(null, true);
     } else {
-      logger.error(`[Multer] Unsupported file type: ${file.mimetype}`);
-      callback(new Error(responses.INVALID_FILETYPE));
+      callback(new AppError('archivo no permitido'));
     }
   },
 });
 
-function fileRequiredMiddleware(
-  req: Request,
-  res: Response,
-  next: NextFunction
-) {
-  upload.single('file')(req, res, (err: any) => {
-    if (err) {
-      logger.error(`[Multer] Upload error: ${err.message}`);
-      return res.status(415).json({ message: err.message });
-    }
-    if (!req.file) {
-      logger.error(`[Multer] No file provided in request.`);
-      return res.status(400).json({ message: responses.REQUIRED_FILE });
-    }
-    next();
-  });
+function requireFile(req: Request, res: Response, next: NextFunction) {
+  try {
+    upload.single('file')(req, res, (err: any) => {
+      try {
+        if (err) {
+          throw new AppError('Tipo de archivo no permitido', 415);
+        }
+        if (!req.file) {
+          throw new AppError('El archivo es requerido', 400);
+        }
+        next();
+      } catch (error) {
+        next(error);
+      }
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
-export default fileRequiredMiddleware;
+export default requireFile;

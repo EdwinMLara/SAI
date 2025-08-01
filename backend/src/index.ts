@@ -1,20 +1,21 @@
 import cors from 'cors';
-import dotenv from 'dotenv';
 import express from 'express';
 
 import logger from '@utils/logger';
+import env from '@utils/env';
 
-import router from '@routes/api.routes';
+import router from '@routes';
 import * as Mongo from '@config/database';
+import cookieParser from 'cookie-parser';
 
 import RequestMiddleware from '@middlewares/Request.middleware';
 import ResponseMiddleware from '@middlewares/Response.middleware';
-
-dotenv.config();
+import ErrorMiddleware from '@middlewares/Error.middleware';
 
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 app.use(RequestMiddleware);
@@ -23,12 +24,10 @@ app.use(ResponseMiddleware);
 Mongo.connect();
 
 app.use('/api', router);
+app.use(ErrorMiddleware);
 
-const PORT = process.env.PORT || 5001;
-const toListen = process.env.LOCAL_IP || '0.0.0.0';
-
-const server = app.listen(Number(PORT), String(toListen), () => {
-  logger.info(`[Express] Connected on  ${toListen}:${PORT}`);
+const server = app.listen(Number(env.SERVER_PORT), env.SERVER_IP, () => {
+  logger.info(`[Express] Connected on  ${env.SERVER_IP}:${env.SERVER_PORT}`);
 });
 
 const gracefulShutdown = async (signal: string) => {

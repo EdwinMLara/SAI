@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from 'express';
 import ProductValidator from '@validators/Product.validator';
 import responses from '@utils/responses';
-import logger from '@utils/logger';
 import { ZodError } from 'zod';
+import AppError from '@utils/AppError';
 
 export const validateProduct = async (
   req: Request,
@@ -17,23 +17,8 @@ export const validateProduct = async (
       error instanceof ZodError ||
       (error as { name?: string })?.name === 'ZodError'
     ) {
-      logger.error('Product validation failed', {
-        errors: error instanceof ZodError ? error.errors : error,
-        requestId: req.headers['x-request-id'] || 'unknown',
-      });
-      res.status(400).json({
-        message: responses.INTERFACE_VALUE_ERROR,
-        errors: error instanceof ZodError ? error.errors : error,
-      });
-      return;
+      return next(new AppError(responses.INTERFACE_VALUE_ERROR, 400, error));
     }
-    logger.error('Unexpected product validation error', {
-      error: responses.INTERNAL_SERVER_ERROR,
-      requestId: req.headers['x-request-id'] || 'unknown',
-    });
-    res.status(500).json({
-      message: responses.INTERNAL_SERVER_ERROR,
-    });
-    return;
+    return next(new AppError(responses.INTERNAL_SERVER_ERROR, 500, error));
   }
 };

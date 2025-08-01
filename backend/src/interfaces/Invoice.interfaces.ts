@@ -40,7 +40,7 @@ interface Payments {
 }
 
 export interface InvoiceInterface extends Document {
-  id: string;
+  invoiceId: string;
   reference: string;
   date: Date;
   expiration: Date;
