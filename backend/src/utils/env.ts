@@ -11,6 +11,7 @@ const envOptions = [
   'BUCKET_TICKET',
   'SERVER_IP',
   'SERVER_PORT',
+  'ORIGIN_SERVER',
 ];
 
 envOptions.forEach((key) => {
@@ -29,6 +30,7 @@ const env = {
   BUCKET_TICKET: process.env.BUCKET_TICKET || '',
   SERVER_IP: process.env.SERVER_IP || '',
   SERVER_PORT: process.env.SERVER_PORT || '',
+  ORIGIN_SERVER: process.env.ORIGIN_SERVER || '',
 };
 
 export default env;
