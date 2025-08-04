@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Icon } from '@components/index';
+import Icon from './Icon';
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   icon?: string;

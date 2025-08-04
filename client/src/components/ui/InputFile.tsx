@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '..';
+import Button from './Button';
 
 interface InputFileProps {
   onChange?: (file: File | null) => void;
