@@ -1,18 +1,23 @@
-import { Request, Response } from 'express';
+import { Request, Response, NextFunction } from 'express';
 
 import log from '@utils/Logger.utils';
 import AppError from '../utils/AppError';
 
 /* ------------------ Code ------------------ */
 
-const ErrorMiddleware = (err: Error, req: Request, res: Response) => {
+const ErrorMiddleware = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const returnCode = err instanceof AppError ? err.statusCode || 500 : 500;
 
   log({
     level: 'error',
     message: err.message,
     metadata: {
-      user: req.user.name || 'Undefined',
+      user: req.user?.name || 'Undefined',
       clientIp: req.ip as string,
       stackTrace: err.stack as string,
       endpoint: req.path,
@@ -22,14 +27,13 @@ const ErrorMiddleware = (err: Error, req: Request, res: Response) => {
   });
 
   if (err instanceof AppError) {
-    res.status(err.statusCode || 500).json({
+    return res.status(err.statusCode || 500).json({
       message: err.message,
     });
-    return;
   }
-  res.status(500).json({
+
+  return res.status(500).json({
     message: 'Error interno del servidor',
   });
 };
-
 export default ErrorMiddleware;
