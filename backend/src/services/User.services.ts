@@ -26,7 +26,7 @@ export async function updatedUser(
       new: true,
     });
     if (!updated) {
-      throw new AppError('Error en la transacción de la base de datos');
+      throw new AppError(responses.User.updateError, 500);
     }
     return updated as UserInterface;
   } catch (error) {

@@ -5,6 +5,7 @@ const SystemResponses = {
   serverError: 'Ocurrió un error interno. Estaremos diagnosticando el problema',
   unauthorizedRole: 'No tienes autorización para realizar esta acción.',
   authenticationError: 'Hubo un problema de autenticación.',
+  badRequest: 'Hubo un problema en la solicitud.',
 };
 
 export default SystemResponses;
