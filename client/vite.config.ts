@@ -1,10 +1,12 @@
 import { defineConfig } from 'vite';
+import dotenv from 'dotenv';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+dotenv.config();
 
 export default defineConfig({
   plugins: [react()],
@@ -15,6 +17,8 @@ export default defineConfig({
       '@services': resolve(__dirname, './src/core/services'),
       '@interfaces': resolve(__dirname, './src/core/interfaces'),
       '@common': resolve(__dirname, './src/core/common'),
+      '@managment': resolve(__dirname, './src/core/managment'),
+      '@config': resolve(__dirname, './src/core/config'),
       '@utils': resolve(__dirname, './src/utils'),
       '@pages': resolve(__dirname, './src/pages'),
       '@hooks': resolve(__dirname, './src/hooks'),
@@ -26,7 +30,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: `http://${process.env.SERVER_IP}:${process.env.SERVER_PORT}`,
+        target: `http://${process.env.VITE_API_HOST}:${process.env.VITE_API_PORT}`,
         changeOrigin: true,
       },
     },

@@ -22,6 +22,8 @@
       "@components/*": ["src/components/*"],
       "@services/*": ["src/core/services/*"],
       "@interfaces/*": ["src/core/interfaces/*"],
+      "@managment/*": ["src/core/managment/*"],
+      "@config/*": ["src/core/config/*"],
       "@common/*": ["src/core/common/*"],
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
