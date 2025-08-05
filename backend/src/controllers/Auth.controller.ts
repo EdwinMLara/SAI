@@ -109,11 +109,20 @@ export async function sessionState(
   next: NextFunction
 ): Promise<void> {
   try {
+    if (!req.user || !req.user.id) {
+      res.status(200).json({
+        message: responses.System.ok,
+        isAuthenticated: false,
+        user: null,
+      });
+      return;
+    }
+
     const user = await userServices.getUserById(req.user.id);
     const publicUser = await helpers.returnUser(user);
     res.status(200).json({
       message: responses.System.ok,
-      autenticate: true,
+      isAuthenticated: true,
       user: publicUser,
     });
   } catch (error) {
