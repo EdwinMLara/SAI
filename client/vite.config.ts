@@ -23,7 +23,7 @@ export default defineConfig({
       '@utils': resolve(__dirname, './src/utils'),
       '@pages': resolve(__dirname, './src/pages'),
       '@hooks': resolve(__dirname, './src/hooks'),
-      '@contexts': resolve(__dirname, './src/contexts'),
+      '@context': resolve(__dirname, './src/context'),
       '@layouts': resolve(__dirname, './src/layouts'),
       '@routes': resolve(__dirname, './src/routes'),
     },

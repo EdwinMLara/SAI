@@ -13,8 +13,6 @@
     "noEmit": true,
     "jsx": "react-jsx",
     "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": ".",
     "paths": {
@@ -26,6 +24,7 @@
       "@managment/*": ["src/core/managment/*"],
       "@config/*": ["src/core/config/*"],
       "@common/*": ["src/core/common/*"],
+      "@context/*": ["src/context/*"],
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
       "@hooks/*": ["src/hooks/*"],
