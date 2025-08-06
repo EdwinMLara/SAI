@@ -4,74 +4,114 @@
 @tailwind components;
 @tailwind utilities;
 
-.text-main {
-  @apply text-textMain;
-}
-.bg-main {
-  @apply bg-primaryLight;
-}
-.bg-card {
-  @apply bg-white;
-}
-.text-brand {
-  @apply text-primary;
-}
-.bg-brand {
-  @apply bg-primary;
-}
-.bg-brand-light {
-  @apply bg-primaryLight;
-}
-.bg-brand-dark {
-  @apply bg-primaryDark;
-}
-.bg-accent {
-  @apply bg-secondary;
-}
-.bg-accent-light {
-  @apply bg-secondaryLight;
-}
-.bg-accent-dark {
-  @apply bg-secondaryDark;
-}
-.text-accent {
-  @apply text-secondaryDark;
-}
-.text-accent-light {
-  @apply text-secondaryLight;
-}
-.text-accent-dark {
-  @apply text-secondaryDark;
-}
-
-body {
-  font-family: 'Inter', sans-serif;
-}
-
-.ghost-hover-bg:hover {
-  background-color: #c7daf5 !important;
-  transition: background-color 0.3s;
-}
-
-@keyframes fade-in-out {
-  0% {
-    opacity: 0;
-    transform: translateY(-16px);
-  }
-  10% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  90% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 0;
-    transform: translateY(-16px);
+@layer base {
+  body {
+    font-family: 'Inter', sans-serif;
+    @apply bg-main text-main transition-colors duration-300;
   }
 }
 
-.animate-fade-in-out {
-  animation: fade-in-out 3.5s both;
+@layer components {
+  .text-main {
+    @apply text-textMain dark:text-dark-textMain;
+  }
+  .bg-main {
+    @apply bg-secondary dark:bg-dark-bg;
+  }
+  .bg-card {
+    @apply bg-white dark:bg-dark-card;
+  }
+
+  .bg-bg {
+    @apply bg-secondary dark:bg-dark-bg;
+  }
+  .bg-card-bg {
+    @apply bg-white dark:bg-dark-card;
+  }
+
+  .text-brand {
+    @apply text-primary dark:text-dark-primary;
+  }
+  .bg-brand {
+    @apply bg-primary dark:bg-dark-primary;
+  }
+  .bg-brand-light {
+    @apply bg-primaryLight dark:bg-dark-primaryLight;
+  }
+  .bg-brand-dark {
+    @apply bg-primaryDark dark:bg-dark-primaryDark;
+  }
+
+  .bg-accent {
+    @apply bg-secondary dark:bg-dark-secondary;
+  }
+  .bg-accent-light {
+    @apply bg-secondaryLight dark:bg-dark-secondaryLight;
+  }
+  .bg-accent-dark {
+    @apply bg-secondaryDark dark:bg-dark-secondaryDark;
+  }
+  .text-accent {
+    @apply text-secondaryDark dark:text-dark-textMain;
+  }
+  .text-accent-light {
+    @apply text-secondaryLight dark:text-gray-300;
+  }
+  .text-accent-dark {
+    @apply text-secondaryDark dark:text-gray-400;
+  }
+
+  .border-main {
+    @apply border-gray-200 dark:border-gray-600;
+  }
+  .border-brand {
+    @apply border-primary dark:border-dark-primary;
+  }
+
+  .shadow-main {
+    @apply shadow-lg dark:shadow-2xl;
+  }
+
+  .ghost-hover-bg:hover {
+    @apply bg-primaryLight dark:bg-dark-primaryLight !important;
+    transition: background-color 0.3s;
+  }
+
+  .icon-ghost-effect:hover {
+    @apply bg-primaryLight dark:bg-dark-primaryLight;
+  }
+}
+
+@layer utilities {
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    @apply bg-gray-100 dark:bg-gray-800;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-600 rounded-md;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400 dark:bg-gray-500;
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-4px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-in {
+    animation: fade-in 0.2s ease-out;
+  }
 }
