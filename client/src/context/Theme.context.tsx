@@ -23,15 +23,7 @@ interface ThemeProviderProps {
 }
 
 export const Theme: React.FC<ThemeProviderProps> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    if (typeof window === 'undefined') return 'light';
-    const savedTheme = localStorage.getItem('theme') as Theme;
-    const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
-      .matches
-      ? 'dark'
-      : 'light';
-    return savedTheme || systemTheme;
-  });
+  const [theme, setThemeState] = useState<Theme>('light');
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

@@ -49,7 +49,7 @@ function Table<T extends object>({
 
   return (
     <div
-      className={`w-full max-w-full border-2 border-gray-200 bg-white p-0 font-sans text-main ${className}`.trim()}
+      className={`w-full max-w-full border-2 border-gray-200 dark:border-gray-700 bg-white dark:bg-dark-card p-0 font-sans text-main ${className}`.trim()}
       style={{
         minWidth: 0,
         borderRadius: '0.375rem',
@@ -79,12 +79,14 @@ function Table<T extends object>({
           }
         >
           <thead>
-            <tr className="bg-gray-50">
+            <tr className="bg-gray-50 dark:bg-dark-secondary">
               {cols.map((col, idx) => (
                 <th
                   key={String(col.key)}
-                  className={`px-3 py-2 text-center font-semibold text-main capitalize tracking-wide border-b-2 border-gray-200 ${
-                    idx < cols.length - 1 ? 'border-r-2 border-gray-200' : ''
+                  className={`px-3 py-2 text-center font-semibold text-main capitalize tracking-wide border-b-2 border-gray-200 dark:border-gray-700 ${
+                    idx < cols.length - 1
+                      ? 'border-r-2 border-gray-200 dark:border-gray-700'
+                      : ''
                   }`}
                   style={{ letterSpacing: 0.5, whiteSpace: 'nowrap' }}
                 >
@@ -105,7 +107,7 @@ function Table<T extends object>({
               <tr>
                 <td
                   colSpan={cols.length}
-                  className="px-2 py-6 text-center text-gray-300 text-xs font-medium bg-white border-b border-gray-200"
+                  className="px-2 py-6 text-center text-gray-300 dark:text-gray-600 text-xs font-medium bg-white dark:bg-dark-card border-b border-gray-200 dark:border-gray-700"
                 >
                   Sin datos
                 </td>
@@ -126,7 +128,7 @@ function Table<T extends object>({
                     {cols.map((col) => (
                       <td
                         key={String(col.key)}
-                        className="px-2 py-2 text-main border-b border-gray-200 align-middle"
+                        className="px-2 py-2 text-main border-b border-gray-200 dark:border-gray-700 align-middle"
                         style={{ wordBreak: 'break-all', whiteSpace: 'nowrap' }}
                       >
                         {typeof col.render === 'function' ? (
@@ -138,7 +140,9 @@ function Table<T extends object>({
                         ) : row[col.key] === undefined ||
                           row[col.key] === null ||
                           row[col.key] === '' ? (
-                          <span className="text-gray-300">—</span>
+                          <span className="text-gray-300 dark:text-gray-600">
+                            —
+                          </span>
                         ) : (
                           String(row[col.key])
                         )}
@@ -153,9 +157,11 @@ function Table<T extends object>({
       </div>
       <div className="flex flex-col md:flex-row items-center justify-between gap-1 mt-2 px-2 pb-2">
         <div className="flex items-center gap-1 w-full md:w-auto md:justify-start justify-center mb-1 md:mb-0">
-          <span className="text-[11px] text-gray-600">Filas por página:</span>
+          <span className="text-[11px] text-gray-600 dark:text-gray-400">
+            Filas por página:
+          </span>
           <select
-            className="border border-gray-300 rounded px-1 py-0.5 text-[11px] focus:outline-none focus:ring-1 focus:ring-primary bg-white"
+            className="border border-gray-300 dark:border-gray-600 rounded px-1 py-0.5 text-[11px] focus:outline-none focus:ring-1 focus:ring-primary dark:focus:ring-dark-primary bg-white dark:bg-dark-card text-gray-900 dark:text-dark-textMain"
             value={rowsPerPage}
             onChange={handleRowsPerPage}
           >
@@ -185,18 +191,18 @@ function Table<T extends object>({
         </div>
         <div className="flex items-center gap-1 w-full md:w-auto md:justify-center justify-center">
           <button
-            className="px-1.5 py-0.5 rounded bg-gray-200 text-gray-700 font-bold disabled:opacity-40 hover:bg-gray-300 transition text-xs"
+            className="px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold disabled:opacity-40 hover:bg-gray-300 dark:hover:bg-gray-600 transition text-xs"
             onClick={handlePrev}
             disabled={page === 1}
             aria-label="Anterior"
           >
             &lt;
           </button>
-          <span className="text-[11px] text-gray-600">
+          <span className="text-[11px] text-gray-600 dark:text-gray-400">
             Página {page} de {totalPages}
           </span>
           <button
-            className="px-1.5 py-0.5 rounded bg-gray-200 text-gray-700 font-bold disabled:opacity-40 hover:bg-gray-300 transition text-xs"
+            className="px-1.5 py-0.5 rounded bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-bold disabled:opacity-40 hover:bg-gray-300 dark:hover:bg-gray-600 transition text-xs"
             onClick={handleNext}
             disabled={page === totalPages}
             aria-label="Siguiente"
@@ -204,7 +210,7 @@ function Table<T extends object>({
             &gt;
           </button>
         </div>
-        <div className="text-[10px] text-gray-400">
+        <div className="text-[10px] text-gray-400 dark:text-gray-500">
           Mostrando {totalRows === 0 ? 0 : (page - 1) * rowsPerPage + 1}-
           {Math.min(page * rowsPerPage, totalRows)} de {totalRows}
         </div>

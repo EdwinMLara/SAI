@@ -75,7 +75,7 @@ const IconButton: React.FC<IconButtonProps> = ({
       </Button>
       {title && showTooltip && (
         <span
-          className="pointer-events-none absolute z-50 left-1/2 -translate-x-1/2 -top-8 mb-2 px-3 py-1 rounded bg-white text-neutral-900 text-xs shadow-lg border border-neutral-200 whitespace-nowrap animate-fade-in"
+          className="pointer-events-none absolute z-50 left-1/2 -translate-x-1/2 -top-8 mb-2 px-3 py-1 rounded bg-white dark:bg-gray-800 text-neutral-900 dark:text-white text-xs shadow-lg dark:shadow-2xl border border-neutral-200 dark:border-gray-600 whitespace-nowrap animate-fade-in"
           style={{ ...tooltipStyle, top: '-2.2rem' }} // más arriba
           role="tooltip"
         >

@@ -57,7 +57,7 @@ const CardViewer: React.FC<CardViewerProps> = ({
     (isPDF(pendingUrl, extension) ||
       isImage(pendingUrl, extension) ||
       pendingUrl.startsWith('blob:'));
-  const iconClass = 'text-gray-400';
+  const iconClass = 'text-gray-400 dark:text-gray-500';
   const getIcon = () => {
     if (isPDF(pendingUrl, extension))
       return <Icon name="FaRegFileAlt" size={40} className={iconClass} />;
@@ -79,9 +79,13 @@ const CardViewer: React.FC<CardViewerProps> = ({
             onClick={() => setShowUpload(true)}
           >
             <span className="flex items-center justify-center">
-              <Icon name="FaFileInvoice" size={22} className="text-gray-400" />
+              <Icon
+                name="FaFileInvoice"
+                size={22}
+                className="text-gray-400 dark:text-gray-500"
+              />
             </span>
-            <span className="text-xs font-semibold text-neutral-500 select-none mr-2">
+            <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 select-none mr-2">
               Comprobante
             </span>
             <div className="flex">
@@ -89,7 +93,7 @@ const CardViewer: React.FC<CardViewerProps> = ({
                 icon="FaCloudUploadAlt"
                 aria-label="Subir archivo"
                 variant="ghost"
-                color="text-gray-400"
+                color="text-gray-400 dark:text-gray-500"
                 title="Subir imagen"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -131,9 +135,13 @@ const CardViewer: React.FC<CardViewerProps> = ({
           >
             <div className="flex-1 flex flex-col items-center justify-center px-0 pt-7 pb-3">
               <div className="flex items-center justify-center mb-1 scale-110 drop-shadow-lg">
-                <Icon name="FaRegFileAlt" size={40} className="text-gray-400" />
+                <Icon
+                  name="FaRegFileAlt"
+                  size={40}
+                  className="text-gray-400 dark:text-gray-500"
+                />
               </div>
-              <span className="mt-2 text-sm font-semibold text-neutral-500 select-none">
+              <span className="mt-2 text-sm font-semibold text-neutral-500 dark:text-neutral-400 select-none">
                 Factura
               </span>
             </div>
@@ -141,7 +149,7 @@ const CardViewer: React.FC<CardViewerProps> = ({
               <IconButton
                 icon="FaCloudUploadAlt"
                 aria-label="Subir archivo"
-                className="bg-white text-blue-500 hover:bg-blue-100 hover:text-blue-700 rounded-full shadow p-2 text-lg transition"
+                className="bg-white dark:bg-dark-card text-blue-500 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-dark-primaryLight hover:text-blue-700 dark:hover:text-blue-300 rounded-full shadow dark:shadow-lg p-2 text-lg transition border border-gray-200 dark:border-gray-700"
                 title="Subir PDF"
                 onClick={(e) => {
                   e.stopPropagation();
@@ -184,7 +192,7 @@ const CardViewer: React.FC<CardViewerProps> = ({
           <Icon
             name="FaCloudUploadAlt"
             size={40}
-            className="mb-2 text-gray-400"
+            className="mb-2 text-gray-400 dark:text-gray-500"
           />
         </div>
         <Modal
@@ -219,7 +227,7 @@ const CardViewer: React.FC<CardViewerProps> = ({
 
   if (!isAccepted) {
     return (
-      <div className="bg-card rounded-lg shadow-lg p-4 flex flex-col items-center justify-center w-full max-w-xs min-h-[180px]">
+      <div className="bg-card rounded-lg shadow-lg dark:shadow-xl p-4 flex flex-col items-center justify-center w-full max-w-xs min-h-[180px] border border-gray-200 dark:border-gray-700">
         <Icon name="FaRegFile" size={40} className={`mb-2 ${iconClass}`} />
         <span className="text-main text-center text-xs break-all select-none mb-2">
           Formato no soportado
@@ -244,7 +252,7 @@ const CardViewer: React.FC<CardViewerProps> = ({
           <span className="flex items-center justify-center">
             {React.cloneElement(getIcon(), { size: 22 })}
           </span>
-          <span className="text-xs font-semibold text-neutral-500 select-none mr-2">
+          <span className="text-xs font-semibold text-neutral-500 dark:text-neutral-400 select-none mr-2">
             Comprobante
           </span>
           <div className="flex">

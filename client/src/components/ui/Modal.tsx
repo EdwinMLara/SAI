@@ -39,7 +39,7 @@ const Modal: React.FC<ModalProps> = ({
   <AnimatePresence>
     {open && (
       <motion.div
-        className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 ${overlayClassName}`}
+        className={`fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60 ${overlayClassName}`}
         initial="hidden"
         animate="visible"
         exit="hidden"
@@ -47,7 +47,7 @@ const Modal: React.FC<ModalProps> = ({
         onClick={closeOnOverlayClick ? onClose : undefined}
       >
         <motion.div
-          className={`bg-card rounded-lg shadow-lg p-6 w-full max-w-sm sm:max-w-md md:max-w-lg min-h-[320px] relative ${className}`}
+          className={`bg-card rounded-lg shadow-lg dark:shadow-2xl p-6 w-full max-w-sm sm:max-w-md md:max-w-lg min-h-[320px] relative border border-gray-200 dark:border-gray-700 ${className}`}
           initial="hidden"
           animate="visible"
           exit="hidden"
@@ -58,7 +58,7 @@ const Modal: React.FC<ModalProps> = ({
           {title ? (
             <div className="flex items-center justify-between gap-4 mb-4">
               <h2
-                className="flex items-center text-base sm:text-lg font-semibold text-gray-500 tracking-tight leading-tight select-none"
+                className="flex items-center text-base sm:text-lg font-semibold text-gray-500 dark:text-gray-400 tracking-tight leading-tight select-none"
                 style={{ letterSpacing: '.01em' }}
               >
                 <span className="flex w-3 h-6 mr-1.5 items-center justify-center">
@@ -76,6 +76,7 @@ const Modal: React.FC<ModalProps> = ({
                       height="22"
                       rx="1"
                       fill="#E5E7EB"
+                      className="dark:fill-gray-600"
                     />
                   </svg>
                 </span>

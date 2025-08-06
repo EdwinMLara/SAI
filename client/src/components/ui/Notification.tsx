@@ -18,11 +18,17 @@ interface NotificationProps {
 }
 
 const typeConfig: Record<NotificationType, { icon: string; color: string }> = {
-  success: { icon: 'FaCheckCircle', color: 'text-green-600' },
-  warning: { icon: 'FaExclamationTriangle', color: 'text-yellow-600' },
-  error: { icon: 'FaTimesCircle', color: 'text-red-600' },
-  info: { icon: 'FaInfoCircle', color: 'text-blue-600' },
-  general: { icon: 'FaRegBell', color: 'text-gray-600' },
+  success: {
+    icon: 'FaCheckCircle',
+    color: 'text-green-600 dark:text-green-400',
+  },
+  warning: {
+    icon: 'FaExclamationTriangle',
+    color: 'text-yellow-600 dark:text-yellow-400',
+  },
+  error: { icon: 'FaTimesCircle', color: 'text-red-600 dark:text-red-400' },
+  info: { icon: 'FaInfoCircle', color: 'text-blue-600 dark:text-blue-400' },
+  general: { icon: 'FaRegBell', color: 'text-gray-600 dark:text-gray-400' },
 };
 
 const Notification: React.FC<NotificationProps> = ({
@@ -49,7 +55,7 @@ const Notification: React.FC<NotificationProps> = ({
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -30 }}
           transition={{ duration: 0.25 }}
-          className={`fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-3 rounded-lg shadow-lg bg-white border border-gray-200 ${color}`}
+          className={`fixed top-6 right-6 z-[9999] flex items-center gap-3 px-5 py-3 rounded-lg shadow-lg bg-white dark:bg-dark-card border border-gray-200 dark:border-gray-700 ${color}`}
           style={{ minWidth: 240, maxWidth: 320 }}
         >
           <Icon name={icon} size={22} className={color} />

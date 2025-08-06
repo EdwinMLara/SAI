@@ -30,13 +30,13 @@ const Alert: React.FC<AlertProps> = ({
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 dark:bg-black/60"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
           <motion.div
-            className={`bg-card rounded-lg shadow-lg p-6 w-full max-w-sm sm:max-w-md md:max-w-lg min-h-[180px] relative ${className}`}
+            className={`bg-card rounded-lg shadow-lg dark:shadow-2xl p-6 w-full max-w-sm sm:max-w-md md:max-w-lg min-h-[180px] relative border border-gray-200 dark:border-gray-700 ${className}`}
             initial={{ scale: 0.95, y: 40, opacity: 0 }}
             animate={{ scale: 1, y: 0, opacity: 1 }}
             exit={{ scale: 0.95, y: 40, opacity: 0 }}
@@ -45,8 +45,12 @@ const Alert: React.FC<AlertProps> = ({
             <div className="flex flex-col items-center gap-4">
               {icon && (
                 <div className="flex justify-center w-full">
-                  <span className="flex items-center justify-center w-16 h-16 rounded-full border-2 border-secondaryDark bg-secondary/60 mb-2">
-                    <Icon name={icon} size={32} className="text-primaryDark" />
+                  <span className="flex items-center justify-center w-16 h-16 rounded-full border-2 border-secondaryDark dark:border-gray-600 bg-secondary/60 dark:bg-dark-secondary/60 mb-2">
+                    <Icon
+                      name={icon}
+                      size={32}
+                      className="text-primaryDark dark:text-dark-primary"
+                    />
                   </span>
                 </div>
               )}
