@@ -5,18 +5,20 @@ import NotFound from '@pages/NotFound';
 import MainLayout from '@layouts/MainLayout';
 import Authentication from '@/pages/Authentication';
 
+import Home from '@/layouts/Home';
+
 /* ------------------ Code ------------------ */
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/auth" element={<Authentication />} />
-      <Route element={<Protected />}>
-        <Route path="/" element={<MainLayout />}>
-          {/* Aqui se renderizarán los componentes del sistema */}
+      <Route path="/" element={<MainLayout />}>
+        <Route element={<Protected />}>
+          <Route index element={<Home />} />
         </Route>
-        <Route path="*" element={<NotFound />} />
       </Route>
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 };
