@@ -41,7 +41,7 @@ app.use(ErrorMiddleware);
 const server = app.listen(Number(env.SERVER_PORT), env.SERVER_IP, () => {
   log({
     level: 'debug',
-    message: 'Express server on',
+    message: `Express server on ${env.SERVER_IP}:${env.SERVER_PORT}`,
   });
 });
 
@@ -50,7 +50,7 @@ const gracefulShutdown = async (signal: string) => {
     await Mongo.disconnect();
     log({
       level: 'debug',
-      message: 'Express server off',
+      message: 'Express server OFF',
     });
   });
 
