@@ -1,11 +1,12 @@
 import { Router } from 'express';
 
 import * as Product from '@controllers/Product.controller';
+import Identity from '@middlewares/Auth.middleware';
 
 const router = Router();
 
-router.post('/', Product.createProduct);
-router.get('/', Product.getProduct);
-router.delete('/', Product.deleteProduct);
+router.post('/', Identity, Product.createProduct);
+router.get('/', Identity, Product.getProduct);
+router.delete('/', Identity, Product.deleteProduct);
 
 export default router;

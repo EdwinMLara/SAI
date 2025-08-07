@@ -2,12 +2,13 @@ import { Router } from 'express';
 
 import * as Document from '@controllers/Document.controller';
 import FileFilter from '@middlewares/Multer.middleware';
+import Identity from '@middlewares/Auth.middleware';
 
 const router = Router();
 
-router.post('/', FileFilter, Document.uploadFile);
-router.get('/', Document.readDocumentURL);
-router.put('/', FileFilter, Document.updateDocument);
-router.delete('/', Document.deleteDocument);
+router.post('/', Identity, FileFilter, Document.uploadFile);
+router.get('/', Identity, Document.readDocumentURL);
+router.put('/', Identity, FileFilter, Document.updateDocument);
+router.delete('/', Identity, Document.deleteDocument);
 
 export default router;
