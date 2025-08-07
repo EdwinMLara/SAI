@@ -7,76 +7,94 @@
 @layer base {
   body {
     font-family: 'Inter', sans-serif;
-    @apply bg-main text-main transition-colors duration-300;
+    @apply bg-bg text-main transition-colors duration-300;
   }
 }
 
 @layer components {
+  /* Color principal del texto */
   .text-main {
     @apply text-textMain dark:text-dark-textMain;
   }
-  .bg-main {
-    @apply bg-secondary dark:bg-dark-bg;
-  }
-  .bg-card {
-    @apply bg-white dark:bg-dark-card;
-  }
 
+  /* Color principal del fondo */
   .bg-bg {
     @apply bg-secondary dark:bg-dark-bg;
   }
+
+  /* Color de fondo de una card */
   .bg-card-bg {
     @apply bg-white dark:bg-dark-card;
   }
 
+  /* Color de texto de marca o primario */
   .text-brand {
     @apply text-primary dark:text-dark-primary;
   }
+  /* Fondo de marca o primario */
   .bg-brand {
     @apply bg-primary dark:bg-dark-primary;
   }
+  /* Fondo de marca en tono claro */
   .bg-brand-light {
     @apply bg-primaryLight dark:bg-dark-primaryLight;
   }
+  /* Fondo de marca en tono oscuro */
   .bg-brand-dark {
     @apply bg-primaryDark dark:bg-dark-primaryDark;
   }
 
+  /* Fondo de acento secundario */
   .bg-accent {
     @apply bg-secondary dark:bg-dark-secondary;
   }
+  /* Fondo de acento en tono claro */
   .bg-accent-light {
     @apply bg-secondaryLight dark:bg-dark-secondaryLight;
   }
+  /* Fondo de acento en tono oscuro */
   .bg-accent-dark {
     @apply bg-secondaryDark dark:bg-dark-secondaryDark;
   }
+  /* Color de texto de acento */
   .text-accent {
     @apply text-secondaryDark dark:text-dark-textMain;
   }
+  /* Color de texto de acento claro */
   .text-accent-light {
     @apply text-secondaryLight dark:text-gray-300;
   }
+  /* Color de texto de acento oscuro */
   .text-accent-dark {
     @apply text-secondaryDark dark:text-gray-400;
   }
 
+  /* Borde principal */
   .border-main {
     @apply border-gray-200 dark:border-gray-600;
   }
+  /* Borde de marca o primario */
   .border-brand {
     @apply border-primary dark:border-dark-primary;
   }
 
+  /* Bordes redondeados estándar */
+  .rounded-main {
+    @apply rounded-md;
+  }
+
+  /* Sombra principal */
   .shadow-main {
     @apply shadow-lg dark:shadow-2xl;
   }
 
+  /* Efecto de fondo al hacer hover en botones tipo ghost */
   .ghost-hover-bg:hover {
     @apply bg-primaryLight dark:bg-dark-primaryLight !important;
     transition: background-color 0.3s;
   }
 
+  /* Efecto de fondo al hacer hover en iconos tipo ghost */
   .icon-ghost-effect:hover {
     @apply bg-primaryLight dark:bg-dark-primaryLight;
   }
