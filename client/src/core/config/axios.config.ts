@@ -5,27 +5,18 @@ axios.defaults.baseURL = '/api';
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 10000;
 
+/* ------------------ Code ------------------ */
+
 axios.interceptors.response.use(
   (response: AxiosResponse) => {
     const resData = response.data;
 
-    if (resData.status && resData.data) {
-      return {
-        ...response,
-        data: {
-          status: resData.status,
-          message: resData.data.message || resData.message || 'OK',
-          data: resData.data,
-        },
-      };
-    }
-
     return {
       ...response,
       data: {
-        status: response.status,
-        message: resData.message || 'Proceso Exitoso',
-        data: resData,
+        status: resData.status || response.status,
+        message: resData.data.message || resData.data.message || '',
+        all: resData.data,
       },
     };
   },
@@ -36,17 +27,18 @@ axios.interceptors.response.use(
         ...error.response,
         data: {
           status: errorData.status || error.response.status,
-          message: errorData.message || 'Error desconocido',
-          data: errorData.data || errorData,
+          message: errorData.data.message || 'Error desconocido',
+          all: errorData,
         },
       });
     }
 
     return Promise.resolve({
+      ...error.response,
       data: {
         status: 500,
         message: 'Error de conexión con el servidor',
-        data: null,
+        all: null,
       },
     });
   }
