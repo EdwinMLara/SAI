@@ -1,15 +1,19 @@
 import axios, { AxiosResponse, AxiosError } from 'axios';
+
 import { ApiResponse } from '@interfaces/Api.interfaces';
+
+import env from '../common/env';
+
+/* ------------------ Code ------------------ */
 
 axios.defaults.baseURL = '/api';
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 10000;
 
-/* ------------------ Code ------------------ */
-
 axios.interceptors.response.use(
   (response: AxiosResponse) => {
     const resData = response.data;
+    log(resData);
 
     return {
       ...response,
@@ -23,6 +27,7 @@ axios.interceptors.response.use(
   (error: AxiosError) => {
     if (error.response?.data) {
       const errorData = error.response.data as any;
+      log(errorData);
       return Promise.resolve({
         ...error.response,
         data: {
@@ -43,5 +48,11 @@ axios.interceptors.response.use(
     });
   }
 );
+
+const log = (response: unknown) => {
+  if (env.NODE_ENV === 'development') {
+    console.log(response);
+  }
+};
 
 export default axios;
