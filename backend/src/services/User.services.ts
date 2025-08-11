@@ -5,6 +5,7 @@ import { UserChanges, UserInterface } from '@interfaces/User.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
+import { comprobeUnicity } from '@helpers/User.helpers';
 
 /* ------------------ Code ------------------ */
 
@@ -69,5 +70,34 @@ export async function getUserById(userId: string): Promise<UserInterface> {
     return user as UserInterface;
   } catch (error) {
     throw error;
+  }
+}
+
+export async function findUserByUniqueFields({
+  email,
+  username,
+  name,
+  phone,
+}: {
+  email?: string;
+  username?: string;
+  name?: string;
+  phone?: string;
+}): Promise<{ field: string } | void> {
+  if (email) {
+    const user = await UserModel.findOne({ email });
+    if (user) return { field: 'correo electrónico' };
+  }
+  if (username) {
+    const user = await UserModel.findOne({ username });
+    if (user) return { field: 'nombre de usuario' };
+  }
+  if (name) {
+    const user = await UserModel.findOne({ name });
+    if (user) return { field: 'nombre' };
+  }
+  if (phone) {
+    const user = await UserModel.findOne({ phone });
+    if (user) return { field: 'numero de telefono' };
   }
 }

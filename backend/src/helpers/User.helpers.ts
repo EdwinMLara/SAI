@@ -1,6 +1,7 @@
 import { ObjectId } from 'mongoose';
 
 import { hasInvite, getInvite } from '@services/Invite.services';
+import { findUserByUniqueFields } from '@services/User.services';
 import UserModel from '@models/User.model';
 import AppError from '@utils/AppError';
 import responses from '@responses';
@@ -57,6 +58,22 @@ export async function returnUser(user: UserInterface): Promise<PublicUserData> {
   try {
     const { image, name, userName, phone, email, role } = user;
     return { image, name, userName, phone, email, role };
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function comprobeUnicity(user: UserInterface): Promise<void> {
+  try {
+    const result = await findUserByUniqueFields({
+      email: user.email,
+      username: user.userName,
+      name: user.name,
+      phone: user.phone,
+    });
+    if (result) {
+      throw new AppError(`El ${result.field} ya está en uso.`);
+    }
   } catch (error) {
     throw error;
   }

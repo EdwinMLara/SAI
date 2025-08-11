@@ -19,11 +19,7 @@ export async function register(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = await helpers.existsUserByEmail(req.body.email);
-
-    if (user) {
-      throw new AppError(responses.User.alreadyexists, 409);
-    }
+    await helpers.comprobeUnicity(req.body);
     await helpers.comprobeInvite(req.body.email);
     req.body.password = await auth.encrypt(req.body.password);
     req.body.role = await helpers.findRole(req.body.email);
