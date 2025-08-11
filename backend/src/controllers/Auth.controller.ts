@@ -92,18 +92,8 @@ export async function logout(
   next: NextFunction
 ): Promise<void> {
   try {
-    res.clearCookie('accessToken', {
-      path: '/',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-    });
-    res.clearCookie('refreshToken', {
-      path: '/',
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
-    });
+    cookies.clearAuthCookies(res);
+
     res.status(200).json({ message: responses.System.ok });
   } catch (error) {
     if (error instanceof AppError) {

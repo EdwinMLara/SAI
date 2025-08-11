@@ -40,3 +40,12 @@ export async function session(): Promise<{
     isAuthenticated: response.data.all?.isAuthenticated || false,
   };
 }
+
+export async function logout(): Promise<{
+  status: number;
+}> {
+  const response = await axios.post('/auth/logout');
+  return {
+    status: response.status,
+  };
+}

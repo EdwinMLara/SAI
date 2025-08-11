@@ -42,3 +42,16 @@ export async function setAuthToken(
     throw error;
   }
 }
+
+export function clearAuthCookies(res: Response): void {
+  const base = {
+    path: '/',
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict' as const,
+    expires: new Date(0),
+    maxAge: 0,
+  };
+  res.cookie('accessToken', '', base);
+  res.cookie('refreshToken', '', base);
+}

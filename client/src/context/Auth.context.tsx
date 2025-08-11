@@ -62,8 +62,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = async (): Promise<void> => {
-    setUser(null);
-    setIsAuthenticated(false);
+    const response = await services.logout();
+    if (response.status === 200) {
+      setUser(null);
+      setIsAuthenticated(false);
+    }
   };
 
   return (

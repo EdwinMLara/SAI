@@ -11,7 +11,11 @@ const RequestMiddleware = (
   next: NextFunction
 ): void => {
   try {
-    if (req.method === 'GET' || req.method === 'DELETE') {
+    if (
+      req.method === 'GET' ||
+      req.method === 'DELETE' ||
+      (req.method === 'POST' && req.path.endsWith('/logout'))
+    ) {
       return next();
     }
 
@@ -45,6 +49,7 @@ const RequestMiddleware = (
     }
     throw new AppError(responses.System.missingFieldBody, 415);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };
