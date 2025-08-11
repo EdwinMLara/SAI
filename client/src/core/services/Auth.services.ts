@@ -11,61 +11,32 @@ import {
 export async function login(user: UserCredentials): Promise<{
   status: number;
   message: string;
-  isAuthenticated: boolean;
 }> {
-  try {
-    const response = await axios.post('/auth/login', user);
-    return {
-      status: response.status,
-      message: response.data.message,
-      isAuthenticated: response.data.isAuthenticated,
-    };
-  } catch (error) {
-    return {
-      status: 500,
-      message: 'Hubo un error con la solicitud. Intenta nuevamente.',
-      isAuthenticated: false,
-    };
-  }
+  const response = await axios.post('/auth/login', user);
+  return {
+    status: response.status,
+    message: response.data.message,
+  };
 }
 
 export async function register(user: NewUser): Promise<{
   status: number;
   message: string;
 }> {
-  try {
-    const response = await axios.post('/auth/register', user);
-    return {
-      status: response.status,
-      message: response.data.message,
-    };
-  } catch (error) {
-    return {
-      status: 500,
-      message: 'Hubo un error con la solicitud. Intenta nuevamente.',
-    };
-  }
+  const response = await axios.post('/auth/register', user);
+  return {
+    status: response.status,
+    message: response.data.message,
+  };
 }
 
 export async function session(): Promise<{
-  status: number;
-  user: PublicUser;
+  user: PublicUser | null;
   isAuthenticated: boolean;
 }> {
-  try {
-    const response = await axios.get('/auth/session');
-    console.log(response);
-    return {
-      status: response.status,
-      user: response.data.user,
-      isAuthenticated: response.data.isAuthenticated,
-    };
-  } catch (error) {
-    console.error('Session error:', error);
-    return {
-      status: 200,
-      user: null as any,
-      isAuthenticated: false,
-    };
-  }
+  const response = await axios.get('/auth/session');
+  return {
+    user: response.data.all?.user || null,
+    isAuthenticated: response.data.all?.isAuthenticated || false,
+  };
 }

@@ -12,12 +12,16 @@ import {
   UserCredentials,
 } from '@interfaces/User.interfaces';
 
+/* ------------------ Code ------------------ */
+
 interface AuthContextType {
   user: PublicUser | null;
   isAuthenticated: boolean;
-  login: (user: UserCredentials) => Promise<void>;
-  register: (user: NewUser) => Promise<void>;
   logout: () => Promise<void>;
+  register: (user: NewUser) => Promise<void>;
+  login: (
+    user: UserCredentials
+  ) => Promise<{ message: string; status: number }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -39,9 +43,17 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetchSession();
   }, []);
 
-  const login = async (user: UserCredentials): Promise<void> => {
+  const login = async (
+    user: UserCredentials
+  ): Promise<{ message: string; status: number }> => {
     const loginRequest = await services.login(user);
-    setIsAuthenticated(loginRequest.isAuthenticated);
+    if (loginRequest.status === 200) {
+      const sessionRequest = await services.session();
+      setUser(sessionRequest.user || null);
+      setIsAuthenticated(sessionRequest.isAuthenticated);
+      return { message: 'Redirigiendo...', status: loginRequest.status };
+    }
+    return { message: loginRequest.message, status: loginRequest.status };
   };
 
   const register = async (user: NewUser): Promise<void> => {

@@ -19,8 +19,9 @@ axios.interceptors.response.use(
       ...response,
       data: {
         status: resData.status || response.status,
-        message: resData.data.message || resData.data.message || '',
-        all: resData.data,
+        message:
+          resData.message || (resData.data && resData.data.message) || '',
+        all: resData.data || resData,
       },
     };
   },
@@ -32,8 +33,11 @@ axios.interceptors.response.use(
         ...error.response,
         data: {
           status: errorData.status || error.response.status,
-          message: errorData.data.message || 'Error desconocido',
-          all: errorData,
+          message:
+            (errorData.data && errorData.data.message) ||
+            errorData.message ||
+            'Error desconocido',
+          all: errorData.data || errorData,
         },
       });
     }
