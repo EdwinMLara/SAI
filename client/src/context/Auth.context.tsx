@@ -18,7 +18,7 @@ interface AuthContextType {
   user: PublicUser | null;
   isAuthenticated: boolean;
   logout: () => Promise<void>;
-  register: (user: NewUser) => Promise<void>;
+  register: (user: NewUser) => Promise<{ message: string; status: number }>;
   login: (
     user: UserCredentials
   ) => Promise<{ message: string; status: number }>;
@@ -56,9 +56,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return { message: loginRequest.message, status: loginRequest.status };
   };
 
-  const register = async (user: NewUser): Promise<void> => {
+  const register = async (
+    user: NewUser
+  ): Promise<{ message: string; status: number }> => {
     const registerRequest = await services.register(user);
-    setIsAuthenticated(registerRequest.status === 201);
+    if (registerRequest.status !== 200) {
+      return {
+        status: registerRequest.status,
+        message: registerRequest.message,
+      };
+    }
+    setIsAuthenticated(true);
+    setUser(registerRequest.user);
+    return { message: registerRequest.message, status: registerRequest.status };
   };
 
   const logout = async (): Promise<void> => {

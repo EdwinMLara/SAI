@@ -22,11 +22,13 @@ export async function login(user: UserCredentials): Promise<{
 export async function register(user: NewUser): Promise<{
   status: number;
   message: string;
+  user: PublicUser | null;
 }> {
   const response = await axios.post('/auth/register', user);
   return {
     status: response.status,
     message: response.data.message,
+    user: response.data.all?.user || null,
   };
 }
 
