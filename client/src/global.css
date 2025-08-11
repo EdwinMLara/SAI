@@ -27,6 +27,11 @@
     @apply bg-white dark:bg-dark-card;
   }
 
+  /* Color de texto secundario más claro que text-main usando Tailwind */
+  .text-secondary {
+    @apply text-textSecondary dark:text-dark-textSecondary;
+  }
+
   /* Color de texto de marca o primario */
   .text-brand {
     @apply text-primary dark:text-dark-primary;
@@ -97,6 +102,31 @@
   /* Efecto de fondo al hacer hover en iconos tipo ghost */
   .icon-ghost-effect:hover {
     @apply bg-primaryLight dark:bg-dark-primaryLight;
+  }
+
+  /* Clases para el sidebar */
+  .sidebar-item {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .sidebar-item-active {
+    @apply bg-brand-light text-brand border border-brand/20;
+  }
+
+  .sidebar-item-inactive {
+    @apply text-secondary hover:bg-hover hover:text-main;
+  }
+
+  .sidebar-subitem {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  .sidebar-subitem-active {
+    @apply bg-brand-light text-brand border border-brand/20;
+  }
+
+  .sidebar-subitem-inactive {
+    @apply text-secondary-light hover:bg-hover hover:text-secondary;
   }
 }
 

@@ -5,6 +5,9 @@ module.exports = {
   theme: {
     extend: {
       colors: {
+        // Color de texto secundario más claro que textMain
+        textSecondary: '#6b7280', // gray-500
+
         textMain: '#181a1b',
 
         primary: '#2d5be3',
@@ -13,6 +16,8 @@ module.exports = {
         secondary: '#f7f8fa',
         secondaryLight: '#ffffff',
         secondaryDark: '#e5e7eb',
+
+        'dark-textSecondary': '#9ca3af', // gray-400
         bg: '#f7f8fa',
         card: '#ffffff',
 
