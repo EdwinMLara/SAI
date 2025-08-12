@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as auth from '@auth/crypt';
 import * as services from '@services/Auth.services';
 import * as helpers from '@helpers/User.helpers';
+import * as authHelpers from '@helpers/Auth.helpers';
 import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 
@@ -71,9 +72,30 @@ export async function refreshToken(
   next: NextFunction
 ): Promise<void> {
   try {
-    const user = await userServices.getUserById(req.user.id);
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      throw new AppError(responses.System.authenticationError, 401);
+    }
+
+    if (!authHelpers.verifyToken(refreshToken)) {
+      throw new AppError(responses.System.authenticationError, 401);
+    }
+    const userData = authHelpers.userData(refreshToken);
+
+    if (!userData || !userData.id) {
+      throw new AppError(responses.System.authenticationError, 401);
+    }
+
+    const user = await userServices.getUserById(userData.id);
     await cookies.setAuthToken(res, user);
-    res.status(200).json({ message: responses.System.ok });
+    const publicUser = await helpers.returnUser(user);
+
+    res.status(200).json({
+      message: responses.System.ok,
+      user: publicUser,
+      isAuthenticated: true,
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

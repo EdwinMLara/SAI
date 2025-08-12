@@ -35,11 +35,15 @@ export async function register(user: NewUser): Promise<{
 export async function session(): Promise<{
   user: PublicUser | null;
   isAuthenticated: boolean;
+  access: boolean;
+  refresh: boolean;
 }> {
   const response = await axios.get('/auth/session');
   return {
     user: response.data.all?.user || null,
     isAuthenticated: response.data.all?.isAuthenticated || false,
+    access: response.data.all?.access || false,
+    refresh: response.data.all?.refresh || false,
   };
 }
 
@@ -50,4 +54,35 @@ export async function logout(): Promise<{
   return {
     status: response.status,
   };
+}
+
+export async function refresh(): Promise<{
+  status: number;
+  user?: PublicUser | null;
+  isAuthenticated?: boolean;
+  message?: string;
+}> {
+  try {
+    const response = await axios.get('/auth/refresh');
+    return {
+      status: response.status,
+      user: response.data.user || null,
+      isAuthenticated: response.data.isAuthenticated || false,
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        status: error.response.status,
+        message: error.response.data.message || 'Error al refrescar el token',
+        user: null,
+        isAuthenticated: false,
+      };
+    }
+    return {
+      status: 500,
+      message: 'Error de conexión al servidor',
+      user: null,
+      isAuthenticated: false,
+    };
+  }
 }

@@ -14,20 +14,30 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const { accessToken, refreshToken } = req.cookies;
 
-    if (!accessToken || !refreshToken) {
-      throw new AppError(responses.System.authenticationError, 401);
+    if (helpers.verifyToken(refreshToken)) {
+      if (helpers.verifyToken(accessToken)) {
+        const user = helpers.userData(accessToken);
+        if (!user || !user.email) {
+          throw new AppError(responses.System.authenticationError, 401);
+        }
+        req.user = user;
+        next();
+      } else {
+        res.status(401).json({
+          message: responses.System.authenticationError,
+          access: false,
+          refresh: true,
+        });
+        return;
+      }
+    } else {
+      res.status(401).json({
+        message: responses.System.authenticationError,
+        access: false,
+        refresh: false,
+      });
+      return;
     }
-
-    helpers.verifyToken(accessToken);
-
-    const user = helpers.userData(accessToken);
-
-    if (!user || !user.email) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
-
-    req.user = user;
-    next();
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

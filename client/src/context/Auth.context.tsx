@@ -5,6 +5,7 @@ import React, {
   ReactNode,
   useContext,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import * as services from '@services/Auth.services';
 import {
   NewUser,
@@ -33,15 +34,43 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<PublicUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [sessionChecked, setSessionChecked] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (sessionChecked) return;
+
     const fetchSession = async () => {
-      const sessionData = await services.session();
-      setUser(sessionData.user);
-      setIsAuthenticated(sessionData.isAuthenticated);
+      try {
+        const sessionData = await services.session();
+        setSessionChecked(true);
+
+        if (sessionData.refresh && !sessionData.access) {
+          try {
+            const refreshResponse = await services.refresh();
+            if (refreshResponse.status === 200) {
+              setUser(refreshResponse.user || null);
+              setIsAuthenticated(refreshResponse.isAuthenticated || false);
+            } else {
+              setUser(null);
+              setIsAuthenticated(false);
+            }
+          } catch (error) {
+            setUser(null);
+            setIsAuthenticated(false);
+          }
+        } else {
+          setUser(sessionData.user);
+          setIsAuthenticated(sessionData.isAuthenticated);
+        }
+      } catch (error) {
+        setUser(null);
+        setIsAuthenticated(false);
+        setSessionChecked(true);
+      }
     };
     fetchSession();
-  }, []);
+  }, [sessionChecked]);
 
   const login = async (
     user: UserCredentials
@@ -51,6 +80,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const sessionRequest = await services.session();
       setUser(sessionRequest.user || null);
       setIsAuthenticated(sessionRequest.isAuthenticated);
+      setSessionChecked(true);
       return { message: 'Redirigiendo...', status: loginRequest.status };
     }
     return { message: loginRequest.message, status: loginRequest.status };
@@ -68,6 +98,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
     setIsAuthenticated(true);
     setUser(registerRequest.user);
+    setSessionChecked(true);
     return { message: registerRequest.message, status: registerRequest.status };
   };
 

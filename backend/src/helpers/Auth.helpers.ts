@@ -7,12 +7,9 @@ import AppError from '@utils/AppError';
 
 /* ------------------ Code ------------------ */
 
-export function verifyToken(token: string): void {
+export function verifyToken(token: string): boolean {
   try {
-    const isValid = tokens.verifyToken(token);
-    if (!isValid) {
-      throw new AppError('Token no accesible', 401);
-    }
+    return tokens.verifyToken(token);
   } catch (error) {
     if (error instanceof AppError) {
       throw error;
