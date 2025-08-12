@@ -43,6 +43,23 @@ const navigationItems: NavigationItem[] = [
     label: 'Productos',
     iconName: 'FaBox',
     path: '/products',
+    subItems: [
+      {
+        id: 'buscar-producto',
+        label: 'Buscar Producto',
+        path: '/products/search',
+      },
+      {
+        id: 'products',
+        label: 'Editar producto',
+        path: '/products/change',
+      },
+      {
+        id: 'base-datos',
+        label: 'Base de datos',
+        path: '/products/database',
+      },
+    ],
   },
   {
     id: 'usuarios',
