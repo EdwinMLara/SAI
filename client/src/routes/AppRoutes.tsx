@@ -1,7 +1,9 @@
 import { Routes, Route } from 'react-router-dom';
 
 import Protected from './Protected';
+import AdminProtected from './AdminProtected';
 import NotFound from '@pages/NotFound';
+import Restricted from '@pages/Restricted';
 import MainLayout from '@layouts/MainLayout';
 import Authentication from '@/pages/Authentication';
 
@@ -13,9 +15,11 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/auth" element={<Authentication />} />
+      <Route path="restricted" element={<Restricted />} />
       <Route path="/" element={<MainLayout />}>
         <Route element={<Protected />}>
           <Route index element={<Home />} />
+          <Route element={<AdminProtected />}></Route>
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
