@@ -5,7 +5,6 @@ import { motion } from 'framer-motion';
 import { useSidebar } from '@context/Sidebar.context';
 
 import Header from '@components/semantic/Header';
-import Footer from '@components/semantic/Footer';
 import Sidebar from '@components/semantic/Sidebar';
 
 /* ------------------ Code ------------------ */
@@ -46,7 +45,6 @@ const MainLayout: React.FC = () => {
             </div>
           </main>
         </div>
-        <Footer />
       </motion.div>
     </div>
   );
