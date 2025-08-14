@@ -11,6 +11,7 @@ interface InputFileProps {
   multiple?: boolean;
   disabled?: boolean;
   onContinue?: () => void;
+  resetKey?: string | number;
 }
 
 const InputFile: React.FC<InputFileProps> = ({
@@ -22,6 +23,7 @@ const InputFile: React.FC<InputFileProps> = ({
   multiple = false,
   disabled = false,
   onContinue,
+  resetKey,
 }) => {
   if (!accept) throw new Error('El prop "accept" es obligatorio en InputFile.');
   if (!onContinue)
@@ -31,6 +33,13 @@ const InputFile: React.FC<InputFileProps> = ({
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [fileNames, setFileNames] = useState<string[]>([]);
+  React.useEffect(() => {
+    setFileNames([]);
+    setInvalidFile(false);
+    if (inputRef.current) {
+      inputRef.current.value = '';
+    }
+  }, [resetKey]);
   const [invalidFile, setInvalidFile] = useState(false);
 
   const isValidFileType = (file: File) => {
