@@ -3,8 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '@context/Auth.context';
 import { useSidebar } from '@context/Sidebar.context';
 
-import Icon from '@ui/Icon';
-import IconButton from '@ui/IconButton';
+import { Logo } from '../helpers/Brand';
+import { Icon, IconButton } from '@ui/index.ui';
 import ThemeToggle from '../helpers/ToggleTheme';
 
 const Header: React.FC = () => {
@@ -13,18 +13,9 @@ const Header: React.FC = () => {
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
-  const [currentTime, setCurrentTime] = useState(new Date());
 
   const userMenuRef = useRef<HTMLDivElement>(null);
   const notificationRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setCurrentTime(new Date());
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, []);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,22 +42,6 @@ const Header: React.FC = () => {
     setIsUserMenuOpen(false);
   };
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString('es-ES', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-  };
-
-  const formatDate = (date: Date) => {
-    return date.toLocaleDateString('es-ES', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-  };
-
   return (
     <header className="bg-card-bg border-b border-main shadow-sm">
       <div className="flex items-center justify-between px-6 py-4">
@@ -80,23 +55,12 @@ const Header: React.FC = () => {
           />
 
           <div className="hidden md:block">
-            <h1 className="text-xl font-semibold text-main">Dashboard</h1>
-            <p className="text-sm text-gray-500 capitalize">
-              {formatDate(currentTime)}
-            </p>
+            <Logo className="h-8 w-auto" />
           </div>
         </div>
 
         <div className="flex items-center gap-4">
-          <div className="hidden sm:flex items-center gap-2 text-sm">
-            <Icon name="FaClock" size={16} className="text-gray-400" />
-            <span className="text-main font-mono">
-              {formatTime(currentTime)}
-            </span>
-          </div>
-
           <ThemeToggle />
-
           {user && (
             <div className="relative" ref={userMenuRef}>
               <button
