@@ -8,5 +8,7 @@ const router = Router();
 router.post('/', Identity, Product.createProduct);
 router.get('/', Identity, Product.getProduct);
 router.delete('/', Identity, Product.deleteProduct);
+router.post('/replaceAll', Identity, Product.replaceAllProducts);
+router.get('/lastUpdate', Identity, Product.getLastUpdate);
 
 export default router;

@@ -61,3 +61,38 @@ export async function deleteProduct(
     return next(new AppError(responses.System.serverError, 500, error));
   }
 }
+
+export async function replaceAllProducts(
+  req: Request<{}, {}, ProductInterface[]>,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    await services.replaceAllProducts(req.body);
+    res.status(200).json({ message: responses.Product.replaced });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
+export async function getLastUpdate(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const lastUpdate = await services.getLastDatabaseUpdate();
+    res.status(200).json({
+      message: responses.System.ok,
+      lastUpdate: lastUpdate,
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
