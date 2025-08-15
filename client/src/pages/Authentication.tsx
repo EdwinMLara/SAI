@@ -16,7 +16,6 @@ const Authentication = () => {
   const [isLoginForm, setIsLoginForm] = useState(true);
 
   if (isAuthenticated) {
-    // Redirigir a la ruta de origen o a la raíz como fallback
     const from = location.state?.from?.pathname || '/';
     return <Navigate to={from} replace />;
   }
@@ -55,7 +54,6 @@ const Authentication = () => {
           transition={{ duration: 0.4, delay: 0.2 }}
         >
           <div className="p-6 pb-2">
-            {/* Elemento que cambia togger */}
             <div className="relative flex bg-gray-100 rounded-xl p-1 mb-6">
               <motion.div
                 className="absolute top-1 bottom-1 bg-primary rounded-xl shadow-main"

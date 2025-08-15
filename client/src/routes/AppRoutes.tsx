@@ -8,7 +8,7 @@ import MainLayout from '@/pages/MainLayout';
 import Authentication from '@/pages/Authentication';
 
 import Home from '@/layouts/Home';
-import ChangeProduct from '@/layouts/Products/ChangeProduct';
+import Quotations from '@/layouts/Products/Quotations';
 import DatabaseProduct from '@/layouts/Products/DatabaseProduct';
 import SearchProduct from '@/layouts/Products/SearchProduct';
 
@@ -25,7 +25,7 @@ const AppRoutes = () => {
           <Route path="/products/search" element={<SearchProduct />} />
           <Route element={<AdminProtected />}>
             <Route path="/products/database" element={<DatabaseProduct />} />
-            <Route path="/products/change" element={<ChangeProduct />} />
+            <Route path="/products/quotations" element={<Quotations />} />
           </Route>
         </Route>
       </Route>

@@ -52,7 +52,7 @@ const navigationItems: NavigationItem[] = [
       {
         id: 'products',
         label: 'Editar producto',
-        path: '/products/change',
+        path: '/products/quotations',
       },
       {
         id: 'base-datos',

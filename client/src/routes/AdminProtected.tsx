@@ -11,7 +11,6 @@ const AdminProtected: React.FC<AdminProtectedProps> = ({ children }) => {
   const { user, isAuthenticated, isLoading } = useAuth();
   const location = useLocation();
 
-  // Mostrar un loader mientras se verifica la autenticación
   if (isLoading) {
     return <Loading message="Verificando permisos de administrador..." />;
   }
