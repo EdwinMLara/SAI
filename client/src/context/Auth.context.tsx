@@ -18,6 +18,7 @@ import {
 interface AuthContextType {
   user: PublicUser | null;
   isAuthenticated: boolean;
+  isLoading: boolean;
   logout: () => Promise<void>;
   register: (user: NewUser) => Promise<{ message: string; status: number }>;
   login: (
@@ -34,6 +35,7 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<PublicUser | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
   const [sessionChecked, setSessionChecked] = useState<boolean>(false);
   const navigate = useNavigate();
 
@@ -67,6 +69,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setUser(null);
         setIsAuthenticated(false);
         setSessionChecked(true);
+      } finally {
+        setIsLoading(false);
       }
     };
     fetchSession();
@@ -99,6 +103,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
     setUser(registerRequest.user);
     setSessionChecked(true);
+    setIsLoading(false); // Asegurar que loading se desactive después del registro
     return { message: registerRequest.message, status: registerRequest.status };
   };
 
@@ -107,12 +112,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (response.status === 200) {
       setUser(null);
       setIsAuthenticated(false);
+      setIsLoading(false); // Resetear loading después del logout
     }
   };
 
   return (
     <AuthContext.Provider
-      value={{ user, isAuthenticated, login, register, logout }}
+      value={{ user, isAuthenticated, isLoading, login, register, logout }}
     >
       {children}
     </AuthContext.Provider>

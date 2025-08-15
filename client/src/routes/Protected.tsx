@@ -1,6 +1,7 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@/context/Auth.context';
+import { Loading } from '@ui/index.ui';
 
 /* ------------------ Code ------------------ */
 
@@ -9,9 +10,17 @@ interface ProtectedProps {
 }
 
 const Protected: React.FC<ProtectedProps> = ({ children }) => {
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
+  const location = useLocation();
+
+  // Mostrar un loader mientras se verifica la autenticación
+  if (isLoading) {
+    return <Loading />;
+  }
+
   if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
+    // Guardar la ubicación actual para redirigir después del login
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
   return children ? <>{children}</> : <Outlet />;
 };

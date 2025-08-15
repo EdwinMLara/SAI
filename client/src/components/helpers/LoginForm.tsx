@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Input, Button } from '@ui/index.ui';
@@ -10,6 +10,7 @@ import { UserCredentials } from '@interfaces/User.interfaces';
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { login } = useAuth();
 
   const [resStatus, setStatus] = useState<number>();
@@ -28,7 +29,9 @@ const LoginForm = () => {
     setStatus(request.status);
     if (request.status === 200) {
       setTimeout(() => {
-        navigate('/');
+        // Redirigir a la ruta de origen o a la raíz como fallback
+        const from = location.state?.from?.pathname || '/';
+        navigate(from);
       }, 2000);
     }
     setIsLoading(false);

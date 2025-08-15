@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import Button from '@ui/Button';
@@ -12,10 +12,13 @@ import RegisterForm from '@/components/helpers/RegisterForm';
 
 const Authentication = () => {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
   const [isLoginForm, setIsLoginForm] = useState(true);
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    // Redirigir a la ruta de origen o a la raíz como fallback
+    const from = location.state?.from?.pathname || '/';
+    return <Navigate to={from} replace />;
   }
 
   const containerVariants = {

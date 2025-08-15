@@ -1,16 +1,23 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@/context/Auth.context';
+import { Loading } from '@ui/index.ui';
 
 interface AdminProtectedProps {
   children?: React.ReactNode;
 }
 
 const AdminProtected: React.FC<AdminProtectedProps> = ({ children }) => {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, isLoading } = useAuth();
+  const location = useLocation();
+
+  // Mostrar un loader mientras se verifica la autenticación
+  if (isLoading) {
+    return <Loading message="Verificando permisos de administrador..." />;
+  }
 
   if (!isAuthenticated) {
-    return <Navigate to="/auth" replace />;
+    return <Navigate to="/auth" state={{ from: location }} replace />;
   }
 
   if (user?.role !== 'admin') {
