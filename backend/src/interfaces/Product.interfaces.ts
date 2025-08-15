@@ -9,6 +9,7 @@ export interface Prices {
 
 export interface ProductInterface extends Document {
   key: string;
+  clave: string;
   description: string;
   prices: Prices;
 }

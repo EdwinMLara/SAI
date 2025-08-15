@@ -3,6 +3,7 @@ import { ProductInterface } from '@interfaces/Product.interfaces';
 
 const ProductSchema: Schema = new Schema<ProductInterface>({
   key: { type: String, required: true, unique: true },
+  clave: { type: String, required: true, unique: true },
   description: { type: String, required: true },
   prices: {
     distribution: { type: Number, required: true, default: 0 },

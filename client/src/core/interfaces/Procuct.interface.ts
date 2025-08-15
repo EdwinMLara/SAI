@@ -7,6 +7,7 @@ export interface Prices {
 
 export interface ProductInterface {
   key: string;
+  clave: string;
   description: string;
   prices: Prices;
 }
