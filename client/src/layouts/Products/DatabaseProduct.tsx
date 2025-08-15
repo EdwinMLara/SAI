@@ -3,12 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { InputFile } from '@ui/index.ui';
 import Button from '@/components/ui/Button';
 
-import useProcessFile from '@hooks/useXLSXProcessor';
+import useProcessFile from '@/layouts/Products/hooks/useProcessFile';
+import useLastUpdate from '@/layouts/Products/hooks/useLastUpdate';
 import { ProductInterface } from '@interfaces/Procuct.interface';
+
+import * as services from '@services/Products.services';
 
 const DatabaseProduct = () => {
   const { processedData, isProcessing, error, processFile, resetData } =
     useProcessFile();
+  const {
+    lastUpdate,
+    isLoading: isLoadingUpdate,
+    formatDate,
+    refetch,
+  } = useLastUpdate();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [uploadSuccess, setUploadSuccess] = useState<boolean>(false);
@@ -28,14 +37,15 @@ const DatabaseProduct = () => {
   };
 
   const handleUpload = async () => {
-    if (processedData.validProducts.length === 0) return;
+    await confirmUpload();
   };
 
   const confirmUpload = async () => {
     setIsUploading(true);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 2000));
+      await services.replaceAllProducts(processedData.validProducts);
       setUploadSuccess(true);
+      refetch();
     } catch (err) {
       console.error('Error al subir productos:', err);
     } finally {
@@ -272,9 +282,13 @@ const DatabaseProduct = () => {
       {renderProcessingResults()}
 
       <div className="bg-card-bg py-3 px-4 border border-main rounded-main">
-        <p className="text-secondary text-sm">
-          <span className="font-medium">Última actualización:</span> 13 de
-          agosto, 2025
+        <p className="text-main text-sm">
+          <span className="font-medium">Última actualización:</span>{' '}
+          {isLoadingUpdate ? (
+            <span className="animate-pulse">Cargando...</span>
+          ) : (
+            formatDate(lastUpdate)
+          )}
         </p>
       </div>
     </div>

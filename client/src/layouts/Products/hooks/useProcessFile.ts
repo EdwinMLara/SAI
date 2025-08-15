@@ -45,6 +45,7 @@ const useProcessFile = () => {
 
       const requiredFields = [
         'código',
+        'clave',
         'descripción',
         'precio distribuidor con IVA',
         'precio mayoreo con IVA',
@@ -68,9 +69,14 @@ const useProcessFile = () => {
 
       const keyValue = cleanValue(row['código']);
       const descriptionValue = cleanValue(row['descripción']);
+      const claveValue = cleanValue(row['clave']);
 
       if (!keyValue || keyValue === 0) {
         return { error: 'El código del producto es obligatorio' };
+      }
+
+      if (!claveValue || claveValue === 0) {
+        return { error: 'La clave del producto es obligatoria' };
       }
 
       if (!descriptionValue || descriptionValue === 0) {
@@ -86,6 +92,7 @@ const useProcessFile = () => {
 
       const product: ProductInterface = {
         key: String(keyValue),
+        clave: String(claveValue),
         description: String(descriptionValue),
         prices,
       };
