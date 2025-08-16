@@ -24,7 +24,7 @@ const MainLayout: React.FC = () => {
   }, []);
 
   return (
-    <div className="main-layout flex min-h-screen">
+    <div className="main-layout flex min-h-screen bg-primary">
       <Sidebar />
       <motion.div
         className="flex flex-col flex-1 min-h-screen"
@@ -38,7 +38,7 @@ const MainLayout: React.FC = () => {
         }}
       >
         <Header />
-        <div className="flex-1 w-full bg-bg transition-colors duration-300 relative overflow-x-hidden">
+        <div className="flex-1 w-full bg-primary transition-colors duration-300 relative overflow-x-hidden">
           <main className="relative w-full">
             <div className="w-full max-w-7xl mx-auto p-6">
               <Outlet />

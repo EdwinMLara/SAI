@@ -29,8 +29,8 @@ const ProductList: React.FC<ProductListProps> = ({
         className="space-y-4"
       >
         <div className="flex items-center justify-between">
-          <h2 className="text-xl font-bold text-main flex items-center gap-3">
-            <Icon name="FaBoxes" size={20} className="text-primary" />
+          <h2 className="text-xl font-bold text-primary-color flex items-center gap-3">
+            <Icon name="FaBoxes" size={20} className="text-brand" />
             Productos encontrados ({products.length})
           </h2>
           <Button

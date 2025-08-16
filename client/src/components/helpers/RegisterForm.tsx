@@ -237,7 +237,7 @@ const RegisterForm = () => {
             <Button
               type="submit"
               variant="primary"
-              className="w-full mt-6 text-lg py-3 shadow-lg hover:shadow-xl transition-all duration-300"
+              className="w-full mt-6 text-lg py-3 shadow-medium hover:shadow-strong transition-all duration-300"
               disabled={isLoading}
             >
               {isLoading ? (
@@ -258,15 +258,15 @@ const RegisterForm = () => {
             className="flex justify-center pt-4"
           >
             <div
-              className={`w-full max-w-md px-4 py-3 rounded text-center text-sm font-medium shadow-md transition-all duration-300
+              className={`w-full max-w-md px-4 py-3 rounded-md text-center text-sm font-medium shadow-soft transition-all duration-300
                         ${
                           resStatus === 200
-                            ? 'bg-green-100 text-green-800 border border-green-300'
+                            ? 'bg-success-light text-success border border-success'
                             : ''
                         }
                         ${
                           resStatus !== 200
-                            ? 'bg-red-100 text-red-800 border border-red-300'
+                            ? 'bg-error-light text-error border border-error'
                             : ''
                         }
                       `}

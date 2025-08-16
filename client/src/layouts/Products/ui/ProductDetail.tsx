@@ -24,41 +24,37 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
       label: 'Distribución',
       value: product.prices.distribution,
       icon: 'FaTruck',
-      gradient:
-        'from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30',
-      border: ' border border-main',
-      textColor: 'text-green-600',
-      valueColor: 'text-green-700 dark:text-green-300',
+      bgColor: 'bg-success-light',
+      border: 'border-success',
+      textColor: 'text-success',
+      valueColor: 'text-success',
     },
     {
       label: 'Mayoreo',
       value: product.prices.wholesale,
       icon: 'FaWarehouse',
-      gradient:
-        'from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30',
-      border: 'border-blue-200 dark:border-blue-800',
-      textColor: 'text-blue-600',
-      valueColor: 'text-blue-700 dark:text-blue-300',
+      bgColor: 'bg-info-light',
+      border: 'border-info',
+      textColor: 'text-info',
+      valueColor: 'text-info',
     },
     {
       label: 'Medio Mayoreo',
       value: product.prices.mid_wholesale,
       icon: 'FaBoxes',
-      gradient:
-        'from-orange-50 to-orange-100 dark:from-orange-900/30 dark:to-orange-800/30',
-      border: 'border-orange-200 dark:border-orange-800',
-      textColor: 'text-orange-600',
-      valueColor: 'text-orange-700 dark:text-orange-300',
+      bgColor: 'bg-warning-light',
+      border: 'border-warning',
+      textColor: 'text-warning',
+      valueColor: 'text-warning',
     },
     {
       label: 'Menudeo',
       value: product.prices.retail,
       icon: 'FaShoppingCart',
-      gradient:
-        'from-purple-50 to-purple-100 dark:from-purple-900/30 dark:to-purple-800/30',
-      border: 'border-purple-200 dark:border-purple-800',
-      textColor: 'text-purple-600',
-      valueColor: 'text-purple-700 dark:text-purple-300',
+      bgColor: 'bg-vibrant-purple-light',
+      border: 'border-medium',
+      textColor: 'text-vibrant-purple',
+      valueColor: 'text-vibrant-purple',
     },
   ];
 
@@ -69,44 +65,46 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
         animate={{ opacity: 1, y: 0 }}
         exit={{ opacity: 0, y: -20 }}
         transition={{ delay: 0.2 }}
-        className="bg-gradient-to-br from-primary/5 to-blue-50 dark:from-primary/10 dark:to-blue-900/20 rounded-main p-8 border-2 border-primary/20"
+        className="bg-brand-light rounded-md p-8 border border-brand"
       >
         <div className="flex items-center gap-4 mb-6">
-          <div className="p-4 bg-primary/15 rounded-2xl">
-            <Icon name="FaCheckCircle" size={32} className="text-primary" />
+          <div className="p-4 bg-brand rounded-md">
+            <Icon name="FaCheckCircle" size={32} className="text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-main">
+            <h2 className="text-2xl font-bold text-primary-color">
               Producto Encontrado
             </h2>
-            <p className="text-textSecondary">
+            <p className="text-secondary-color">
               Información detallada del producto
             </p>
           </div>
         </div>
 
-        <div className="bg-card-bg rounded-main shadow-lg border border-main p-6">
+        <div className="bg-card rounded-md shadow-medium border border-light p-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <Icon name="FaTag" size={18} className="text-primary" />
-                  <h3 className="font-bold text-main text-lg">
+                  <Icon name="FaTag" size={18} className="text-brand" />
+                  <h3 className="font-bold text-primary-color text-lg">
                     Información General
                   </h3>
                 </div>
                 <div className="space-y-4">
-                  <div className="p-4 bg-gray-50 rounded-main">
-                    <p className="text-sm text-textSecondary mb-1">
+                  <div className="p-4 bg-tertiary rounded-md">
+                    <p className="text-sm text-secondary-color mb-1">
                       Clave del Producto
                     </p>
-                    <p className="text-xl font-bold text-main">{product.key}</p>
+                    <p className="text-xl font-bold text-primary-color">
+                      {product.key}
+                    </p>
                   </div>
-                  <div className="p-4 bg-gray-50 rounded-main">
-                    <p className="text-sm text-textSecondary mb-1">
+                  <div className="p-4 bg-tertiary rounded-md">
+                    <p className="text-sm text-secondary-color mb-1">
                       Descripción
                     </p>
-                    <p className="text-main font-medium">
+                    <p className="text-primary-color font-medium">
                       {product.description}
                     </p>
                   </div>
@@ -117,18 +115,16 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
             <div className="space-y-6">
               <div>
                 <div className="flex items-center gap-3 mb-3">
-                  <Icon
-                    name="FaDollarSign"
-                    size={18}
-                    className="text-primary"
-                  />
-                  <h3 className="font-bold text-main text-lg">Precios</h3>
+                  <Icon name="FaDollarSign" size={18} className="text-brand" />
+                  <h3 className="font-bold text-primary-color text-lg">
+                    Precios
+                  </h3>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {priceCards.map((priceCard, idx) => (
                     <div
                       key={idx}
-                      className={`bg-gradient-to-br ${priceCard.gradient} p-4 rounded-main border ${priceCard.border}`}
+                      className={`${priceCard.bgColor} p-4 rounded-md border ${priceCard.border}`}
                     >
                       <div className="flex items-center gap-2 mb-2">
                         <Icon
@@ -137,12 +133,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                           className={priceCard.textColor}
                         />
                         <p
-                          className={`text-sm font-semibold ${
-                            priceCard.textColor
-                          } dark:${priceCard.textColor.replace(
-                            'text-',
-                            'text-'
-                          )}-400`}
+                          className={`text-sm font-semibold ${priceCard.textColor}`}
                         >
                           {priceCard.label}
                         </p>
@@ -164,11 +155,11 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               transition={{ delay: 0.3 }}
-              className="mt-8 border-t border-gray-200 dark:border-gray-700 pt-6"
+              className="mt-8 border-t border-light pt-6"
             >
               <div className="flex items-center gap-3 mb-4">
-                <Icon name="FaImage" size={18} className="text-primary" />
-                <h3 className="font-bold text-main text-lg">
+                <Icon name="FaImage" size={18} className="text-brand" />
+                <h3 className="font-bold text-primary-color text-lg">
                   Imagen del Producto
                 </h3>
               </div>
@@ -176,7 +167,7 @@ const ProductDetail: React.FC<ProductDetailProps> = ({
                 <img
                   src={`https://www.truper.com/media/import/imagenes/${product.clave}.jpg`}
                   alt={product.description}
-                  className="max-w-md w-full h-64 object-cover rounded-main border border-main shadow-lg"
+                  className="max-w-md w-full h-64 object-cover rounded-md border border-light shadow-medium"
                   onError={handleImageError}
                 />
               </div>

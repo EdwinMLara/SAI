@@ -140,12 +140,12 @@ const Sidebar: React.FC = () => {
       <motion.aside
         variants={sidebarVariants}
         animate={isOpen ? 'open' : 'closed'}
-        className={`fixed left-0 top-0 h-full bg-card-bg border-r border-main shadow-main z-40 flex flex-col ${
+        className={`fixed left-0 top-0 h-full bg-card border-r border-light shadow-medium z-40 flex flex-col ${
           isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : ''
         }`}
       >
         {/* Header del Sidebar */}
-        <div className="h-16 flex items-center justify-between px-4 border-b border-main">
+        <div className="h-16 flex items-center justify-between px-4 border-b border-light">
           <AnimatePresence mode="wait">
             {isOpen && (
               <motion.div
@@ -156,7 +156,7 @@ const Sidebar: React.FC = () => {
                 exit="closed"
                 className="flex items-center gap-3"
               >
-                <span className="text-main font-bold text-md">
+                <span className="text-primary-color font-bold text-md">
                   Administrador
                 </span>
               </motion.div>
@@ -196,7 +196,7 @@ const Sidebar: React.FC = () => {
                         } ${
                           isActive || hasActiveSub
                             ? 'bg-brand-light text-brand border border-brand/20'
-                            : 'text-gray-500 hover:bg-hover hover:text-main'
+                            : 'text-secondary-color hover-bg-secondary hover:text-primary-color'
                         }`}
                       >
                         <span
@@ -212,7 +212,7 @@ const Sidebar: React.FC = () => {
                             className={`flex-shrink-0 ${
                               isActive || hasActiveSub
                                 ? 'text-brand'
-                                : 'text-gray-400'
+                                : 'text-secondary-color'
                             }`}
                           />
                         </span>
@@ -225,7 +225,7 @@ const Sidebar: React.FC = () => {
                               exit="closed"
                               className="flex items-center justify-between flex-1"
                             >
-                              <span className="font-medium text-sm text-main">
+                              <span className="font-medium text-sm text-primary-color">
                                 {item.label}
                               </span>
                               <Icon
@@ -236,7 +236,7 @@ const Sidebar: React.FC = () => {
                                 } ${
                                   isActive || hasActiveSub
                                     ? 'text-brand'
-                                    : 'text-gray-400'
+                                    : 'text-secondary-color'
                                 }`}
                               />
                             </motion.div>
@@ -255,7 +255,7 @@ const Sidebar: React.FC = () => {
                         } ${
                           isActive
                             ? 'bg-brand-light text-brand border border-brand/20'
-                            : 'text-main hover:bg-hover hover:text-main'
+                            : 'text-primary-color hover-bg-secondary hover:text-primary-color'
                         }`}
                       >
                         <span
@@ -269,7 +269,7 @@ const Sidebar: React.FC = () => {
                             name={item.iconName}
                             size={20}
                             className={`flex-shrink-0 ${
-                              isActive ? 'text-brand' : 'text-gray-400'
+                              isActive ? 'text-brand' : 'text-secondary-color'
                             }`}
                           />
                         </span>
@@ -317,14 +317,12 @@ const Sidebar: React.FC = () => {
                                   className={`flex items-center gap-2 px-3 py-2 rounded-md text-sm transition-all duration-200 ${
                                     isSubActive
                                       ? 'bg-brand-light text-brand border border-brand/20'
-                                      : 'text-gray-400 hover:bg-hover hover:text-gray-600'
+                                      : 'text-secondary-color hover-bg-secondary hover:text-primary-color'
                                   }`}
                                 >
                                   <div
                                     className={`w-1.5 h-1.5 rounded-full ${
-                                      isSubActive
-                                        ? 'bg-brand'
-                                        : 'bg-secondary-light'
+                                      isSubActive ? 'bg-brand' : 'bg-secondary'
                                     }`}
                                   />
                                   <span className="font-medium">
@@ -343,7 +341,7 @@ const Sidebar: React.FC = () => {
           </ul>
         </nav>
 
-        <div className="p-4 border-t border-main">
+        <div className="p-4 border-t border-light">
           <AnimatePresence>
             {isOpen ? (
               <motion.div
@@ -354,7 +352,7 @@ const Sidebar: React.FC = () => {
                 exit="closed"
                 className="flex items-center gap-3"
               >
-                <div className="w-8 h-8 rounded-full overflow-hidden border border-secondary">
+                <div className="w-8 h-8 rounded-full overflow-hidden border border-light">
                   {user?.image ? (
                     <img
                       src={user.image}
@@ -363,17 +361,17 @@ const Sidebar: React.FC = () => {
                     />
                   ) : (
                     <div className="w-full h-full bg-accent flex items-center justify-center">
-                      <span className="text-placeholder text-sm font-medium">
+                      <span className="text-primary-color text-sm font-medium">
                         {user?.name?.charAt(0)}
                       </span>
                     </div>
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-main text-sm font-medium truncate">
+                  <p className="text-primary-color text-sm font-medium truncate">
                     {user?.name}
                   </p>
-                  <p className="text-gray-400 text-xs truncate">
+                  <p className="text-secondary-color text-xs truncate">
                     {user?.role === 'admin' ? 'Administrador' : 'Usuario'}
                   </p>
                 </div>
@@ -387,7 +385,7 @@ const Sidebar: React.FC = () => {
                 exit="open"
                 className="flex justify-center"
               >
-                <div className="w-12 h-12 flex items-center justify-center rounded-full overflow-hidden border border-secondary group cursor-pointer relative">
+                <div className="w-12 h-12 flex items-center justify-center rounded-full overflow-hidden border border-light group cursor-pointer relative">
                   {user?.image ? (
                     <img
                       src={user.image}
@@ -396,13 +394,13 @@ const Sidebar: React.FC = () => {
                     />
                   ) : (
                     <div className="w-full h-full bg-accent flex items-center justify-center">
-                      <span className="text-placeholder text-sm font-medium">
+                      <span className="text-primary-color text-sm font-medium">
                         {user?.name?.charAt(0)}
                       </span>
                     </div>
                   )}
 
-                  <div className="absolute left-full ml-2 px-2 py-1 bg-overlay rounded-md shadow-main text-xs font-medium text-main opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
+                  <div className="absolute left-full ml-2 px-2 py-1 bg-elevated rounded-md shadow-medium text-xs font-medium text-primary-color opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-50">
                     {user?.name}
                   </div>
                 </div>

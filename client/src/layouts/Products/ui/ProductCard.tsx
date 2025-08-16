@@ -27,34 +27,34 @@ const ProductCard: React.FC<ProductCardProps> = ({
     {
       label: 'Distribución',
       value: product.prices.distribution,
-      bgColor: 'bg-green-50 dark:bg-green-900/20',
-      borderColor: 'border-main dark:border-green-800',
-      textColor: 'text-green-600 dark:text-green-400',
-      valueColor: 'text-green-700 dark:text-green-300',
+      bgColor: 'bg-success-light',
+      borderColor: 'border-success',
+      textColor: 'text-success',
+      valueColor: 'text-success',
     },
     {
       label: 'Mayoreo',
       value: product.prices.wholesale,
-      bgColor: 'bg-blue-50 dark:bg-blue-900/20',
-      borderColor: 'border-blue-200 dark:border-blue-800',
-      textColor: 'text-blue-600 dark:text-blue-400',
-      valueColor: 'text-blue-700 dark:text-blue-300',
+      bgColor: 'bg-info-light',
+      borderColor: 'border-info',
+      textColor: 'text-info',
+      valueColor: 'text-info',
     },
     {
       label: 'Medio Mayoreo',
       value: product.prices.mid_wholesale,
-      bgColor: 'bg-orange-50 dark:bg-orange-900/20',
-      borderColor: 'border-orange-200 dark:border-orange-800',
-      textColor: 'text-orange-600 dark:text-orange-400',
-      valueColor: 'text-orange-700 dark:text-orange-300',
+      bgColor: 'bg-warning-light',
+      borderColor: 'border-warning',
+      textColor: 'text-warning',
+      valueColor: 'text-warning',
     },
     {
       label: 'Menudeo',
       value: product.prices.retail,
-      bgColor: 'bg-purple-50 dark:bg-purple-900/20',
-      borderColor: 'border-purple-200 dark:border-purple-800',
-      textColor: 'text-purple-600 dark:text-purple-400',
-      valueColor: 'text-purple-700 dark:text-purple-300',
+      bgColor: 'bg-vibrant-purple-light',
+      borderColor: 'border-medium',
+      textColor: 'text-vibrant-purple',
+      valueColor: 'text-vibrant-purple',
     },
   ];
 
@@ -64,29 +64,31 @@ const ProductCard: React.FC<ProductCardProps> = ({
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: index * 0.1 }}
-      className="bg-card-bg rounded-main shadow-md border border-mai p-6 hover:shadow-lg transition-all duration-300 group"
+      className="bg-card rounded-md shadow-medium border border-light p-6 hover:shadow-strong transition-all duration-300 group"
     >
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-lg">
-            <Icon name="FaBox" size={18} className="text-primary " />
+          <div className="p-2 bg-brand-light rounded-md">
+            <Icon name="FaBox" size={18} className="text-brand" />
           </div>
           <div>
-            <h3 className="font-bold text-main text-lg">{product.key}</h3>
-            <p className="text-xs text-textSecondary">Código del producto</p>
+            <h3 className="font-bold text-primary-color text-lg">
+              {product.key}
+            </h3>
+            <p className="text-xs text-secondary-color">Código del producto</p>
           </div>
         </div>
         <IconButton
           icon="FaTimes"
           variant="ghost"
           onClick={() => onRemove(index)}
-          className="opacity-0 group-hover:opacity-100 transition-opacity text-red-500 hover:bg-red-50"
+          className="opacity-0 group-hover:opacity-100 transition-opacity text-error hover:bg-error-light"
           title="Eliminar producto"
         />
       </div>
 
       <div className="mb-4">
-        <p className="text-main font-medium line-clamp-2">
+        <p className="text-primary-color font-medium line-clamp-2">
           {product.description}
         </p>
       </div>
@@ -95,7 +97,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
         {priceCards.map((priceCard, idx) => (
           <div
             key={idx}
-            className={`${priceCard.bgColor} p-3 rounded-main border ${priceCard.borderColor}`}
+            className={`${priceCard.bgColor} p-3 rounded-md border ${priceCard.borderColor}`}
           >
             <p className={`text-xs ${priceCard.textColor} font-medium mb-1`}>
               {priceCard.label}
@@ -112,12 +114,12 @@ const ProductCard: React.FC<ProductCardProps> = ({
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: 'auto' }}
           transition={{ delay: 0.3 }}
-          className="mt-4 border-t border-main pt-4"
+          className="mt-4 border-t border-light pt-4"
         >
           <img
             src={`https://www.truper.com/media/import/imagenes/${product.clave}.jpg`}
             alt={product.description}
-            className="w-full h-32 object-cover rounded-main border border-main"
+            className="w-full h-32 object-cover rounded-md border border-light"
             onError={handleImageError}
           />
         </motion.div>

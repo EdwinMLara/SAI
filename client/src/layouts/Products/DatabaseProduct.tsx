@@ -63,10 +63,12 @@ const DatabaseProduct = () => {
   const renderProcessingResults = () => {
     if (isProcessing) {
       return (
-        <div className="mt-6 p-4 bg-card-bg border border-main rounded-main">
+        <div className="mt-6 p-4 bg-card border border-light rounded-md">
           <div className="flex items-center justify-center space-x-3">
             <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-brand"></div>
-            <span className="text-main font-medium">Procesando archivo...</span>
+            <span className="text-primary-color font-medium">
+              Procesando archivo...
+            </span>
           </div>
         </div>
       );
@@ -76,61 +78,57 @@ const DatabaseProduct = () => {
 
     return (
       <div className="mt-6 space-y-4">
-        <div className="bg-card-bg p-6 border border-main rounded-main">
-          <h3 className="text-lg font-semibold text-main mb-4">
+        <div className="bg-card p-6 border border-light rounded-md">
+          <h3 className="text-lg font-semibold text-primary-color mb-4">
             Resultados del procesamiento
           </h3>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <div className="bg-bg p-4 rounded-main border border-main">
-              <div className="text-2xl font-bold text-main">
+            <div className="bg-tertiary p-4 rounded-md border border-light">
+              <div className="text-2xl font-bold text-primary-color">
                 {processedData.totalRows}
               </div>
-              <div className="text-secondary text-sm">Filas totales</div>
+              <div className="text-secondary-color text-sm">Filas totales</div>
             </div>
-            <div className="bg-green-50 dark:bg-green-900/20 p-4 rounded-main border border-green-200 dark:border-green-800">
-              <div className="text-2xl font-bold text-green-600 dark:text-green-400">
+            <div className="bg-success-light p-4 rounded-md border border-success">
+              <div className="text-2xl font-bold text-success">
                 {processedData.validProducts.length}
               </div>
-              <div className="text-green-600 dark:text-green-400 text-sm">
-                Productos válidos
-              </div>
+              <div className="text-success text-sm">Productos válidos</div>
             </div>
-            <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-main border border-red-200 dark:border-red-800">
-              <div className="text-2xl font-bold text-red-600 dark:text-red-400">
+            <div className="bg-error-light p-4 rounded-md border border-error">
+              <div className="text-2xl font-bold text-error">
                 {processedData.invalidRows.length}
               </div>
-              <div className="text-red-600 dark:text-red-400 text-sm">
-                Filas con errores
-              </div>
+              <div className="text-error text-sm">Filas con errores</div>
             </div>
           </div>
 
           {processedData.validProducts.length > 0 && (
             <div className="mb-6">
-              <h4 className="font-semibold text-main mb-3">
+              <h4 className="font-semibold text-primary-color mb-3">
                 Vista previa de productos válidos (primeros 3)
               </h4>
               <div className="overflow-x-auto">
-                <table className="w-full text-sm border border-main rounded-main">
+                <table className="w-full text-sm border border-light rounded-md">
                   <thead>
-                    <tr className="bg-bg">
-                      <th className="px-4 py-3 text-left text-main border-b border-main">
+                    <tr className="bg-tertiary">
+                      <th className="px-4 py-3 text-left text-primary-color border-b border-light">
                         Clave
                       </th>
-                      <th className="px-4 py-3 text-left text-main border-b border-main">
+                      <th className="px-4 py-3 text-left text-primary-color border-b border-light">
                         Descripción
                       </th>
-                      <th className="px-4 py-3 text-left text-main border-b border-main">
+                      <th className="px-4 py-3 text-left text-primary-color border-b border-light">
                         Distribución
                       </th>
-                      <th className="px-4 py-3 text-left text-main border-b border-main">
+                      <th className="px-4 py-3 text-left text-primary-color border-b border-light">
                         Mayoreo
                       </th>
-                      <th className="px-4 py-3 text-left text-main border-b border-main">
+                      <th className="px-4 py-3 text-left text-primary-color border-b border-light">
                         Medio Mayoreo
                       </th>
-                      <th className="px-4 py-3 text-left text-main border-b border-main">
+                      <th className="px-4 py-3 text-left text-primary-color border-b border-light">
                         Menudeo
                       </th>
                     </tr>
@@ -141,24 +139,24 @@ const DatabaseProduct = () => {
                       .map((product, index) => (
                         <tr
                           key={index}
-                          className="border-b border-main last:border-b-0"
+                          className="border-b border-light last:border-b-0"
                         >
-                          <td className="px-4 py-3 text-main font-medium">
+                          <td className="px-4 py-3 text-primary-color font-medium">
                             {product.key}
                           </td>
-                          <td className="px-4 py-3 text-main">
+                          <td className="px-4 py-3 text-primary-color">
                             {product.description}
                           </td>
-                          <td className="px-4 py-3 text-main">
+                          <td className="px-4 py-3 text-primary-color">
                             ${product.prices.distribution.toFixed(2)}
                           </td>
-                          <td className="px-4 py-3 text-main">
+                          <td className="px-4 py-3 text-primary-color">
                             ${product.prices.wholesale.toFixed(2)}
                           </td>
-                          <td className="px-4 py-3 text-main">
+                          <td className="px-4 py-3 text-primary-color">
                             ${product.prices.mid_wholesale.toFixed(2)}
                           </td>
-                          <td className="px-4 py-3 text-main">
+                          <td className="px-4 py-3 text-primary-color">
                             ${product.prices.retail.toFixed(2)}
                           </td>
                         </tr>
@@ -167,7 +165,7 @@ const DatabaseProduct = () => {
                 </table>
               </div>
               {processedData.validProducts.length > 3 && (
-                <p className="text-secondary text-sm mt-2">
+                <p className="text-secondary-color text-sm mt-2">
                   ... y {processedData.validProducts.length - 3} productos más
                 </p>
               )}
@@ -176,21 +174,21 @@ const DatabaseProduct = () => {
 
           {processedData.invalidRows.length > 0 && (
             <div className="mb-6">
-              <h4 className="font-semibold text-main mb-3">
+              <h4 className="font-semibold text-primary-color mb-3">
                 Errores encontrados
               </h4>
-              <div className="bg-red-50 dark:bg-red-900/20 p-4 rounded-main border border-red-200 dark:border-red-800 max-h-48 overflow-y-auto custom-scrollbar">
+              <div className="bg-error-light p-4 rounded-md border border-error max-h-48 overflow-y-auto scrollbar-thin">
                 {processedData.invalidRows
                   .slice(0, 10)
                   .map((invalid, index) => (
                     <div key={index} className="mb-2 last:mb-0">
-                      <span className="text-red-600 dark:text-red-400 font-medium text-sm">
+                      <span className="text-error font-medium text-sm">
                         Fila {invalid.row}: {invalid.error}
                       </span>
                     </div>
                   ))}
                 {processedData.invalidRows.length > 10 && (
-                  <p className="text-red-600 dark:text-red-400 text-sm mt-2">
+                  <p className="text-error text-sm mt-2">
                     ... y {processedData.invalidRows.length - 10} errores más
                   </p>
                 )}
@@ -248,15 +246,17 @@ const DatabaseProduct = () => {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-main mb-2">Productos</h1>
-        <p className="text-secondary">
+        <h1 className="text-2xl font-bold text-primary-color mb-2">
+          Productos
+        </h1>
+        <p className="text-secondary-color">
           Carga un archivo Excel con los productos del sistema. El sistema
           reconocerá automáticamente las columnas necesarias del formato
           estándar.
         </p>
       </div>
 
-      <div className="bg-card-bg p-6 border border-main rounded-main">
+      <div className="bg-card p-6 border border-light rounded-md">
         <div className="max-w-md mx-auto">
           <InputFile
             accept=".xlsx,.xls"
@@ -271,18 +271,16 @@ const DatabaseProduct = () => {
         </div>
 
         {error && (
-          <div className="mt-4 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-main">
-            <p className="text-red-600 dark:text-red-400 text-sm font-medium">
-              {error}
-            </p>
+          <div className="mt-4 p-4 bg-error-light border border-error rounded-md">
+            <p className="text-error text-sm font-medium">{error}</p>
           </div>
         )}
       </div>
 
       {renderProcessingResults()}
 
-      <div className="bg-card-bg py-3 px-4 border border-main rounded-main">
-        <p className="text-main text-sm">
+      <div className="bg-card py-3 px-4 border border-light rounded-md">
+        <p className="text-primary-color text-sm">
           <span className="font-medium">Última actualización:</span>{' '}
           {isLoadingUpdate ? (
             <span className="animate-pulse">Cargando...</span>

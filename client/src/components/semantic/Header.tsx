@@ -43,7 +43,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-card-bg border-b border-main shadow-sm">
+    <header className="bg-card border-b border-light shadow-soft">
       <div className="flex items-center justify-between px-6 py-4">
         <div className="flex items-center gap-4">
           <IconButton
@@ -65,17 +65,19 @@ const Header: React.FC = () => {
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
-                className="flex items-center gap-3 p-2 rounded-lg hover:bg-hover transition-colors"
+                className="flex items-center gap-3 p-2 rounded-md hover-bg-secondary transition-colors"
               >
                 <div className="hidden sm:block text-right">
-                  <p className="text-sm font-medium text-main">{user.name}</p>
-                  <p className="text-xs text-gray-500 capitalize">
+                  <p className="text-sm font-medium text-primary-color">
+                    {user.name}
+                  </p>
+                  <p className="text-xs text-secondary-color capitalize">
                     {user.role === 'admin' ? 'Administrador' : 'Usuario'}
                   </p>
                 </div>
 
                 <div className="relative">
-                  <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-secondary">
+                  <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-light">
                     {user.image ? (
                       <img
                         src={user.image}
@@ -84,7 +86,7 @@ const Header: React.FC = () => {
                       />
                     ) : (
                       <div className="w-full h-full bg-accent flex items-center justify-center">
-                        <span className="text-placeholder text-sm font-medium">
+                        <span className="text-primary-color text-sm font-medium">
                           {user.name?.charAt(0)}
                         </span>
                       </div>
@@ -95,7 +97,7 @@ const Header: React.FC = () => {
                 <Icon
                   name="FaChevronDown"
                   size={12}
-                  className={`text-gray-400 transition-transform ${
+                  className={`text-secondary-color transition-transform ${
                     isUserMenuOpen ? 'rotate-180' : ''
                   }`}
                 />
@@ -108,39 +110,41 @@ const Header: React.FC = () => {
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     exit={{ opacity: 0, scale: 0.95, y: -10 }}
                     transition={{ duration: 0.15 }}
-                    className="absolute right-0 mt-2 w-56 bg-card-bg border border-main rounded-lg shadow-main z-50"
+                    className="absolute right-0 mt-2 w-56 bg-card border border-light shadow-medium rounded-md z-50"
                   >
-                    <div className="p-3 border-b border-main">
-                      <p className="text-sm font-medium text-main">
+                    <div className="p-3 border-b border-light">
+                      <p className="text-sm font-medium text-primary-color">
                         {user.name}
                       </p>
-                      <p className="text-xs text-gray-500">{user.email}</p>
+                      <p className="text-xs text-secondary-color">
+                        {user.email}
+                      </p>
                     </div>
 
                     <div className="p-2">
-                      <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-main hover:bg-hover rounded-md transition-colors">
+                      <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors">
                         <Icon
                           name="FaUser"
                           size={16}
-                          className="text-gray-400"
+                          className="text-secondary-color"
                         />
                         Mi perfil
                       </button>
 
-                      <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-main hover:bg-hover rounded-md transition-colors">
+                      <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors">
                         <Icon
                           name="FaCog"
                           size={16}
-                          className="text-gray-400"
+                          className="text-secondary-color"
                         />
                         Configuración
                       </button>
 
-                      <div className="border-t border-main my-2"></div>
+                      <div className="border-t border-light my-2"></div>
 
                       <button
                         onClick={handleLogout}
-                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-md transition-colors"
+                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-error hover:bg-error-light rounded-md transition-colors"
                       >
                         <Icon name="FaSignOutAlt" size={16} />
                         Cerrar sesión

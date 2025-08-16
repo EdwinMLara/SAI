@@ -57,7 +57,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         </Button>
       </div>
 
-      <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+      <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-light">
         <div className="flex gap-4 flex-wrap">
           <Checkbox
             id="multiSearch"

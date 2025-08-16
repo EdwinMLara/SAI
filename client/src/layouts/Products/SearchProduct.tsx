@@ -42,7 +42,9 @@ const SearchProduct = () => {
       >
         <div className="flex items-center gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-main">Buscar Productos</h1>
+            <h1 className="text-2xl font-bold text-primary-color">
+              Buscar Productos
+            </h1>
           </div>
         </div>
 
@@ -62,7 +64,7 @@ const SearchProduct = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="bg-card-bg rounded-2xl shadow-main border border-main p-6"
+        className="bg-card rounded-md shadow-medium border border-light p-6"
       >
         <SearchForm
           search={search}

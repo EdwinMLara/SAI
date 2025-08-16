@@ -41,22 +41,22 @@ const Authentication = () => {
 
   return (
     <motion.div
-      className="min-h-screen flex items-center justify-center p-4"
+      className="min-h-screen flex items-center justify-center p-4 bg-primary"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.8 }}
     >
       <div className="w-full max-w-md">
         <motion.div
-          className="bg-white rounded-main shadow-main backdrop-blur-sm bg-opacity-95 border border-main overflow-hidden"
+          className="bg-card rounded-md shadow-medium backdrop-blur-sm bg-opacity-95 border border-light overflow-hidden"
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.4, delay: 0.2 }}
         >
           <div className="p-6 pb-2">
-            <div className="relative flex bg-gray-100 rounded-xl p-1 mb-6">
+            <div className="relative flex bg-secondary rounded-md p-1 mb-6">
               <motion.div
-                className="absolute top-1 bottom-1 bg-primary rounded-xl shadow-main"
+                className="absolute top-1 bottom-1 bg-brand rounded-md shadow-soft"
                 initial={false}
                 animate={{
                   left: isLoginForm ? '4px' : '50%',
@@ -71,10 +71,10 @@ const Authentication = () => {
 
               <motion.button
                 onClick={() => setIsLoginForm(true)}
-                className={`relative z-10 flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-colors duration-200 ${
+                className={`relative z-10 flex-1 py-3 px-4 text-sm font-semibold rounded-md transition-colors duration-200 ${
                   isLoginForm
                     ? 'text-white'
-                    : 'text-gray-600 hover:text-gray-800'
+                    : 'text-secondary-color hover:text-primary-color'
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -84,10 +84,10 @@ const Authentication = () => {
 
               <motion.button
                 onClick={() => setIsLoginForm(false)}
-                className={`relative z-10 flex-1 py-3 px-4 text-sm font-semibold rounded-xl transition-colors duration-200 ${
+                className={`relative z-10 flex-1 py-3 px-4 text-sm font-semibold rounded-md transition-colors duration-200 ${
                   !isLoginForm
                     ? 'text-white'
-                    : 'text-gray-600 hover:text-gray-800'
+                    : 'text-secondary-color hover:text-primary-color'
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -102,7 +102,7 @@ const Authentication = () => {
               animate="visible"
             >
               <motion.div variants={itemVariants}>
-                <h2 className="text-xl font-bold text-textMain mb-2">
+                <h2 className="text-xl font-bold text-primary-color mb-2">
                   {isLoginForm ? 'Acceder a tu cuenta' : 'Crear una cuenta'}
                 </h2>
               </motion.div>
