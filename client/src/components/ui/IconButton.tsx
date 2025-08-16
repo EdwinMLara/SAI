@@ -14,7 +14,7 @@ const IconButton: React.FC<IconButtonProps> = ({
   icon,
   iconPosition = 'left',
   iconClassName = '',
-  color = 'text-blue-500',
+  color = 'text-primary-color',
   children,
   ...buttonProps
 }) => {
@@ -24,7 +24,9 @@ const IconButton: React.FC<IconButtonProps> = ({
         {iconPosition === 'left' && (
           <Icon
             name={icon}
-            className={`${children ? 'mr-2' : ''} ${iconClassName} ${color}`}
+            className={`flex-shrink-0 ${
+              children ? 'mr-2' : ''
+            } ${iconClassName} ${color}`}
             size={16}
           />
         )}
@@ -32,7 +34,9 @@ const IconButton: React.FC<IconButtonProps> = ({
         {iconPosition === 'right' && (
           <Icon
             name={icon}
-            className={`${children ? 'ml-2' : ''} ${iconClassName} ${color}`}
+            className={`flex-shrink-0 ${
+              children ? 'ml-2' : ''
+            } ${iconClassName} ${color}`}
             size={16}
           />
         )}

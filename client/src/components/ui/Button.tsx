@@ -9,26 +9,17 @@ interface ButtonProps extends HTMLMotionProps<'button'> {
 }
 
 const baseClass =
-  'flex items-center justify-center rounded-md font-sans font-semibold text-base focus:outline-none h-11 min-h-11 transition-colors duration-300';
+  'flex items-center justify-center rounded-md font-sans font-semibold text-base h-11 min-h-11 transition-colors';
 const variantBase = {
-  primary: 'bg-primary text-white dark:bg-dark-primary dark:text-white',
+  primary: 'bg-brand text-white',
   secondary:
-    'bg-secondary text-primaryDark dark:bg-dark-secondary dark:text-dark-textMain',
-  ghost: 'text-primary dark:text-dark-primary',
+    'bg-secondary text-primary-color dark:bg-background-dark-secondary',
+  ghost: 'text-brand',
 };
 const variantHover = {
-  primary: 'hover:bg-primaryDark dark:hover:bg-blue-600',
-  secondary: 'hover:bg-secondaryDark dark:hover:bg-dark-secondaryLight',
-  ghost:
-    'hover:bg-primaryLight hover:bg-opacity-80 dark:hover:bg-dark-primaryLight dark:hover:bg-opacity-80',
-};
-const variantFocus = {
-  primary:
-    'focus-visible:ring-2 focus-visible:ring-primaryDark dark:focus-visible:ring-dark-primary',
-  secondary:
-    'focus-visible:ring-2 focus-visible:ring-secondaryDark dark:focus-visible:ring-dark-secondaryLight',
-  ghost:
-    'focus-visible:ring-2 focus-visible:ring-primary dark:focus-visible:ring-dark-primary',
+  primary: 'hover:bg-brand-600',
+  secondary: 'hover-bg-secondary',
+  ghost: 'hover:bg-brand-light',
 };
 const disabledClass =
   'bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500';
@@ -59,11 +50,8 @@ function getButtonClasses({
   return [
     baseClass,
     iconOnly ? 'p-2 w-11 h-11' : 'px-4 py-0 h-11',
-    isGhostIconOnly && 'icon-ghost-effect',
     disabled ? disabledClass : variantBase[variant],
-    !disabled && variant !== 'ghost' && variantHover[variant],
-    !disabled && variant === 'ghost' && 'ghost-hover-bg',
-    !disabled && variantFocus[variant],
+    !disabled && variantHover[variant],
     className,
   ]
     .filter(Boolean)

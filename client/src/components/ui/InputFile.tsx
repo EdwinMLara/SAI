@@ -96,10 +96,8 @@ const InputFile: React.FC<InputFileProps> = ({
         initial={{ scale: 1 }}
         animate={{ scale: dragActive ? 1.03 : 1 }}
         whileHover={{ scale: 1.04 }}
-        className={`flex flex-col items-center justify-center w-full h-32 px-4 transition-all border-2 border-dashed rounded-lg cursor-pointer bg-gray-50 dark:bg-dark-secondary/50 border-gray-300 dark:border-gray-600 hover:border-primary dark:hover:border-dark-primary focus:outline-none focus:ring-2 focus:ring-primary/40 dark:focus:ring-dark-primary/40 ${
-          dragActive
-            ? 'border-primary bg-primary/10 dark:bg-dark-primary/10'
-            : ''
+        className={`flex flex-col items-center justify-center w-full h-32 px-4 transition-colors duration-300 border-2 border-dashed rounded-xl cursor-pointer bg-background-tertiary dark:bg-background-dark-tertiary border-gray-300 dark:border-gray-600 hover:border-brand focus:outline-none focus:ring-2 focus:ring-brand/40 dark:focus:ring-brand/40 ${
+          dragActive ? 'border-brand bg-brand/10 dark:bg-brand/10' : ''
         } ${disabled ? 'opacity-60 cursor-not-allowed' : ''}`}
         htmlFor="input-file"
         onDragEnter={handleDrag}
@@ -109,10 +107,10 @@ const InputFile: React.FC<InputFileProps> = ({
         tabIndex={0}
         aria-disabled={disabled}
       >
-        <span className="text-xs text-gray-600 dark:text-gray-400 text-center select-none flex flex-col items-center w-full">
+        <span className="text-xs text-text-secondary dark:text-text-dark-secondary text-center select-none flex flex-col items-center w-full">
           <span className="mb-4">
             <svg
-              className="w-8 h-8 text-primary dark:text-dark-primary"
+              className="w-8 h-8 text-brand dark:text-brand"
               fill="none"
               stroke="currentColor"
               strokeWidth="1.5"
@@ -128,19 +126,19 @@ const InputFile: React.FC<InputFileProps> = ({
           </span>
           <span className="flex items-center justify-center gap-2 w-full text-center">
             {fileNames.length > 0 && !invalidFile ? (
-              <span className="font-medium break-all w-full text-center text-gray-700 dark:text-gray-300">
+              <span className="font-medium break-all w-full text-center text-text-primary dark:text-text-dark-primary">
                 {multiple
                   ? `${fileNames.length} archivo${
                       fileNames.length > 1 ? 's' : ''
                     } seleccionado${fileNames.length > 1 ? 's' : ''}: `
                   : 'Archivo seleccionado: '}
-                <span className="text-primary dark:text-dark-primary font-semibold">
+                <span className="text-brand dark:text-brand font-semibold">
                   {multiple ? fileNames.join(', ') : fileNames[0]}
                 </span>
               </span>
             ) : invalidFile ? (
               <span className="flex flex-col items-center w-full">
-                <span className="text-red-500 dark:text-red-400 font-semibold break-all w-full text-center">
+                <span className="text-error dark:text-error font-semibold break-all w-full text-center">
                   Tipo de archivo no permitido. Selecciona uno válido.
                 </span>
               </span>
@@ -176,12 +174,12 @@ const InputFile: React.FC<InputFileProps> = ({
         </Button>
       </div>
       {helperText && !error && (
-        <span className="block mt-1 text-xs text-gray-500 dark:text-gray-400">
+        <span className="block mt-1 text-xs text-text-secondary dark:text-text-dark-secondary">
           {helperText}
         </span>
       )}
       {error && (
-        <span className="block mt-1 text-xs text-red-500 dark:text-red-400">
+        <span className="block mt-1 text-xs text-error dark:text-error">
           {error}
         </span>
       )}
