@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button, Icon } from '@ui/index.ui';
 import { ProductInterface } from '@interfaces/Procuct.interface';
-import { ProductCard } from '../index';
+import { ProductCard } from '../../index';
 
 interface ProductListProps {
   products: ProductInterface[];

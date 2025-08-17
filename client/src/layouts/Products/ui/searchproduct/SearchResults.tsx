@@ -1,8 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ProductInterface } from '@interfaces/Procuct.interface';
-import { ProductList } from '../index';
-import { ProductDetail } from '../index';
+import { ProductList } from '../../index';
 
 interface SearchResultsProps {
   listProducts: ProductInterface[];
