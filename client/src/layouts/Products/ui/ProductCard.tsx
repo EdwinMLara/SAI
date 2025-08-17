@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Icon, IconButton } from '@ui/index.ui';
-import { ProductInterface } from '@/core/interfaces/Procuct.interface';
+import { ProductInterface } from '@interfaces/Procuct.interface';
 
 interface ProductCardProps {
   product: ProductInterface;

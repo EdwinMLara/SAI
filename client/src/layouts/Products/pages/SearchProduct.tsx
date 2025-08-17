@@ -3,8 +3,13 @@ import { motion } from 'framer-motion';
 
 import { Button, Icon } from '@ui/index.ui';
 
-import { SearchForm, ProductList, ProductDetail } from './ui';
-import { useProductSearch, useSearchOptions } from '@/layouts/Products/hooks';
+import {
+  SearchForm,
+  ProductList,
+  ProductDetail,
+  useProductSearch,
+  useSearchOptions,
+} from '../index';
 
 const SearchProduct = () => {
   const {

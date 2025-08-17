@@ -1,10 +1,10 @@
-import axios from '../config/axios.config';
+import axios from '@config/axios.config';
 
 import {
   UserCredentials,
   PublicUser,
   NewUser,
-} from '../interfaces/User.interfaces';
+} from '@interfaces/User.interfaces';
 
 /* ------------------ Code ------------------ */
 

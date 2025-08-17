@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from 'react';
 
-import { InputFile } from '@ui/index.ui';
-import Button from '@/components/ui/Button';
+import { InputFile, Button } from '@ui/index.ui';
 
-import useProcessFile from '@/layouts/Products/hooks/useProcessFile';
-import useLastUpdate from '@/layouts/Products/hooks/useLastUpdate';
+import { useProcessFile, useLastUpdate } from '../';
 import { ProductInterface } from '@interfaces/Procuct.interface';
 
 import * as services from '@services/Products.services';

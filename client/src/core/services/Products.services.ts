@@ -1,6 +1,6 @@
-import axios from '../config/axios.config';
+import axios from '@config/axios.config';
 
-import { ProductInterface } from '../interfaces/Procuct.interface';
+import { ProductInterface } from '@interfaces/Procuct.interface';
 
 /* ------------------ Code ------------------ */
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as services from '@services/Products.services';
-import { ProductInterface } from '@/core/interfaces/Procuct.interface';
+import { ProductInterface } from '@interfaces/Procuct.interface';
 
 const useProductSearch = () => {
   const [search, setSearch] = useState<string>('');
