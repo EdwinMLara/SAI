@@ -51,7 +51,7 @@ const navigationItems: NavigationItem[] = [
       },
       {
         id: 'products',
-        label: 'Editar producto',
+        label: 'Cotizaciones',
         path: '/products/quotations',
       },
       {
