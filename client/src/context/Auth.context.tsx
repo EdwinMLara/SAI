@@ -40,6 +40,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const handleAutoLogout = () => {
+      setUser(null);
+      setIsAuthenticated(false);
+      setIsLoading(false);
+      setSessionChecked(true);
+      navigate('/auth/login');
+    };
+
+    window.addEventListener('auth:logout', handleAutoLogout);
+    return () => window.removeEventListener('auth:logout', handleAutoLogout);
+  }, [navigate]);
+
+  useEffect(() => {
     if (sessionChecked) return;
 
     const fetchSession = async () => {
@@ -47,25 +60,30 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const sessionData = await services.session();
         setSessionChecked(true);
 
-        if (sessionData.refresh && !sessionData.access) {
+        if (sessionData.isAuthenticated && sessionData.user) {
+          setUser(sessionData.user);
+          setIsAuthenticated(true);
+        } else if (sessionData.refresh && !sessionData.access) {
           try {
             const refreshResponse = await services.refresh();
-            if (refreshResponse.status === 200) {
-              setUser(refreshResponse.user || null);
+            if (refreshResponse.status === 200 && refreshResponse.user) {
+              setUser(refreshResponse.user);
               setIsAuthenticated(refreshResponse.isAuthenticated || false);
             } else {
               setUser(null);
               setIsAuthenticated(false);
             }
           } catch (error) {
+            console.warn('Error during token refresh:', error);
             setUser(null);
             setIsAuthenticated(false);
           }
         } else {
-          setUser(sessionData.user);
-          setIsAuthenticated(sessionData.isAuthenticated);
+          setUser(null);
+          setIsAuthenticated(false);
         }
       } catch (error) {
+        console.warn('Error fetching session:', error);
         setUser(null);
         setIsAuthenticated(false);
         setSessionChecked(true);

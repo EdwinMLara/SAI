@@ -5,10 +5,9 @@ import { UserInfoAtToken } from '../types/index';
 import responses from '@responses';
 import AppError from '@utils/AppError';
 
-/* ------------------ Code ------------------ */
-
 export function verifyToken(token: string): boolean {
   try {
+    if (!token) return false;
     return tokens.verifyToken(token);
   } catch (error) {
     if (error instanceof AppError) {
@@ -31,5 +30,25 @@ export function userData(token: string): UserInfoAtToken {
       throw error;
     }
     throw new AppError(responses.System.serverError, 500, error);
+  }
+}
+
+export function validateTokenPair(
+  accessToken: string,
+  refreshToken: string
+): {
+  hasValidAccess: boolean;
+  hasValidRefresh: boolean;
+} {
+  try {
+    return {
+      hasValidAccess: verifyToken(accessToken),
+      hasValidRefresh: verifyToken(refreshToken),
+    };
+  } catch (error) {
+    return {
+      hasValidAccess: false,
+      hasValidRefresh: false,
+    };
   }
 }

@@ -38,13 +38,34 @@ export async function session(): Promise<{
   access: boolean;
   refresh: boolean;
 }> {
-  const response = await axios.get('/auth/session');
-  return {
-    user: response.data.all?.user || null,
-    isAuthenticated: response.data.all?.isAuthenticated || false,
-    access: response.data.all?.access || false,
-    refresh: response.data.all?.refresh || false,
-  };
+  try {
+    const response = await axios.get('/auth/session');
+    const data = response.data.all || response.data;
+
+    return {
+      user: data.user || null,
+      isAuthenticated: data.isAuthenticated || false,
+      access: data.access !== false,
+      refresh: data.refresh !== false,
+    };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response?.status === 401) {
+      const errorData = error.response.data as any;
+      return {
+        user: null,
+        isAuthenticated: false,
+        access: errorData.access || false,
+        refresh: errorData.refresh || false,
+      };
+    }
+    console.warn('Error in session service:', error);
+    return {
+      user: null,
+      isAuthenticated: false,
+      access: false,
+      refresh: false,
+    };
+  }
 }
 
 export async function logout(): Promise<{

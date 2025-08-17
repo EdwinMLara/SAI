@@ -73,27 +73,15 @@ export async function refreshToken(
 ): Promise<void> {
   try {
     const { refreshToken } = req.cookies;
-
-    if (!refreshToken) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
-
-    if (!authHelpers.verifyToken(refreshToken)) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
-    const userData = authHelpers.userData(refreshToken);
-
-    if (!userData || !userData.id) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
-
-    const user = await userServices.getUserById(userData.id);
-    await cookies.setAuthToken(res, user);
-    const publicUser = await helpers.returnUser(user);
+    const { user, publicUser } = await services.refreshUserTokens(
+      refreshToken,
+      res
+    );
+    const returnUser = await helpers.returnUser(user);
 
     res.status(200).json({
       message: responses.System.ok,
-      user: publicUser,
+      user: returnUser,
       isAuthenticated: true,
     });
   } catch (error) {
@@ -127,11 +115,18 @@ export async function sessionState(
   next: NextFunction
 ): Promise<void> {
   try {
+    const tokenStatus = req.tokenStatus || {
+      hasValidAccess: false,
+      hasValidRefresh: false,
+    };
+
     if (!req.user || !req.user.id) {
       res.status(200).json({
         message: responses.System.ok,
         isAuthenticated: false,
         user: null,
+        access: tokenStatus.hasValidAccess,
+        refresh: tokenStatus.hasValidRefresh,
       });
       return;
     }
@@ -142,6 +137,8 @@ export async function sessionState(
       message: responses.System.ok,
       isAuthenticated: true,
       user: publicUser,
+      access: tokenStatus.hasValidAccess,
+      refresh: tokenStatus.hasValidRefresh,
     });
   } catch (error) {
     if (error instanceof AppError) {

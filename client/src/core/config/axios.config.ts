@@ -1,14 +1,28 @@
-import axios, { AxiosResponse, AxiosError } from 'axios';
+import axios, {
+  AxiosResponse,
+  AxiosError,
+  InternalAxiosRequestConfig,
+} from 'axios';
 
 import { ApiResponse } from '@interfaces/Api.interfaces';
 
 import env from '../common/env';
 
-/* ------------------ Code ------------------ */
-
 axios.defaults.baseURL = '/api';
 axios.defaults.withCredentials = true;
 axios.defaults.timeout = 10000;
+
+let isRefreshing = false;
+let refreshSubscribers: Array<(token?: string) => void> = [];
+
+const addRefreshSubscriber = (callback: (token?: string) => void) => {
+  refreshSubscribers.push(callback);
+};
+
+const onRefreshed = (token?: string) => {
+  refreshSubscribers.forEach((callback) => callback(token));
+  refreshSubscribers = [];
+};
 
 axios.interceptors.response.use(
   (response: AxiosResponse) => {
@@ -25,7 +39,42 @@ axios.interceptors.response.use(
       },
     };
   },
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
+    const originalRequest = error.config as InternalAxiosRequestConfig & {
+      _retry?: boolean;
+    };
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      const errorData = error.response.data as any;
+
+      if (errorData.refresh === true && errorData.access === false) {
+        if (!isRefreshing) {
+          isRefreshing = true;
+          originalRequest._retry = true;
+
+          try {
+            const refreshResponse = await axios.get('/auth/refresh');
+            if (refreshResponse.status === 200) {
+              isRefreshing = false;
+              onRefreshed();
+              return axios(originalRequest);
+            }
+          } catch (refreshError) {
+            isRefreshing = false;
+            onRefreshed();
+            window.dispatchEvent(new CustomEvent('auth:logout'));
+            return Promise.reject(refreshError);
+          }
+        } else {
+          return new Promise((resolve) => {
+            addRefreshSubscriber(() => {
+              resolve(axios(originalRequest));
+            });
+          });
+        }
+      }
+    }
+
     if (error.response?.data) {
       const errorData = error.response.data as any;
       log(errorData);

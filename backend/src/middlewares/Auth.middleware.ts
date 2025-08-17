@@ -5,17 +5,20 @@ import * as helpers from '@helpers/Auth.helpers';
 import responses from '@responses';
 import AppError from '@utils/AppError';
 
-/* ------------------ Code ------------------ */
-
 const Identity = (req: Request, res: Response, next: NextFunction): void => {
   if (req.url.startsWith('/api/auth/')) {
     return next();
   }
+
   try {
     const { accessToken, refreshToken } = req.cookies;
+    const tokenValidation = helpers.validateTokenPair(
+      accessToken,
+      refreshToken
+    );
 
-    if (helpers.verifyToken(refreshToken)) {
-      if (helpers.verifyToken(accessToken)) {
+    if (tokenValidation.hasValidRefresh) {
+      if (tokenValidation.hasValidAccess) {
         const user = helpers.userData(accessToken);
         if (!user || !user.email) {
           throw new AppError(responses.System.authenticationError, 401);
@@ -46,6 +49,40 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
   }
 };
 
+const SessionChecker = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): void => {
+  try {
+    const { accessToken, refreshToken } = req.cookies;
+    const tokenValidation = helpers.validateTokenPair(
+      accessToken,
+      refreshToken
+    );
+
+    req.tokenStatus = {
+      hasValidAccess: tokenValidation.hasValidAccess,
+      hasValidRefresh: tokenValidation.hasValidRefresh,
+    };
+
+    if (tokenValidation.hasValidAccess) {
+      const user = helpers.userData(accessToken);
+      if (user && user.email) {
+        req.user = user;
+      }
+    }
+
+    next();
+  } catch (error) {
+    req.tokenStatus = {
+      hasValidAccess: false,
+      hasValidRefresh: false,
+    };
+    next();
+  }
+};
+
 const Authorize = (...allow: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
@@ -69,4 +106,4 @@ const Authorize = (...allow: string[]) => {
 };
 
 export default Identity;
-export { Authorize };
+export { Authorize, SessionChecker };
