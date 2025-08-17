@@ -1,145 +1,40 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Input, Button } from '@ui/index.ui';
-import { useAuth } from '@/context/Auth.context';
-import { useFormValidation } from '@/hooks/useFormValidations';
-import { UserCredentials, NewUser } from '@/core/interfaces/User.interfaces';
+import { useRegister } from '../index';
 
-/* ------------------ Code ------------------ */
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
+    },
+  },
+};
 
-const RegisterForm = () => {
-  const navigate = useNavigate();
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
 
-  const [isLoginForm, setIsLoginForm] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
-  const [resStatus, setStatus] = useState<number>();
-  const [resMessage, setMessage] = useState<string>();
-  const { register } = useAuth();
+const RegisterForm: React.FC = () => {
   const {
+    registerData,
+    confirmPassword,
+    isLoading,
+    resStatus,
+    resMessage,
     errors,
-    validateForm,
-    clearError,
-    formatName,
-    formatUsername,
-    processName,
-    formatPhone,
-  } = useFormValidation();
-
-  const [registerData, setRegisterData] = useState<NewUser>({
-    name: '',
-    username: '',
-    email: '',
-    phone: '',
-    password: '',
-  });
-
-  const [confirmPassword, setConfirmPassword] = useState('');
-
-  const validateRegister = (): boolean => {
-    const formData = {
-      name: registerData.name,
-      username: registerData.username,
-      email: registerData.email,
-      phone: registerData.phone,
-      password: registerData.password,
-      confirmPassword: confirmPassword,
-    };
-
-    return validateForm(
-      formData,
-      {
-        name: true,
-        username: true,
-        email: true,
-        phone: true,
-        password: true,
-        confirmPassword: registerData.password,
-      },
-      { password: registerData.password }
-    );
-  };
-
-  const handleRegister = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateRegister()) {
-      setMessage('');
-      return;
-    }
-
-    setIsLoading(true);
-
-    const request = await register({
-      ...registerData,
-      name: registerData.name.trim(),
-      username: registerData.username.trim(),
-      phone: registerData.phone.trim(),
-    });
-    setMessage(request.message);
-    setStatus(request.status);
-    if (request.status === 200) {
-      setTimeout(() => {
-        navigate('/');
-      }, 2000);
-    }
-    setIsLoading(false);
-  };
-
-  const handleRegisterInputChange =
-    (field: keyof NewUser) => (e: React.ChangeEvent<HTMLInputElement>) => {
-      let value = e.target.value;
-
-      if (field === 'email' || field === 'password') {
-        value = value.replace(/\s/g, '');
-      }
-
-      if (field === 'name') {
-        value = formatName(value);
-      } else if (field === 'username') {
-        value = formatUsername(value);
-      } else if (field === 'phone') {
-        value = formatPhone(value);
-      }
-
-      setRegisterData((prev) => ({
-        ...prev,
-        [field]: field === 'name' ? processName(value) : value,
-      }));
-
-      if (errors[field]) {
-        clearError(field);
-      }
-    };
-
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = e.target.value.replace(/\s/g, '');
-    setConfirmPassword(value);
-    if (errors.confirmPassword) {
-      clearError('confirmPassword');
-    }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
+    handleRegister,
+    handleRegisterInputChange,
+    handleConfirmPasswordChange,
+  } = useRegister();
 
   return (
     <AnimatePresence mode="wait">
@@ -250,6 +145,7 @@ const RegisterForm = () => {
             </Button>
           </motion.div>
         </motion.form>
+
         {resMessage && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}

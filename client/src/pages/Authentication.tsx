@@ -5,8 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from '@ui/Button';
 import { useAuth } from '@/context/Auth.context';
 
-import LoginForm from '@/components/helpers/LoginForm';
-import RegisterForm from '@/components/helpers/RegisterForm';
+import LoginForm from '@layouts/autentication/pages/LoginForm';
+import RegisterForm from '@layouts/autentication/pages/RegisterForm';
 
 /* ------------------ Code ------------------ */
 

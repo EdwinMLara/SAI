@@ -1,73 +1,37 @@
-import React, { useContext, useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import { Input, Button } from '@ui/index.ui';
-import { useAuth } from '@/context/Auth.context';
-import { UserCredentials } from '@interfaces/User.interfaces';
+import { useLogin } from '../index';
 
-/* ------------------ Code ------------------ */
-
-const LoginForm = () => {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const { login } = useAuth();
-
-  const [resStatus, setStatus] = useState<number>();
-  const [resMessage, setMessage] = useState<string>();
-  const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [loginData, setLoginData] = useState<UserCredentials>({
-    email: '',
-    password: '',
-  });
-
-  const handleLogin = async (event: React.FormEvent) => {
-    event.preventDefault();
-    setIsLoading(true);
-    const request = await login(loginData);
-    setMessage(request.message);
-    setStatus(request.status);
-    if (request.status === 200) {
-      setTimeout(() => {
-        // Redirigir a la ruta de origen o a la raíz como fallback
-        const from = location.state?.from?.pathname || '/';
-        navigate(from);
-      }, 2000);
-    }
-    setIsLoading(false);
-  };
-
-  const handleLoginInputChange =
-    (field: keyof UserCredentials) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      let value = e.target.value;
-      if (field === 'email' || field === 'password') {
-        value = value.replace(/\s/g, '');
-      }
-      setLoginData((prev) => ({
-        ...prev,
-        [field]: value,
-      }));
-    };
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.1,
-      },
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.1,
+      delayChildren: 0.1,
     },
-  };
+  },
+};
 
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-    },
-  };
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+  },
+};
+
+const LoginForm: React.FC = () => {
+  const {
+    loginData,
+    isLoading,
+    resStatus,
+    resMessage,
+    handleLogin,
+    handleLoginInputChange,
+  } = useLogin();
 
   return (
     <AnimatePresence mode="wait">
@@ -96,7 +60,7 @@ const LoginForm = () => {
               value={loginData.email}
               onChange={handleLoginInputChange('email')}
               disabled={isLoading}
-            ></Input>
+            />
           </motion.div>
 
           <motion.div variants={itemVariants}>
@@ -127,6 +91,7 @@ const LoginForm = () => {
             </Button>
           </motion.div>
         </motion.form>
+
         {resMessage && (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
