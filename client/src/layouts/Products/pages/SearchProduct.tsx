@@ -1,12 +1,12 @@
 import React from 'react';
-import { motion } from 'framer-motion';
-
-import { Button, Icon } from '@ui/index.ui';
 
 import {
   SearchForm,
-  ProductList,
-  ProductDetail,
+  SearchHeader,
+  SearchContainer,
+  SearchResults,
+  EmptyState,
+  LoadingState,
   useProductSearch,
   useSearchOptions,
 } from '../index';
@@ -25,77 +25,54 @@ const SearchProduct = () => {
     clearProductList,
   } = useProductSearch();
 
-  const { addImages, multiSearch, handleShowImages, handleMultiSearch } =
-    useSearchOptions();
+  const { addImages, handleShowImages } = useSearchOptions();
 
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    handleSearch(e, multiSearch);
+  const hasResults = listProducts.length > 0 || Boolean(productSearch);
+  const showEmptyState = !hasResults && !isLoading;
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    handleSearch(e);
   };
 
-  const onMultiSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    handleMultiSearch(e, clearProductList);
+  const handleClearAll = () => {
+    clearSearch();
   };
-
-  const hasResults = listProducts.length > 0 || productSearch;
 
   return (
-    <div className="flex flex-col gap-8 max-w-7xl mx-auto">
-      <motion.div
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center justify-between"
-      >
-        <div className="flex items-center gap-4">
-          <div>
-            <h1 className="text-2xl font-bold text-primary-color">
-              Buscar Productos
-            </h1>
-          </div>
-        </div>
+    <div className="min-h-screen bg-background">
+      <div className="max-w-7xl mx-auto p-4 sm:p-6 space-y-6 sm:space-y-8">
+        <SearchHeader hasResults={hasResults} onClearAll={handleClearAll} />
 
-        {hasResults && (
-          <Button
-            variant="ghost"
-            onClick={clearSearch}
-            className="flex items-center gap-2"
-          >
-            <Icon name="FaTrash" size={16} />
-            Limpiar búsquedas
-          </Button>
-        )}
-      </motion.div>
+        <SearchContainer>
+          <SearchForm
+            search={search}
+            setSearch={setSearch}
+            isLoading={isLoading}
+            searchError={searchError}
+            addImages={addImages}
+            onSubmit={handleSubmit}
+            onShowImagesChange={handleShowImages}
+          />
+        </SearchContainer>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="bg-card rounded-md shadow-medium border border-light p-6"
-      >
-        <SearchForm
-          search={search}
-          setSearch={setSearch}
-          isLoading={isLoading}
-          searchError={searchError}
-          multiSearch={multiSearch}
+        <SearchResults
+          listProducts={listProducts}
+          productSearch={productSearch}
           addImages={addImages}
-          onSubmit={onSubmit}
-          onMultiSearchChange={onMultiSearchChange}
-          onShowImagesChange={handleShowImages}
-        />
-      </motion.div>
-
-      {listProducts.length > 0 && multiSearch && (
-        <ProductList
-          products={listProducts}
-          showImages={addImages}
           onRemoveProduct={removeProduct}
           onClearList={clearProductList}
         />
-      )}
 
-      {productSearch && !multiSearch && (
-        <ProductDetail product={productSearch} showImages={addImages} />
-      )}
+        <LoadingState
+          isVisible={isLoading}
+          message="Estamos buscando el producto en la base de datos..."
+        />
+
+        <EmptyState
+          isVisible={showEmptyState}
+          message="Introduce un código de producto para comenzar la búsqueda"
+        />
+      </div>
     </div>
   );
 };

@@ -11,10 +11,7 @@ const useProductSearch = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string>('');
 
-  const handleSearch = async (
-    e: React.FormEvent<HTMLFormElement>,
-    multiSearch: boolean
-  ) => {
+  const handleSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!search.trim()) return;
 
@@ -25,13 +22,9 @@ const useProductSearch = () => {
       const response = await services.getProduct({ key: search.trim() });
       if (response.product) {
         setProductSearch(response.product);
-        if (multiSearch) {
-          const exists = listProducts.some(
-            (p) => p.key === response.product.key
-          );
-          if (!exists) {
-            setListProducts((prev) => [...prev, response.product]);
-          }
+        const exists = listProducts.some((p) => p.key === response.product.key);
+        if (!exists) {
+          setListProducts((prev) => [...prev, response.product]);
         }
       } else {
         setSearchError('Producto no encontrado');
