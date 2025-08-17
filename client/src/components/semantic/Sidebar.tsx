@@ -140,7 +140,7 @@ const Sidebar: React.FC = () => {
       <motion.aside
         variants={sidebarVariants}
         animate={isOpen ? 'open' : 'closed'}
-        className={`fixed left-0 top-0 h-full bg-card border-r border-light shadow-medium z-40 flex flex-col ${
+        className={`fixed left-0 top-0 h-full bg-card rounded-l-none border-light shadow-medium z-40 flex flex-col ${
           isMobile ? (isOpen ? 'translate-x-0' : '-translate-x-full') : ''
         }`}
       >
