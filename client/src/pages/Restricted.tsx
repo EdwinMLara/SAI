@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import Button from '../components/ui/Button';
+import { Button } from '@ui/index.ui';
 
 const Restricted: React.FC = () => {
   const navigate = useNavigate();

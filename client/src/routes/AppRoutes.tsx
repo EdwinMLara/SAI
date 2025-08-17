@@ -7,10 +7,7 @@ import Restricted from '@pages/Restricted';
 import MainLayout from '@/pages/MainLayout';
 import Authentication from '@/pages/Authentication';
 
-import Home from '@/layouts/Home';
-import Quotations from '@/layouts/Products/Quotations';
-import DatabaseProduct from '@/layouts/Products/DatabaseProduct';
-import SearchProduct from '@/layouts/Products/SearchProduct';
+import Home from '@/pages/Home';
 
 /* ------------------ Code ------------------ */
 
@@ -22,11 +19,7 @@ const AppRoutes = () => {
       <Route path="/" element={<MainLayout />}>
         <Route element={<Protected />}>
           <Route index element={<Home />} />
-          <Route path="/products/search" element={<SearchProduct />} />
-          <Route element={<AdminProtected />}>
-            <Route path="/products/database" element={<DatabaseProduct />} />
-            <Route path="/products/quotations" element={<Quotations />} />
-          </Route>
+          <Route element={<AdminProtected />}></Route>
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />
