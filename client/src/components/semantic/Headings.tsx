@@ -41,7 +41,6 @@ export const H4: React.FC<HeadingProps> = ({ children, className = '' }) => {
   );
 };
 
-// Exportar todos los headings en un objeto para facilitar el uso
 export const Headings = {
   H1,
   H2,

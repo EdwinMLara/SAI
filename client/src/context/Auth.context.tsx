@@ -121,7 +121,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(true);
     setUser(registerRequest.user);
     setSessionChecked(true);
-    setIsLoading(false); // Asegurar que loading se desactive después del registro
+    setIsLoading(false);
     return { message: registerRequest.message, status: registerRequest.status };
   };
 
@@ -130,7 +130,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     if (response.status === 200) {
       setUser(null);
       setIsAuthenticated(false);
-      setIsLoading(false); // Resetear loading después del logout
+      setIsLoading(false);
     }
   };
 
