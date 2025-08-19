@@ -1,6 +1,3 @@
-.hover-bg-secondary {
-  @apply hover:bg-gray-200 dark:hover:bg-gray-700;
-}
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
 
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap');
@@ -223,6 +220,10 @@
   }
 
   /* ===== EFECTOS Y ANIMACIONES SEPARADOS ===== */
+  .hover-bg-secondary {
+    @apply hover:bg-gray-200 dark:hover:bg-gray-700;
+  }
+
   .hover-lift {
     @apply transition-[all] duration-200 ease-in-out hover:-translate-y-1 hover:shadow-strong;
     @apply dark:hover:shadow-dark-strong;
