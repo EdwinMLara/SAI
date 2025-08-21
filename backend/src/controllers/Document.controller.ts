@@ -4,7 +4,7 @@ import * as services from '@services/Document.services';
 import * as helpers from '@helpers/Document.helpers';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
@@ -21,7 +21,7 @@ export async function uploadFile(
     const url = await services.uploadFile(file, filename);
     res.status(200).json({
       message: responses.Document.uploadSuccess,
-      url: url,
+      data: { url: url },
     });
   } catch (error) {
     if (error instanceof AppError) {
@@ -41,7 +41,10 @@ export async function readDocumentURL(
     const filename = `document_${invoiceId}.pdf`;
     await helpers.comprobeExistence(filename);
     const url = await services.getUrlFile(filename);
-    res.status(200).json({ message: responses.System.ok, url: url });
+    res.status(200).json({
+      message: responses.System.ok,
+      data: { url: url },
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
@@ -61,7 +64,10 @@ export async function updateDocument(
     await helpers.comprobeExistence(filename);
     const file = (req as any).file as Express.Multer.File;
     const url = await services.updateFile(file, filename);
-    res.status(200).json({ message: responses.Document.updated, url: url });
+    res.status(200).json({
+      message: responses.Document.updated,
+      data: { url: url },
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

@@ -1,25 +1,27 @@
-import { Response, NextFunction, Request } from 'express';
+import { Request, Response, NextFunction } from 'express';
+
+import { StandardResponse } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
-
-interface ApiResponse<T extends { message: string } = any> {
-  status: number;
-  data: T;
-}
 
 const ResponseMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): void => {
   const originalJson = res.json;
-  res.json = function <T extends { message: string }>(data: T): Response {
-    const formattedResponse: ApiResponse<T> = {
+
+  res.json = function <T = any>(payload: any): Response {
+    const response: StandardResponse<T> = {
       status: res.statusCode,
-      data: data,
+      success: res.statusCode < 400,
+      message: payload.message,
+      data: payload.data ?? payload ?? null,
     };
-    return originalJson.call(this, formattedResponse);
+
+    return originalJson.call(this, response);
   };
+
   next();
 };
 

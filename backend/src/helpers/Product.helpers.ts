@@ -1,7 +1,7 @@
 import * as services from '@services/Product.services';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 

@@ -3,7 +3,7 @@ import { Request, NextFunction, Response } from 'express';
 import * as helpers from '@helpers/Auth.helpers';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 const Identity = (req: Request, res: Response, next: NextFunction): void => {
   if (req.url.startsWith('/api/auth/')) {
@@ -28,16 +28,20 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
       } else {
         res.status(401).json({
           message: responses.System.authenticationError,
-          access: false,
-          refresh: true,
+          data: {
+            access: false,
+            refresh: true,
+          },
         });
         return;
       }
     } else {
       res.status(401).json({
         message: responses.System.authenticationError,
-        access: false,
-        refresh: false,
+        data: {
+          access: false,
+          refresh: false,
+        },
       });
       return;
     }

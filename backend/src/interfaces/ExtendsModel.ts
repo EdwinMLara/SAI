@@ -4,7 +4,7 @@ import {
   ProductInt,
   InvoiceInt,
   InviteInt,
-} from '@cmm_interfaces/index.interfaces';
+} from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 

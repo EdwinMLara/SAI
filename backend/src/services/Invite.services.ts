@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongoose';
 
 import InviteModel from '@models/Invite.model';
-import { InviteInt } from '@cmm_interfaces/index.interfaces';
+import { InviteInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 

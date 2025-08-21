@@ -1,9 +1,9 @@
 import ProductModel from '@models/Product.model';
 
-import { ProductInt } from '@cmm_interfaces/index.interfaces';
+import { ProductInt } from '@cmm_interfaces/index';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 

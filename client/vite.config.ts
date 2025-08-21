@@ -1,12 +1,10 @@
 import { defineConfig } from 'vite';
-import dotenv from 'dotenv';
 import react from '@vitejs/plugin-react';
 import { fileURLToPath } from 'url';
 import { dirname, resolve } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-dotenv.config();
 
 export default defineConfig({
   plugins: [react()],
@@ -14,10 +12,11 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname, './src'),
       '@components': resolve(__dirname, './src/components'),
+      '@cmm_interfaces': resolve(__dirname, '../common/interfaces/*'),
       '@ui': resolve(__dirname, './src/components/ui'),
       '@services': resolve(__dirname, './src/core/services'),
       '@interfaces': resolve(__dirname, './src/core/interfaces'),
-      '@common': resolve(__dirname, './src/core/common'),
+      '@common': resolve(__dirname, '../common'),
       '@managment': resolve(__dirname, './src/core/managment'),
       '@config': resolve(__dirname, './src/core/config'),
       '@utils': resolve(__dirname, './src/utils'),

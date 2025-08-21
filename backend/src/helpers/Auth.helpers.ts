@@ -3,7 +3,7 @@ import * as tokens from '@auth/tokens';
 import { UserInfoAtToken } from '../types/index';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 export function verifyToken(token: string): boolean {
   try {

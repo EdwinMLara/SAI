@@ -2,7 +2,7 @@ import env from '@config/env';
 import supabase from '@config/supabase';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 

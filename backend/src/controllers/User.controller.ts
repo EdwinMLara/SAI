@@ -4,10 +4,10 @@ import * as helpers from '@helpers/User.helpers';
 import * as services from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 
-import { UserChangesInt } from '@cmm_interfaces/index.interfaces';
+import { UserChangesInt } from '@cmm_interfaces/index';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
@@ -23,7 +23,7 @@ export async function updateUser(
 
     res.status(200).json({
       message: responses.User.updated,
-      user: await helpers.returnUser(changes),
+      data: { user: await helpers.returnUser(changes) },
     });
   } catch (error) {
     if (error instanceof AppError) {

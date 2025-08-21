@@ -4,108 +4,213 @@ import axios, {
   InternalAxiosRequestConfig,
 } from 'axios';
 
-import { ApiResponse } from '@interfaces/Api.interfaces';
+import env from '@config/env.config';
+import { StandardResponse } from '@cmm_interfaces/index';
 
-import env from '../common/env';
+/* ------------------ Code ------------------ */
 
-axios.defaults.baseURL = '/api';
-axios.defaults.withCredentials = true;
-axios.defaults.timeout = 10000;
-
-let isRefreshing = false;
-let refreshSubscribers: Array<(token?: string) => void> = [];
-
-const addRefreshSubscriber = (callback: (token?: string) => void) => {
-  refreshSubscribers.push(callback);
-};
-
-const onRefreshed = (token?: string) => {
-  refreshSubscribers.forEach((callback) => callback(token));
-  refreshSubscribers = [];
-};
-
-axios.interceptors.response.use(
-  (response: AxiosResponse) => {
-    const resData = response.data;
-    log(resData);
-
-    return {
-      ...response,
-      data: {
-        status: resData.status || response.status,
-        message:
-          resData.message || (resData.data && resData.data.message) || '',
-        all: resData.data || resData,
-      },
-    };
+/**
+ * Axios base instance configured with:
+ * - API base URL from environment variables
+ * - 10s timeout to prevent hanging requests
+ * - Credentials included for cookie/session authentication
+ * - Default headers for JSON content
+ */
+const axiosInstance = axios.create({
+  baseURL: `${env.VITE_API_HOST}:${env.VITE_API_PORT}`,
+  timeout: 10000,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json',
   },
-  async (error: AxiosError) => {
-    const originalRequest = error.config as InternalAxiosRequestConfig & {
-      _retry?: boolean;
-    };
+});
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
-      const errorData = error.response.data as any;
-
-      if (errorData.refresh === true && errorData.access === false) {
-        if (!isRefreshing) {
-          isRefreshing = true;
-          originalRequest._retry = true;
-
-          try {
-            const refreshResponse = await axios.get('/auth/refresh');
-            if (refreshResponse.status === 200) {
-              isRefreshing = false;
-              onRefreshed();
-              return axios(originalRequest);
-            }
-          } catch (refreshError) {
-            isRefreshing = false;
-            onRefreshed();
-            window.dispatchEvent(new CustomEvent('auth:logout'));
-            return Promise.reject(refreshError);
-          }
-        } else {
-          return new Promise((resolve) => {
-            addRefreshSubscriber(() => {
-              resolve(axios(originalRequest));
-            });
-          });
-        }
-      }
-    }
-
-    if (error.response?.data) {
-      const errorData = error.response.data as any;
-      log(errorData);
-      return Promise.resolve({
-        ...error.response,
-        data: {
-          status: errorData.status || error.response.status,
-          message:
-            (errorData.data && errorData.data.message) ||
-            errorData.message ||
-            'Error desconocido',
-          all: errorData.data || errorData,
-        },
-      });
-    }
-
-    return Promise.resolve({
-      ...error.response,
-      data: {
-        status: 500,
-        message: 'Error de conexión con el servidor',
-        all: null,
-      },
-    });
-  }
-);
-
-const log = (response: unknown) => {
-  if (env.NODE_ENV === 'development') {
-    console.log(response);
-  }
+/**
+ * Converts a successful Axios response to StandardResponse format.
+ * Extracts: status, success, message, and data from backend.
+ *
+ * @template T - Expected data type in response.data
+ * @param response - Axios response with backend structure
+ * @returns StandardResponse typed with backend data
+ */
+const toStandardResponse = <T = any>(
+  response: AxiosResponse
+): StandardResponse<T> => {
+  return {
+    status: response.status,
+    success: response.data.success,
+    message: response.data.message,
+    data: response.data.data,
+  } as StandardResponse<T>;
 };
 
-export default axios;
+/**
+ * Converts Axios errors to unified StandardResponse format.
+ * Handles:
+ * 1. Server errors (4xx, 5xx) - with backend response
+ * 2. Network/timeout errors - no server response
+ * 3. Config/setup errors
+ *
+ * @template T - Expected data type in case of error
+ * @param error - Full Axios error
+ * @returns StandardResponse with normalized error info
+ */
+const errorToStandardResponse = <T = any>(
+  error: AxiosError
+): StandardResponse<T> => {
+  // Error with server response (4xx, 5xx)
+  if (error.response && error.response.data) {
+    const data = error.response.data;
+
+    // If backend already returns StandardResponse
+    if (
+      data &&
+      typeof data === 'object' &&
+      'status' in data &&
+      'success' in data &&
+      'message' in data &&
+      'data' in data
+    ) {
+      return data as StandardResponse<T>;
+    }
+
+    // Create StandardResponse from non-standard backend response
+    return {
+      status: error.response.status,
+      success: error.response.status < 400,
+      message: 'Ocurrió un error inesperado',
+      data: data as T,
+    } as StandardResponse<T>;
+  }
+
+  // Network, timeout, or server unavailable error
+  if (error.request) {
+    return {
+      status: 0,
+      success: false,
+      message: 'Error de comunicación. Intente más tarde',
+      data: null,
+    } as StandardResponse<T>;
+  }
+
+  // Config or unknown error
+  return {
+    status: 500,
+    success: false,
+    message: 'Ocurrió un error inesperado. Vuelva a intentar',
+    data: null,
+  } as StandardResponse<T>;
+};
+
+/**
+ * Main API client that guarantees consistent responses.
+ * All methods return StandardResponse, whether the request succeeded or failed.
+ * This simplifies error handling by having a unified format.
+ *
+ * Methods: GET, POST, PUT, PATCH, DELETE
+ * All include generic typing for expected data.
+ */
+export const apiClient = {
+  /**
+   * Performs a GET request to the specified endpoint
+   * @template T - Expected data type in the response
+   * @param url - Endpoint relative to baseURL
+   * @param config - Additional Axios config (headers, params, etc.)
+   * @returns Promise<StandardResponse<T>> - Normalized response
+   */
+  get: async <T = any>(
+    url: string,
+    config?: any
+  ): Promise<StandardResponse<T>> => {
+    try {
+      const response = await axiosInstance.get(url, config);
+      return toStandardResponse<T>(response);
+    } catch (error) {
+      return errorToStandardResponse<T>(error as AxiosError);
+    }
+  },
+
+  /**
+   * Performs a POST request to the specified endpoint
+   * @template T - Expected data type in the response
+   * @param url - Endpoint relative to baseURL
+   * @param data - Data to send in the request body
+   * @param config - Additional Axios config
+   * @returns Promise<StandardResponse<T>> - Normalized response
+   */
+  post: async <T = any>(
+    url: string,
+    data?: any,
+    config?: any
+  ): Promise<StandardResponse<T>> => {
+    try {
+      const response = await axiosInstance.post(url, data, config);
+      return toStandardResponse<T>(response);
+    } catch (error) {
+      return errorToStandardResponse<T>(error as AxiosError);
+    }
+  },
+
+  /**
+   * Performs a PUT request to the specified endpoint
+   * @template T - Expected data type in the response
+   * @param url - Endpoint relative to baseURL
+   * @param data - Data to send in the request body
+   * @param config - Additional Axios config
+   * @returns Promise<StandardResponse<T>> - Normalized response
+   */
+  put: async <T = any>(
+    url: string,
+    data?: any,
+    config?: any
+  ): Promise<StandardResponse<T>> => {
+    try {
+      const response = await axiosInstance.put(url, data, config);
+      return toStandardResponse<T>(response);
+    } catch (error) {
+      return errorToStandardResponse<T>(error as AxiosError);
+    }
+  },
+
+  /**
+   * Performs a PATCH request to the specified endpoint
+   * @template T - Expected data type in the response
+   * @param url - Endpoint relative to baseURL
+   * @param data - Data to send in the request body
+   * @param config - Additional Axios config
+   * @returns Promise<StandardResponse<T>> - Normalized response
+   */
+  patch: async <T = any>(
+    url: string,
+    data?: any,
+    config?: any
+  ): Promise<StandardResponse<T>> => {
+    try {
+      const response = await axiosInstance.patch(url, data, config);
+      return toStandardResponse<T>(response);
+    } catch (error) {
+      return errorToStandardResponse<T>(error as AxiosError);
+    }
+  },
+
+  /**
+   * Performs a DELETE request to the specified endpoint
+   * @template T - Expected data type in the response
+   * @param url - Endpoint relative to baseURL
+   * @param config - Additional Axios config
+   * @returns Promise<StandardResponse<T>> - Normalized response
+   */
+  delete: async <T = any>(
+    url: string,
+    config?: any
+  ): Promise<StandardResponse<T>> => {
+    try {
+      const response = await axiosInstance.delete(url, config);
+      return toStandardResponse<T>(response);
+    } catch (error) {
+      return errorToStandardResponse<T>(error as AxiosError);
+    }
+  },
+};
+
+export default apiClient;

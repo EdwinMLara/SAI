@@ -11,7 +11,7 @@ export async function getProduct(
   return {
     status: response.status,
     message: response.data.message,
-    product: response.data.all?.product,
+    product: response.data.data?.product,
   };
 }
 
@@ -36,9 +36,9 @@ export async function getLastUpdate(): Promise<{
   const response = await axios.get('/products/lastUpdate');
   return {
     status: response.status,
-    message: response.data.all?.message ?? '',
-    lastUpdate: response.data.all?.lastUpdate
-      ? new Date(response.data.all.lastUpdate)
+    message: response.data.message,
+    lastUpdate: response.data.data?.lastUpdate
+      ? new Date(response.data.data.lastUpdate)
       : null,
   };
 }

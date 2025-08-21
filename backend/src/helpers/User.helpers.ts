@@ -3,13 +3,9 @@ import { ObjectId } from 'mongoose';
 import { hasInvite, getInvite } from '@services/Invite.services';
 import { findUserByUniqueFields } from '@services/User.services';
 import UserModel from '@models/User.model';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 import responses from '@responses';
-import {
-  UserChangesInt,
-  UserInt,
-  PublicUserInt,
-} from '@cmm_interfaces/index.interfaces';
+import { UserChangesInt, UserInt, PublicUserInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 

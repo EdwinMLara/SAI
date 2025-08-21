@@ -28,7 +28,7 @@ export async function register(user: NewUser): Promise<{
   return {
     status: response.status,
     message: response.data.message,
-    user: response.data.all?.user || null,
+    user: response.data.data?.user || null,
   };
 }
 
@@ -40,7 +40,7 @@ export async function session(): Promise<{
 }> {
   try {
     const response = await axios.get('/auth/session');
-    const data = response.data.all || response.data;
+    const data = response.data.data || response.data;
 
     return {
       user: data.user || null,
@@ -49,8 +49,10 @@ export async function session(): Promise<{
       refresh: data.refresh !== false,
     };
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.status === 401) {
-      const errorData = error.response.data as any;
+    // Para manejar respuestas de error, extraemos los datos directamente
+    const errorResponse = error as any;
+    if (errorResponse?.status === 401 && errorResponse?.data) {
+      const errorData = errorResponse.data.data || errorResponse.data;
       return {
         user: null,
         isAuthenticated: false,
@@ -87,14 +89,16 @@ export async function refresh(): Promise<{
     const response = await axios.get('/auth/refresh');
     return {
       status: response.status,
-      user: response.data.user || null,
-      isAuthenticated: response.data.isAuthenticated || false,
+      user: response.data.data?.user || null,
+      isAuthenticated: response.data.data?.isAuthenticated || false,
     };
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response) {
+    // Para manejar respuestas de error con el nuevo formato
+    const errorResponse = error as any;
+    if (errorResponse?.status && errorResponse?.data) {
       return {
-        status: error.response.status,
-        message: error.response.data.message || 'Error al refrescar el token',
+        status: errorResponse.status,
+        message: errorResponse.data.message || 'Error al refrescar el token',
         user: null,
         isAuthenticated: false,
       };

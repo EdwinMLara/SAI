@@ -23,7 +23,8 @@
       "@interfaces/*": ["src/core/interfaces/*"],
       "@managment/*": ["src/core/managment/*"],
       "@config/*": ["src/core/config/*"],
-      "@common/*": ["src/core/common/*"],
+      "@common/*": ["../common/*"],
+      "@cmm_interfaces/*": ["../common/interfaces/*"],
       "@context/*": ["src/context/*"],
       "@utils/*": ["src/utils/*"],
       "@pages/*": ["src/pages/*"],
@@ -33,6 +34,6 @@
       "@routes/*": ["src/routes/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "../common"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

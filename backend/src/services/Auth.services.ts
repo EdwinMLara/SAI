@@ -1,12 +1,12 @@
 import { compareHash } from '../utils/auth/crypt';
-import { UserInt } from '@cmm_interfaces/index.interfaces';
+import { UserInt } from '@cmm_interfaces/index';
 import * as authHelpers from '@helpers/Auth.helpers';
 import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 import { Response } from 'express';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 export async function login(user: UserInt, password: string): Promise<void> {
   try {

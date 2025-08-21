@@ -1,11 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
-import { ProductInt } from '@cmm_interfaces/index.interfaces';
+import { ProductInt } from '@cmm_interfaces/index';
 
 import * as helpers from '@helpers/Product.helpers';
 import * as services from '@services/Product.services';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
@@ -35,7 +35,10 @@ export async function getProduct(
     const keyProduct = helpers.getQuery(req.query.key);
     await helpers.comprobeExistence(keyProduct);
     const product = await services.getProduct(keyProduct);
-    res.status(200).json({ message: responses.System.ok, product: product });
+    res.status(200).json({
+      message: responses.System.ok,
+      data: { product: product },
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

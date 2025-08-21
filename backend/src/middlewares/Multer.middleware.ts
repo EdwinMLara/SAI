@@ -2,7 +2,7 @@ import multer, { FileFilterCallback } from 'multer';
 import { Request, Response, NextFunction } from 'express';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 

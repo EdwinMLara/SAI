@@ -3,10 +3,10 @@ import { Request, Response, NextFunction } from 'express';
 import * as helpers from '@helpers/Invoice.helpers';
 import * as services from '@services/Invoice.services';
 
-import { InvoiceInt } from '@cmm_interfaces/index.interfaces';
+import { InvoiceInt } from '@cmm_interfaces/index';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
@@ -38,7 +38,7 @@ export async function getInvoice(
     const invoice = await services.getInvoice(invoiceId);
     res.status(200).json({
       message: responses.System.ok,
-      invoice: invoice,
+      data: { invoice: invoice },
     });
   } catch (error) {
     if (error instanceof AppError) {

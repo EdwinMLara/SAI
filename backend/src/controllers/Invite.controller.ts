@@ -5,7 +5,7 @@ import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
@@ -44,7 +44,7 @@ export async function getInvites(
 
     res.status(200).json({
       message: responses.System.ok,
-      invites: list.data,
+      data: { invites: list.data },
     });
   } catch (error) {
     if (error instanceof AppError) {

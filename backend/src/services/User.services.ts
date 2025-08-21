@@ -1,10 +1,10 @@
 import { ObjectId } from 'mongoose';
 
 import UserModel from '@models/User.model';
-import { UserChangesInt, UserInt } from '@cmm_interfaces/index.interfaces';
+import { UserChangesInt, UserInt } from '@cmm_interfaces/index';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 import { comprobeUnicity } from '@helpers/User.helpers';
 
 /* ------------------ Code ------------------ */

@@ -1,17 +1,17 @@
-import { Request, Response, NextFunction } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
-import log from '@utils/Logger.utils';
-import AppError from '../utils/AppError';
+import log from '@utils/system/Logger.utils';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
 const ErrorMiddleware = (
-  err: Error,
+  err: AppError,
   req: Request,
   res: Response,
   next: NextFunction
-) => {
-  const returnCode = err instanceof AppError ? err.statusCode || 500 : 500;
+): void => {
+  const statusCode = err instanceof AppError ? err.statusCode || 500 : 500;
 
   log({
     level: 'error',
@@ -22,18 +22,20 @@ const ErrorMiddleware = (
       stackTrace: err.stack as string,
       endpoint: req.path,
       method: req.method,
-      statusCode: returnCode,
+      statusCode: statusCode,
     },
   });
 
   if (err instanceof AppError) {
-    return res.status(err.statusCode || 500).json({
-      message: err.message,
-    });
+    res.status(err.statusCode).json({ message: err.message });
+    return;
   }
 
-  return res.status(500).json({
-    message: 'Error interno del servidor',
+  res.status(500).json({
+    message: 'Internal server error',
   });
+
+  return;
 };
+
 export default ErrorMiddleware;

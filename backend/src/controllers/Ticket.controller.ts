@@ -4,7 +4,7 @@ import * as services from '@services/Ticket.services';
 import * as helpers from '@helpers/Ticket.helpers';
 
 import responses from '@responses';
-import AppError from '@utils/AppError';
+import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
@@ -21,7 +21,7 @@ export async function uploadFile(
     const url = await services.uploadFile(file, filename);
     res.status(200).json({
       message: responses.Ticket.generated,
-      url: url,
+      data: { url: url },
     });
   } catch (error) {
     if (error instanceof AppError) {
@@ -41,7 +41,10 @@ export async function readTicketURL(
     const filename = `ticket_${ticketId}.pdf`;
     await helpers.comprobeExistence(filename);
     const url = await services.getUrlFile(filename);
-    res.status(200).json({ message: responses.System.ok, url: url });
+    res.status(200).json({
+      message: responses.System.ok,
+      data: { url: url },
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
@@ -61,7 +64,10 @@ export async function updateTicket(
     await helpers.comprobeExistence(filename);
     const file = (req as any).file as Express.Multer.File;
     const url = await services.updateFile(file, filename);
-    res.status(200).json({ message: responses.Ticket.updated, url: url });
+    res.status(200).json({
+      message: responses.Ticket.updated,
+      data: { url: url },
+    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
