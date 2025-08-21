@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { ProductInterface } from '@interfaces/Product.interfaces';
+import { ProductInt } from '@cmm_interfaces/index.interfaces';
 
 import * as helpers from '@helpers/Product.helpers';
 import * as services from '@services/Product.services';
@@ -10,7 +10,7 @@ import AppError from '@utils/AppError';
 /* ------------------ Code ------------------ */
 
 export async function createProduct(
-  req: Request<{}, {}, ProductInterface>,
+  req: Request<{}, {}, ProductInt>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -28,7 +28,7 @@ export async function createProduct(
 
 export async function getProduct(
   req: Request,
-  res: Response<{}, ProductInterface>,
+  res: Response<{}, ProductInt>,
   next: NextFunction
 ): Promise<void> {
   try {
@@ -63,32 +63,13 @@ export async function deleteProduct(
 }
 
 export async function replaceAllProducts(
-  req: Request<{}, {}, ProductInterface[]>,
+  req: Request<{}, {}, ProductInt[]>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
     await services.replaceAllProducts(req.body);
     res.status(200).json({ message: responses.Product.replaced });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
-    return next(new AppError(responses.System.serverError, 500, error));
-  }
-}
-
-export async function getLastUpdate(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
-  try {
-    const lastUpdate = await services.getLastDatabaseUpdate();
-    res.status(200).json({
-      message: responses.System.ok,
-      lastUpdate: lastUpdate,
-    });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);

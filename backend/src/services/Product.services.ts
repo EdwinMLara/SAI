@@ -1,14 +1,13 @@
 import ProductModel from '@models/Product.model';
-import DatabaseUpdateModel from '@models/extras/DatabaseUpdate.model';
 
-import { ProductInterface } from '@interfaces/Product.interfaces';
+import { ProductInt } from '@cmm_interfaces/index.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
 
 /* ------------------ Code ------------------ */
 
-export async function createProduct(product: ProductInterface): Promise<void> {
+export async function createProduct(product: ProductInt): Promise<void> {
   try {
     const newProduct = new ProductModel(product);
     await newProduct.save();
@@ -17,9 +16,7 @@ export async function createProduct(product: ProductInterface): Promise<void> {
   }
 }
 
-export async function getProduct(
-  keyProduct: string
-): Promise<ProductInterface> {
+export async function getProduct(keyProduct: string): Promise<ProductInt> {
   try {
     const response = await ProductModel.findOne({ key: keyProduct });
 
@@ -27,7 +24,7 @@ export async function getProduct(
       throw new AppError(responses.Product.notFound, 404);
     }
 
-    return response as ProductInterface;
+    return response as ProductInt;
   } catch (error) {
     throw error;
   }
@@ -50,41 +47,17 @@ export async function existProduct(keyProduct: string): Promise<boolean> {
   }
 }
 
-export async function replaceAllProducts(
-  data: ProductInterface[]
-): Promise<void> {
+export async function replaceAllProducts(data: ProductInt[]): Promise<void> {
   const session = await ProductModel.startSession();
   session.startTransaction();
   try {
     await ProductModel.deleteMany({}, { session });
     await ProductModel.insertMany(data, { session });
-
-    const updateRecord = new DatabaseUpdateModel({
-      type: 'PRODUCTS_FULL_REPLACE',
-      timestamp: new Date(),
-      totalRecords: data.length,
-    });
-    await updateRecord.save({ session });
-
     await session.commitTransaction();
   } catch (error) {
     await session.abortTransaction();
     throw error;
   } finally {
     session.endSession();
-  }
-}
-
-export async function getLastDatabaseUpdate(): Promise<Date | null> {
-  try {
-    const lastUpdate = await DatabaseUpdateModel.findOne({
-      type: 'PRODUCTS_FULL_REPLACE',
-    })
-      .sort({ timestamp: -1 })
-      .exec();
-
-    return lastUpdate ? lastUpdate.timestamp : null;
-  } catch (error) {
-    throw error;
   }
 }

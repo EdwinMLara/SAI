@@ -1,6 +1,6 @@
 import winston from 'winston';
 import Transport from 'winston-transport';
-import { LogMetadata } from '../interfaces/Logs.interfaces';
+import { LogMetadataInt } from '../interfaces/Logs.interfaces';
 import env from '../config/env';
 
 import LogModel from '../models/Logs.model';
@@ -29,7 +29,7 @@ if (isProduction) {
       }
       const log = new LogModel({
         timestamp: ts,
-        level,
+        type: level,
         message,
         metadata: meta,
       });
@@ -67,7 +67,7 @@ type LogBase = {
   message: string;
 };
 
-type LogInput = LogBase & { metadata?: LogMetadata };
+type LogInput = LogBase & { metadata?: LogMetadataInt };
 
 function log({ level, message, metadata }: LogInput) {
   if (isProduction) {

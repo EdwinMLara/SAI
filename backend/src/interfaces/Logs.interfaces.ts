@@ -1,6 +1,8 @@
 import { Document } from 'mongoose';
 
-export interface LogMetadata {
+/* ------------------ Code ------------------ */
+
+export interface LogMetadataInt {
   user: string;
   clientIp: string;
   stackTrace: string;
@@ -9,9 +11,11 @@ export interface LogMetadata {
   statusCode: number;
 }
 
-export interface LogInterface extends Document {
+export interface LogInt {
   timestamp: Date;
-  level: string;
+  type: string;
   message: string;
-  metadata?: LogMetadata;
+  metadata?: LogMetadataInt;
 }
+
+export interface LogDocument extends LogInt, Document {}

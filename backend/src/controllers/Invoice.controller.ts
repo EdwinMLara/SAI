@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as helpers from '@helpers/Invoice.helpers';
 import * as services from '@services/Invoice.services';
 
-import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
+import { InvoiceInt } from '@cmm_interfaces/index.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -11,7 +11,7 @@ import AppError from '@utils/AppError';
 /* ------------------ Code ------------------ */
 
 export async function createInvoice(
-  req: Request<{}, {}, InvoiceInterface>,
+  req: Request<{}, {}, InvoiceInt>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
@@ -49,7 +49,7 @@ export async function getInvoice(
 }
 
 export async function updateInvoice(
-  req: Request<{}, {}, InvoiceInterface>,
+  req: Request<{}, {}, InvoiceInt>,
   res: Response,
   next: NextFunction
 ): Promise<void> {

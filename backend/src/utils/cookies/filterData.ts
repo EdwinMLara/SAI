@@ -1,9 +1,9 @@
 import { generateAccessToken, generateRefreshToken } from '@utils/auth/tokens';
 import { getIdUser } from '@services/User.services';
 import { RefreshTokenInfo, UserInfoAtToken } from '@types';
-import { UserInterface } from '@interfaces/User.interfaces';
+import { UserInt } from '@cmm_interfaces/index.interfaces';
 
-export async function getRefreshData(user: UserInterface): Promise<string> {
+export async function getRefreshData(user: UserInt): Promise<string> {
   try {
     const userId = await getIdUser(user.email);
     const refreshTokenInfo: RefreshTokenInfo = {
@@ -15,7 +15,7 @@ export async function getRefreshData(user: UserInterface): Promise<string> {
   }
 }
 
-export async function getAuthData(user: UserInterface): Promise<string> {
+export async function getAuthData(user: UserInt): Promise<string> {
   try {
     const userId = await getIdUser(user.email);
     const userInfoAtToken: UserInfoAtToken = {

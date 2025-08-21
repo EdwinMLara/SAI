@@ -1,31 +1,25 @@
 import mongoose, { Schema } from 'mongoose';
-import { LogInterface, LogMetadata } from '@interfaces/Logs.interfaces';
+import { LogDocument } from '@interfaces/Logs.interfaces';
 
-const MetadataSchema: Schema = new Schema<LogMetadata>(
-  {
-    user: { type: String, required: true },
-    clientIp: { type: String, required: true },
-    stackTrace: { type: String, required: true },
-    endpoint: { type: String, required: true },
-    method: { type: String, required: true },
-    statusCode: { type: Number, required: true },
-  },
-  {
-    _id: false,
-    timestamps: false,
-  }
-);
+/* ------------------ Code ------------------ */
 
-const LogSchema: Schema = new Schema<LogInterface>(
+const LogSchema: Schema = new Schema<LogDocument>(
   {
     timestamp: { type: Date, required: true },
-    level: { type: String, required: true },
+    type: { type: String, required: true },
     message: { type: String, required: true },
-    metadata: { type: MetadataSchema, required: false },
+    metadata: {
+      user: { type: String, required: true },
+      clientIp: { type: String, required: true },
+      stackTrace: { type: String, required: true },
+      endpoint: { type: String, required: true },
+      method: { type: String, required: true },
+      statusCode: { type: Number, required: true },
+    },
   },
   {
     timestamps: false,
   }
 );
 
-export default mongoose.model<LogInterface>('Logs', LogSchema);
+export default mongoose.model<LogDocument>('Log', LogSchema);

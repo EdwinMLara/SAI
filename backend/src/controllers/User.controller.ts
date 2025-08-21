@@ -4,7 +4,7 @@ import * as helpers from '@helpers/User.helpers';
 import * as services from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 
-import { UserChanges } from '@interfaces/User.interfaces';
+import { UserChangesInt } from '@cmm_interfaces/index.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -12,12 +12,12 @@ import AppError from '@utils/AppError';
 /* ------------------ Code ------------------ */
 
 export async function updateUser(
-  req: Request<{}, {}, Partial<UserChanges>>,
+  req: Request<{}, {}, Partial<UserChangesInt>>,
   res: Response,
   next: NextFunction
 ): Promise<void> {
   try {
-    const updates: Partial<UserChanges> = req.body;
+    const updates: Partial<UserChangesInt> = req.body;
     const changes = await services.updatedUser(req.user.id, updates);
     await cookies.setAuthToken(res, changes);
 

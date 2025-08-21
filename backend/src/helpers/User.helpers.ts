@@ -6,10 +6,10 @@ import UserModel from '@models/User.model';
 import AppError from '@utils/AppError';
 import responses from '@responses';
 import {
-  UserChanges,
-  UserInterface,
-  PublicUserData,
-} from '@interfaces/User.interfaces';
+  UserChangesInt,
+  UserInt,
+  PublicUserInt,
+} from '@cmm_interfaces/index.interfaces';
 
 /* ------------------ Code ------------------ */
 
@@ -42,32 +42,34 @@ export async function comprobeInvite(email: string): Promise<void> {
   }
 }
 
-export async function findRole(email: string): Promise<'admin' | 'user'> {
+export async function findRole(
+  email: string
+): Promise<'super' | 'admin' | 'user'> {
   try {
     const invite = await getInvite(email);
     if (!invite) {
       throw new AppError(responses.Invite.notWasInvite, 401);
     }
-    return invite.role;
+    return invite.asignedRole;
   } catch (error) {
     throw error;
   }
 }
 
-export async function returnUser(user: UserInterface): Promise<PublicUserData> {
+export async function returnUser(user: UserInt): Promise<PublicUserInt> {
   try {
-    const { image, name, userName, phone, email, role } = user;
-    return { image, name, userName, phone, email, role };
+    const { image, name, username, phone, email, role } = user;
+    return { image: image ?? '', name, username, phone, email, role };
   } catch (error) {
     throw error;
   }
 }
 
-export async function comprobeUnicity(user: UserInterface): Promise<void> {
+export async function comprobeUnicity(user: UserInt): Promise<void> {
   try {
     const result = await findUserByUniqueFields({
       email: user.email,
-      username: user.userName,
+      username: user.username,
       name: user.name,
       phone: user.phone,
     });

@@ -1,7 +1,7 @@
 import { ObjectId } from 'mongoose';
 
 import UserModel from '@models/User.model';
-import { UserChanges, UserInterface } from '@interfaces/User.interfaces';
+import { UserChangesInt, UserInt } from '@cmm_interfaces/index.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -9,7 +9,7 @@ import { comprobeUnicity } from '@helpers/User.helpers';
 
 /* ------------------ Code ------------------ */
 
-export async function createUser(user: UserInterface): Promise<void> {
+export async function createUser(user: UserInt): Promise<void> {
   try {
     const newUser = new UserModel(user);
     await newUser.save();
@@ -20,8 +20,8 @@ export async function createUser(user: UserInterface): Promise<void> {
 
 export async function updatedUser(
   user: string,
-  updates: Partial<UserChanges>
-): Promise<UserInterface> {
+  updates: Partial<UserChangesInt>
+): Promise<UserInt> {
   try {
     const updated = await UserModel.findOneAndUpdate({ _id: user }, updates, {
       new: true,
@@ -29,7 +29,7 @@ export async function updatedUser(
     if (!updated) {
       throw new AppError(responses.User.updateError, 500);
     }
-    return updated as UserInterface;
+    return updated as UserInt;
   } catch (error) {
     throw error;
   }
@@ -47,27 +47,25 @@ export async function getIdUser(email: string): Promise<ObjectId> {
   }
 }
 
-export async function getUserByObject(
-  userId: ObjectId
-): Promise<UserInterface> {
+export async function getUserByObject(userId: ObjectId): Promise<UserInt> {
   try {
     const user = await UserModel.findOne({ _id: userId });
     if (!user) {
       throw new AppError(responses.User.notfound, 404);
     }
-    return user as UserInterface;
+    return user as UserInt;
   } catch (error) {
     throw error;
   }
 }
 
-export async function getUserById(userId: string): Promise<UserInterface> {
+export async function getUserById(userId: string): Promise<UserInt> {
   try {
     const user = await UserModel.findOne({ _id: userId });
     if (!user) {
       throw new AppError(responses.User.notfound, 404);
     }
-    return user as UserInterface;
+    return user as UserInt;
   } catch (error) {
     throw error;
   }

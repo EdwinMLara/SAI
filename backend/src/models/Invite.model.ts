@@ -1,14 +1,16 @@
 import mongoose, { Schema } from 'mongoose';
-import { InviteInterface } from '../interfaces/Invite.interfaces';
+import { InviteDocument } from '@interfaces/ExtendsModel';
 
-const InviteSchema: Schema = new Schema<InviteInterface>({
-  ref: { type: Schema.Types.ObjectId, required: true, ref: 'users' },
-  email: { type: String, required: true, unique: true },
-  role: {
+/* ------------------ Code ------------------ */
+
+const InviteSchema: Schema = new Schema<InviteDocument>({
+  senderId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+  invitedEmail: { type: String, required: true, unique: true, index: true },
+  asignedRole: {
     type: String,
-    enum: ['admin', 'user'],
+    enum: ['super', 'admin', 'user'],
     required: true,
   },
 });
 
-export default mongoose.model<InviteInterface>('invites', InviteSchema);
+export default mongoose.model<InviteDocument>('Invite', InviteSchema);

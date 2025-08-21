@@ -7,7 +7,7 @@ import * as authHelpers from '@helpers/Auth.helpers';
 import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 
-import { UserInterface } from '@interfaces/User.interfaces';
+import { UserInt } from '@cmm_interfaces/index.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -15,7 +15,7 @@ import AppError from '@utils/AppError';
 /* ------------------ Code ------------------ */
 
 export async function register(
-  req: Request<{}, {}, UserInterface>,
+  req: Request<{}, {}, UserInt>,
   res: Response,
   next: NextFunction
 ): Promise<void> {

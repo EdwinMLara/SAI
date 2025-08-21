@@ -1,5 +1,5 @@
 import { compareHash } from '../utils/auth/crypt';
-import { UserInterface } from '@interfaces/User.interfaces';
+import { UserInt } from '@cmm_interfaces/index.interfaces';
 import * as authHelpers from '@helpers/Auth.helpers';
 import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
@@ -8,10 +8,7 @@ import { Response } from 'express';
 import responses from '@responses';
 import AppError from '@utils/AppError';
 
-export async function login(
-  user: UserInterface,
-  password: string
-): Promise<void> {
+export async function login(user: UserInt, password: string): Promise<void> {
   try {
     const isValidPassword = await compareHash(password, user.password);
     if (!isValidPassword) {
@@ -25,7 +22,7 @@ export async function login(
 export async function refreshUserTokens(
   refreshToken: string,
   res: Response
-): Promise<{ user: UserInterface; publicUser: any }> {
+): Promise<{ user: UserInt; publicUser: any }> {
   try {
     if (!refreshToken) {
       throw new AppError(responses.System.authenticationError, 401);

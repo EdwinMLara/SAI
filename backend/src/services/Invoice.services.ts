@@ -1,15 +1,13 @@
 import InvoiceModel from '@models/Invoice.model';
 
-import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
+import { InvoiceInt } from '@cmm_interfaces/index.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
 
 /* ------------------ Code ------------------ */
 
-export async function createInvoice(
-  invoiceData: InvoiceInterface
-): Promise<void> {
+export async function createInvoice(invoiceData: InvoiceInt): Promise<void> {
   try {
     const newInvoice = new InvoiceModel(invoiceData);
     await newInvoice.save();
@@ -18,7 +16,7 @@ export async function createInvoice(
   }
 }
 
-export async function getInvoice(invoiceId: string): Promise<InvoiceInterface> {
+export async function getInvoice(invoiceId: string): Promise<InvoiceInt> {
   try {
     const invoice = await InvoiceModel.findOne({ invoiceId });
 
@@ -26,14 +24,14 @@ export async function getInvoice(invoiceId: string): Promise<InvoiceInterface> {
       throw new AppError(responses.Invoice.notFound, 404);
     }
 
-    return invoice as InvoiceInterface;
+    return invoice as InvoiceInt;
   } catch (error) {
     throw error;
   }
 }
 
 export async function updateInvoice(
-  body: InvoiceInterface,
+  body: InvoiceInt,
   invoiceId: string
 ): Promise<void> {
   try {

@@ -1,19 +1,20 @@
 import mongoose, { Schema } from 'mongoose';
-import { UserInterface } from '@interfaces/User.interfaces';
+import { UserDocument } from '@interfaces/ExtendsModel';
 
-const UserSchema: Schema = new Schema<UserInterface>({
+/* ------------------ Code ------------------ */
+
+const UserSchema: Schema = new Schema<UserDocument>({
   image: { type: String, required: false },
   name: { type: String, required: true },
-  userName: { type: String, required: true },
-  phone: { type: String, required: true, unique: true, index: true },
+  username: { type: String, required: true },
+  phone: { type: String, required: true, unique: true },
   email: { type: String, required: true, unique: true, index: true },
   password: { type: String, required: true },
   role: {
     type: String,
     required: true,
-    enum: ['admin', 'user'],
-    default: 'user',
+    enum: ['super', 'admin', 'user'],
   },
 });
 
-export default mongoose.model<UserInterface>('User', UserSchema);
+export default mongoose.model<UserDocument>('User', UserSchema);

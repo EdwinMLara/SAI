@@ -1,13 +1,13 @@
 import { Response } from 'express';
 
 import { getRefreshData, getAuthData } from './filterData';
-import { UserInterface } from '@interfaces/User.interfaces';
+import { UserInt } from '@cmm_interfaces/index.interfaces';
 
 /* ------------------ Code ------------------ */
 
 export async function setRefreshToken(
   res: Response,
-  user: UserInterface
+  user: UserInt
 ): Promise<void> {
   const token = await getRefreshData(user);
 
@@ -26,7 +26,7 @@ export async function setRefreshToken(
 
 export async function setAuthToken(
   res: Response,
-  user: UserInterface
+  user: UserInt
 ): Promise<void> {
   const token = await getAuthData(user);
 
