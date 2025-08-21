@@ -1,7 +1,7 @@
 import winston from 'winston';
 import Transport from 'winston-transport';
 import { LogMetadata } from '../interfaces/Logs.interfaces';
-import env from './env';
+import env from '../config/env';
 
 import LogModel from '../models/Logs.model';
 

@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
-import env from '@utils/env';
+import env from '@config/env';
 import router from '@routes';
 import * as database from '@config/database';
 

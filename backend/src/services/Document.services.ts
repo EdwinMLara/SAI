@@ -1,4 +1,4 @@
-import env from '@utils/env';
+import env from '@config/env';
 import supabase from '@config/supabase';
 
 import responses from '@responses';

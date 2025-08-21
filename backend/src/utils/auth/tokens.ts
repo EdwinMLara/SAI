@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken';
-import env from '@utils/env';
+import env from '@config/env';
 
 const jwtSecret = env.JWT_SECRET;
 
