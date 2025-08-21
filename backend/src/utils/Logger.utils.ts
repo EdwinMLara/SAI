@@ -3,7 +3,7 @@ import Transport from 'winston-transport';
 import { LogMetadataInt } from '../interfaces/Logs.interfaces';
 import env from '../config/env';
 
-import LogModel from '../models/Logs.model';
+import LogModel from '../models/Log.model';
 
 const isProduction = env.NODE_ENV === 'production';
 
