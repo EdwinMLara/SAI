@@ -22,7 +22,6 @@ Main directory: `src/`
 - `tests/`: Automated test cases.
 - `types/`: Base types for system components.
 - `utils/`: General utilities and helpers.
-- `validations/`: Input validation logic.
 
 ---
 

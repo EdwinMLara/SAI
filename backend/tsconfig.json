@@ -1,17 +1,23 @@
 {
   "compilerOptions": {
-    "target": "es6",
+    "target": "es2020",
     "module": "commonjs",
     "rootDir": "src",
     "outDir": "./dist",
+    "lib": ["es2020"],
+    "types": ["node"],
     "strict": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "sourceMap": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
     "baseUrl": ".",
     "paths": {
       "@config/*": ["src/config/*"],
       "@controllers/*": ["src/controllers/*"],
+      "@cmm_interfaces/*": ["../common/interfaces/*"],
       "@interfaces/*": ["src/interfaces/*"],
       "@middlewares/*": ["src/middlewares/*"],
       "@models/*": ["src/models/*"],
@@ -20,11 +26,11 @@
       "@utils/*": ["src/utils/*"],
       "@auth/*": ["src/utils/auth/*"],
       "@types": ["src/types/index.ts"],
+      "@helpers/*": ["src/helpers/*"],
       "@responses": ["src/utils/responses/index.responses.ts"],
-      "@validators/*": ["src/validators/*"],
-      "@helpers/*": ["src/helpers/*"]
+      "@common/*": ["../common/*"]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules"]
+  "include": ["src", "../common"],
+  "exclude": ["node_modules", "dist"]
 }
