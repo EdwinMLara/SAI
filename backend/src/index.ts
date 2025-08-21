@@ -2,11 +2,9 @@ import cors from 'cors';
 import express from 'express';
 import cookieParser from 'cookie-parser';
 
-import router from '@routes';
-import * as Mongo from '@config/database';
-
 import env from '@utils/env';
-import log from '@utils/Logger.utils';
+import router from '@routes';
+import * as database from '@config/database';
 
 import ErrorMiddleware from '@middlewares/Error.middleware';
 import RequestMiddleware from '@middlewares/Request.middleware';
@@ -15,6 +13,10 @@ import ResponseMiddleware from '@middlewares/Response.middleware';
 /* ------------------ Code ------------------ */
 
 const app = express();
+
+(async () => {
+  await database.connect();
+})();
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
@@ -29,8 +31,6 @@ app.use(
 app.use(RequestMiddleware);
 app.use(ResponseMiddleware);
 
-Mongo.connect();
-
 app.use('/api', router);
 
 app.use((req, res, next) => {
@@ -40,29 +40,19 @@ app.use((req, res, next) => {
 app.use(ErrorMiddleware);
 
 const server = app.listen(Number(env.SERVER_PORT), env.SERVER_IP, () => {
-  log({
-    level: 'debug',
-    message: `Express server on ${env.SERVER_IP}:${env.SERVER_PORT}`,
-  });
+  console.log(`Express server on ${env.SERVER_IP}:${env.SERVER_PORT}`);
 });
 
-const gracefulShutdown = async (signal: string) => {
+const gracefulShutdown = async () => {
   server.close(async () => {
-    await Mongo.disconnect();
-    log({
-      level: 'debug',
-      message: 'Express server OFF',
-    });
+    await database.disconnect();
+    process.exit(0);
   });
 
   setTimeout(() => {
-    log({
-      level: 'debug',
-      message: 'Database connection not closed in time',
-    });
     process.exit(1);
   }, 10000);
 };
 
-process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
-process.on('SIGINT', () => gracefulShutdown('SIGINT'));
+process.on('SIGTERM', () => gracefulShutdown());
+process.on('SIGINT', () => gracefulShutdown());
