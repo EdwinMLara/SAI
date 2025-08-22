@@ -1,4 +1,13 @@
+/**
+ * Loads and validates required environment variables using dotenv.
+ * Throws an error if any required variable is missing.
+ * Exports an object containing all validated environment variables for use throughout the application.
+ */
+
 import dotenv from 'dotenv';
+
+/* ------------------ Code ------------------ */
+
 dotenv.config();
 
 const envOptions = [
