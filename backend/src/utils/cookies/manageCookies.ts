@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
 import { getRefreshData, getAuthData } from './filterData';
-import { UserInt } from '@cmm_interfaces/index.interfaces';
+import { UserInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 

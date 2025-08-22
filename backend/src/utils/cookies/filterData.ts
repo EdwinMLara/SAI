@@ -1,7 +1,9 @@
 import { generateAccessToken, generateRefreshToken } from '@utils/auth/tokens';
 import { getIdUser } from '@services/User.services';
 import { RefreshTokenInfo, UserInfoAtToken } from '@types';
-import { UserInt } from '@cmm_interfaces/index.interfaces';
+import { UserInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
 
 export async function getRefreshData(user: UserInt): Promise<string> {
   try {
