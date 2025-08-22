@@ -6,12 +6,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-const Input: React.FC<InputProps> = ({
-  icon,
-  className = '',
-  error,
-  ...props
-}) => {
+const Input: React.FC<InputProps> = ({ icon, className = '', error, ...props }) => {
   const isPassword = props.type === 'password';
   const [show, setShow] = useState(false);
   return (
@@ -65,11 +60,7 @@ const Input: React.FC<InputProps> = ({
           </button>
         )}
       </div>
-      {error && (
-        <span className="text-xs text-error ml-2 mt-0.5 font-medium">
-          {error}
-        </span>
-      )}
+      {error && <span className="text-xs text-error ml-2 mt-0.5 font-medium">{error}</span>}
     </div>
   );
 };

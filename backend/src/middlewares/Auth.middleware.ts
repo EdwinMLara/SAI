@@ -12,10 +12,7 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
 
   try {
     const { accessToken, refreshToken } = req.cookies;
-    const tokenValidation = helpers.validateTokenPair(
-      accessToken,
-      refreshToken
-    );
+    const tokenValidation = helpers.validateTokenPair(accessToken, refreshToken);
 
     if (tokenValidation.hasValidRefresh) {
       if (tokenValidation.hasValidAccess) {
@@ -53,17 +50,10 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
   }
 };
 
-const SessionChecker = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const SessionChecker = (req: Request, res: Response, next: NextFunction): void => {
   try {
     const { accessToken, refreshToken } = req.cookies;
-    const tokenValidation = helpers.validateTokenPair(
-      accessToken,
-      refreshToken
-    );
+    const tokenValidation = helpers.validateTokenPair(accessToken, refreshToken);
 
     req.tokenStatus = {
       hasValidAccess: tokenValidation.hasValidAccess,

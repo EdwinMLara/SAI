@@ -156,9 +156,7 @@ const Sidebar: React.FC = () => {
                 exit="closed"
                 className="flex items-center gap-3"
               >
-                <span className="text-primary-color font-bold text-md">
-                  Administrador
-                </span>
+                <span className="text-primary-color font-bold text-md">Administrador</span>
               </motion.div>
             )}
           </AnimatePresence>
@@ -201,18 +199,14 @@ const Sidebar: React.FC = () => {
                       >
                         <span
                           className={`${
-                            isOpen
-                              ? ''
-                              : 'flex items-center justify-center w-8 h-8 rounded-md'
+                            isOpen ? '' : 'flex items-center justify-center w-8 h-8 rounded-md'
                           } `}
                         >
                           <Icon
                             name={item.iconName}
                             size={20}
                             className={`flex-shrink-0 ${
-                              isActive || hasActiveSub
-                                ? 'text-brand'
-                                : 'text-secondary-color'
+                              isActive || hasActiveSub ? 'text-brand' : 'text-secondary-color'
                             }`}
                           />
                         </span>
@@ -234,9 +228,7 @@ const Sidebar: React.FC = () => {
                                 className={`transition-transform duration-200 ${
                                   isExpanded ? 'rotate-180' : ''
                                 } ${
-                                  isActive || hasActiveSub
-                                    ? 'text-brand'
-                                    : 'text-secondary-color'
+                                  isActive || hasActiveSub ? 'text-brand' : 'text-secondary-color'
                                 }`}
                               />
                             </motion.div>
@@ -260,9 +252,7 @@ const Sidebar: React.FC = () => {
                       >
                         <span
                           className={`${
-                            isOpen
-                              ? ''
-                              : 'flex items-center justify-center w-8 h-8 rounded-md'
+                            isOpen ? '' : 'flex items-center justify-center w-8 h-8 rounded-md'
                           } `}
                         >
                           <Icon
@@ -301,9 +291,7 @@ const Sidebar: React.FC = () => {
                         className="mt-2 ml-6 space-y-1 overflow-hidden"
                       >
                         {item
-                          .subItems!.filter(
-                            (subItem) => !subItem.adminOnly || isAdmin
-                          )
+                          .subItems!.filter((subItem) => !subItem.adminOnly || isAdmin)
                           .map((subItem) => {
                             const isSubActive = isActiveRoute(subItem.path);
                             return (
@@ -325,9 +313,7 @@ const Sidebar: React.FC = () => {
                                       isSubActive ? 'bg-brand' : 'bg-secondary'
                                     }`}
                                   />
-                                  <span className="font-medium">
-                                    {subItem.label}
-                                  </span>
+                                  <span className="font-medium">{subItem.label}</span>
                                 </Link>
                               </li>
                             );
@@ -368,9 +354,7 @@ const Sidebar: React.FC = () => {
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-primary-color text-sm font-medium truncate">
-                    {user?.name}
-                  </p>
+                  <p className="text-primary-color text-sm font-medium truncate">{user?.name}</p>
                   <p className="text-secondary-color text-xs truncate">
                     {user?.role === 'admin' ? 'Administrador' : 'Usuario'}
                   </p>

@@ -42,11 +42,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
         </div>
 
         <div className="flex">
-          <Button
-            type="submit"
-            disabled={!search.trim() || isLoading}
-            className="w-full h-14"
-          >
+          <Button type="submit" disabled={!search.trim() || isLoading} className="w-full h-14">
             {isLoading ? (
               <div className="flex items-center justify-center gap-3">
                 <div className="animate-spin"></div>
@@ -64,9 +60,7 @@ const SearchForm: React.FC<SearchFormProps> = ({
 
       <div className="bg-tertiary rounded-lg p-6">
         <div className="flex items-center gap-3 mb-4">
-          <h3 className="font-semibold text-primary-color">
-            Opciones de Búsqueda
-          </h3>
+          <h3 className="font-semibold text-primary-color">Opciones de Búsqueda</h3>
         </div>
 
         <div className="grid grid-cols-1 gap-6">
@@ -79,13 +73,8 @@ const SearchForm: React.FC<SearchFormProps> = ({
               className="form-checkbox h-5 w-5 text-brand focus:ring-brand border-gray-300 rounded transition duration-150"
             />
             <div className="flex-1">
-              <label
-                htmlFor="addImages"
-                className="flex items-center cursor-pointer"
-              >
-                <span className="font-medium text-primary-color">
-                  Mostrar imágenes
-                </span>
+              <label htmlFor="addImages" className="flex items-center cursor-pointer">
+                <span className="font-medium text-primary-color">Mostrar imágenes</span>
               </label>
             </div>
           </div>

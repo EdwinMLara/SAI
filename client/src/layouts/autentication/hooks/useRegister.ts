@@ -36,15 +36,8 @@ const useRegister = (): UseRegisterReturn => {
   const [resStatus, setStatus] = useState<number>();
   const [resMessage, setMessage] = useState<string>();
 
-  const {
-    errors,
-    validateForm,
-    clearError,
-    formatName,
-    formatUsername,
-    processName,
-    formatPhone,
-  } = useValidations();
+  const { errors, validateForm, clearError, formatName, formatUsername, processName, formatPhone } =
+    useValidations();
 
   const validateRegister = (): boolean => {
     const formData = {
@@ -130,9 +123,7 @@ const useRegister = (): UseRegisterReturn => {
       }
     };
 
-  const handleConfirmPasswordChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value.replace(/\s/g, '');
     setConfirmPassword(value);
 

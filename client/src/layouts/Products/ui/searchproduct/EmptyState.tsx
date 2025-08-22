@@ -28,9 +28,7 @@ const EmptyState: React.FC<EmptyStateProps> = ({
         <h3 className="text-xl font-semibold text-primary-color mb-3">
           No hay productos para mostrar
         </h3>
-        <p className="text-secondary-color text-center max-w-md leading-relaxed">
-          {message}
-        </p>
+        <p className="text-secondary-color text-center max-w-md leading-relaxed">{message}</p>
         <div className="flex items-center gap-2 mt-6 text-sm text-secondary-color">
           <Icon name="FaLightbulb" size={14} className="text-yellow-500" />
           <span>Tip: Puedes buscar por código o descripción del producto</span>

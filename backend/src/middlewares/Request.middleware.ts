@@ -5,11 +5,7 @@ import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
-const RequestMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const RequestMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   try {
     if (
       req.method === 'GET' ||

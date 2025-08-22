@@ -10,12 +10,7 @@ interface ProductCardProps {
   onRemove: (index: number) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({
-  product,
-  index,
-  showImages,
-  onRemove,
-}) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, index, showImages, onRemove }) => {
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
     target.src =
@@ -72,9 +67,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             <Icon name="FaBox" size={18} className="text-brand" />
           </div>
           <div>
-            <h3 className="font-bold text-primary-color text-lg">
-              {product.key}
-            </h3>
+            <h3 className="font-bold text-primary-color text-lg">{product.key}</h3>
             <p className="text-xs text-secondary-color">Código del producto</p>
           </div>
         </div>
@@ -88,9 +81,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="mb-4">
-        <p className="text-primary-color font-medium line-clamp-2">
-          {product.description}
-        </p>
+        <p className="text-primary-color font-medium line-clamp-2">{product.description}</p>
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
@@ -99,9 +90,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
             key={idx}
             className={`${priceCard.bgColor} p-3 rounded-md border ${priceCard.borderColor}`}
           >
-            <p className={`text-xs ${priceCard.textColor} font-medium mb-1`}>
-              {priceCard.label}
-            </p>
+            <p className={`text-xs ${priceCard.textColor} font-medium mb-1`}>{priceCard.label}</p>
             <p className={`text-lg font-bold ${priceCard.valueColor}`}>
               ${priceCard.value.toFixed(2)}
             </p>

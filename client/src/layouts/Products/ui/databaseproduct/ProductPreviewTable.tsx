@@ -7,10 +7,7 @@ interface ProductPreviewTableProps {
   maxPreview?: number;
 }
 
-const ProductPreviewTable: React.FC<ProductPreviewTableProps> = ({
-  products,
-  maxPreview = 3,
-}) => {
+const ProductPreviewTable: React.FC<ProductPreviewTableProps> = ({ products, maxPreview = 3 }) => {
   const previewProducts = products.slice(0, maxPreview);
   const hasMoreProducts = products.length > maxPreview;
 
@@ -58,12 +55,8 @@ const ProductPreviewTable: React.FC<ProductPreviewTableProps> = ({
                 transition={{ delay: index * 0.1, duration: 0.3 }}
                 className="border-b border-light last:border-b-0 hover:bg-tertiary/30 transition-colors duration-200"
               >
-                <td className="px-4 py-3 text-primary-color font-medium">
-                  {product.key}
-                </td>
-                <td className="px-4 py-3 text-primary-color">
-                  {product.description}
-                </td>
+                <td className="px-4 py-3 text-primary-color font-medium">{product.key}</td>
+                <td className="px-4 py-3 text-primary-color">{product.description}</td>
                 <td className="px-4 py-3 text-primary-color">
                   ${product.prices.distribution.toFixed(2)}
                 </td>

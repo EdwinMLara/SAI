@@ -8,11 +8,7 @@ import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
-export async function uploadFile(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function uploadFile(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const invoiceId = helpers.getQuery(req.query.invoiceId);
     const filename = `document_${invoiceId}.pdf`;

@@ -4,11 +4,7 @@ import { StandardResponse } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
-const ResponseMiddleware = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): void => {
+const ResponseMiddleware = (req: Request, res: Response, next: NextFunction): void => {
   const originalJson = res.json;
 
   res.json = function <T = any>(payload: any): Response {

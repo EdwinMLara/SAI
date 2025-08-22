@@ -8,11 +8,7 @@ import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
-export async function uploadFile(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function uploadFile(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const ticketId = helpers.getQuery(req.query.ticketId);
     const filename = `ticket_${ticketId}.pdf`;
@@ -53,11 +49,7 @@ export async function readTicketURL(
   }
 }
 
-export async function updateTicket(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function updateTicket(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const ticketId = helpers.getQuery(req.query.ticketId);
     const filename = `ticket_${ticketId}.pdf`;
@@ -76,11 +68,7 @@ export async function updateTicket(
   }
 }
 
-export async function deleteTicket(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function deleteTicket(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const ticketId = helpers.getQuery(req.query.ticketId);
     const filename = `ticket_${ticketId}.pdf`;

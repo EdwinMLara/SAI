@@ -30,10 +30,7 @@ export async function getInvoice(invoiceId: string): Promise<InvoiceInt> {
   }
 }
 
-export async function updateInvoice(
-  body: InvoiceInt,
-  invoiceId: string
-): Promise<void> {
+export async function updateInvoice(body: InvoiceInt, invoiceId: string): Promise<void> {
   try {
     const result = await InvoiceModel.updateOne({ invoiceId }, { $set: body });
 

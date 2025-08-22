@@ -9,11 +9,7 @@ import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
-export async function createInvite(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function createInvite(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { auth, email, role } = req.body;
 
@@ -33,11 +29,7 @@ export async function createInvite(
   }
 }
 
-export async function getInvites(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function getInvites(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const user = await userServices.getIdUser(req.user.email);
     const list = await services.getInvites(user);
@@ -54,11 +46,7 @@ export async function getInvites(
   }
 }
 
-export async function removeInvite(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function removeInvite(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { email } = req.body;
     if (!email) {

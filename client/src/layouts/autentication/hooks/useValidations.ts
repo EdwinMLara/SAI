@@ -33,11 +33,9 @@ const validateName = (value: string): string => {
 const validateUsername = (value: string): string => {
   const upperValue = value.toUpperCase();
   if (!upperValue) return 'El nombre de usuario es requerido';
-  if (upperValue.length !== 4)
-    return 'El nombre de usuario debe tener exactamente 4 letras';
+  if (upperValue.length !== 4) return 'El nombre de usuario debe tener exactamente 4 letras';
   const usernameRegex = /^[A-Z]{4}$/;
-  if (!usernameRegex.test(upperValue))
-    return 'El nombre de usuario solo puede contener 4 letras';
+  if (!usernameRegex.test(upperValue)) return 'El nombre de usuario solo puede contener 4 letras';
   return '';
 };
 
@@ -53,8 +51,7 @@ const validatePhone = (value: string): string => {
   const trimmedValue = value.trim();
   if (!trimmedValue) return 'El teléfono es requerido';
   const digits = trimmedValue.replace(/\D/g, '');
-  if (digits.length !== 10)
-    return 'El teléfono debe tener exactamente 10 dígitos';
+  if (digits.length !== 10) return 'El teléfono debe tener exactamente 10 dígitos';
   return '';
 };
 
@@ -139,12 +136,7 @@ const useFormValidation = () => {
       const newErrors: ValidationErrors = {};
       let isValid = true;
       Object.keys(data).forEach((fieldName) => {
-        const error = validateField(
-          fieldName,
-          data[fieldName],
-          rules,
-          additionalData
-        );
+        const error = validateField(fieldName, data[fieldName], rules, additionalData);
         if (error) {
           newErrors[fieldName] = error;
           isValid = false;

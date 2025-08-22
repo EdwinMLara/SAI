@@ -17,8 +17,7 @@ const UploadActions: React.FC<UploadActionsProps> = ({
   onUpload,
   onReset,
 }) => {
-  const isUploadDisabled =
-    validProductsCount === 0 || isUploading || uploadSuccess;
+  const isUploadDisabled = validProductsCount === 0 || isUploading || uploadSuccess;
 
   return (
     <motion.div

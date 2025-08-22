@@ -1,10 +1,5 @@
 import { Document } from 'mongoose';
-import {
-  UserInt,
-  ProductInt,
-  InvoiceInt,
-  InviteInt,
-} from '@cmm_interfaces/index';
+import { UserInt, ProductInt, InvoiceInt, InviteInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 

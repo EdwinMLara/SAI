@@ -7,15 +7,12 @@ export interface IconProps {
 }
 
 const Icon: React.FC<IconProps> = ({ name, size = 24, className = '' }) => {
-  const [IconComponent, setIconComponent] =
-    React.useState<React.ComponentType<any> | null>(null);
+  const [IconComponent, setIconComponent] = React.useState<React.ComponentType<any> | null>(null);
 
   React.useEffect(() => {
     const loadIcon = async () => {
       const icons = await import('react-icons/fa');
-      const Comp = (
-        icons as unknown as Record<string, React.ComponentType<any>>
-      )[name];
+      const Comp = (icons as unknown as Record<string, React.ComponentType<any>>)[name];
       setIconComponent(() => Comp || null);
     };
     loadIcon();

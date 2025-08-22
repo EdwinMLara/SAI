@@ -24,14 +24,8 @@ const itemVariants = {
 };
 
 const LoginForm: React.FC = () => {
-  const {
-    loginData,
-    isLoading,
-    resStatus,
-    resMessage,
-    handleLogin,
-    handleLoginInputChange,
-  } = useLogin();
+  const { loginData, isLoading, resStatus, resMessage, handleLogin, handleLoginInputChange } =
+    useLogin();
 
   return (
     <AnimatePresence mode="wait">
@@ -101,16 +95,8 @@ const LoginForm: React.FC = () => {
           >
             <div
               className={`w-full max-w-md px-4 py-3 rounded-md text-center text-sm font-medium shadow-soft transition-all duration-300
-                ${
-                  resStatus === 200
-                    ? 'bg-success-light text-success border border-success'
-                    : ''
-                }
-                ${
-                  resStatus !== 200
-                    ? 'bg-error-light text-error border border-error'
-                    : ''
-                }
+                ${resStatus === 200 ? 'bg-success-light text-success border border-success' : ''}
+                ${resStatus !== 200 ? 'bg-error-light text-error border border-error' : ''}
               `}
             >
               {resMessage}

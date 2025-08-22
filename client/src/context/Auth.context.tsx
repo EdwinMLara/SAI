@@ -1,17 +1,7 @@
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  useContext,
-} from 'react';
+import React, { createContext, useState, useEffect, ReactNode, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import * as services from '@services/Auth.services';
-import {
-  NewUser,
-  PublicUser,
-  UserCredentials,
-} from '@interfaces/User.interfaces';
+import { NewUser, PublicUser, UserCredentials } from '@interfaces/User.interfaces';
 
 /* ------------------ Code ------------------ */
 
@@ -21,9 +11,7 @@ interface AuthContextType {
   isLoading: boolean;
   logout: () => Promise<void>;
   register: (user: NewUser) => Promise<{ message: string; status: number }>;
-  login: (
-    user: UserCredentials
-  ) => Promise<{ message: string; status: number }>;
+  login: (user: UserCredentials) => Promise<{ message: string; status: number }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -94,9 +82,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     fetchSession();
   }, [sessionChecked]);
 
-  const login = async (
-    user: UserCredentials
-  ): Promise<{ message: string; status: number }> => {
+  const login = async (user: UserCredentials): Promise<{ message: string; status: number }> => {
     const loginRequest = await services.login(user);
     if (loginRequest.status === 200) {
       const sessionRequest = await services.session();
@@ -108,9 +94,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     return { message: loginRequest.message, status: loginRequest.status };
   };
 
-  const register = async (
-    user: NewUser
-  ): Promise<{ message: string; status: number }> => {
+  const register = async (user: NewUser): Promise<{ message: string; status: number }> => {
     const registerRequest = await services.register(user);
     if (registerRequest.status !== 200) {
       return {
@@ -135,9 +119,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider
-      value={{ user, isAuthenticated, isLoading, login, register, logout }}
-    >
+    <AuthContext.Provider value={{ user, isAuthenticated, isLoading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   );

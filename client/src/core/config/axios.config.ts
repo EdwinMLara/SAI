@@ -1,8 +1,4 @@
-import axios, {
-  AxiosResponse,
-  AxiosError,
-  InternalAxiosRequestConfig,
-} from 'axios';
+import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import env from '@config/env.config';
 import { StandardResponse } from '@cmm_interfaces/index';
@@ -33,9 +29,7 @@ const axiosInstance = axios.create({
  * @param response - Axios response with backend structure
  * @returns StandardResponse typed with backend data
  */
-const toStandardResponse = <T = any>(
-  response: AxiosResponse
-): StandardResponse<T> => {
+const toStandardResponse = <T = any>(response: AxiosResponse): StandardResponse<T> => {
   return {
     status: response.status,
     success: response.data.success,
@@ -55,9 +49,7 @@ const toStandardResponse = <T = any>(
  * @param error - Full Axios error
  * @returns StandardResponse with normalized error info
  */
-const errorToStandardResponse = <T = any>(
-  error: AxiosError
-): StandardResponse<T> => {
+const errorToStandardResponse = <T = any>(error: AxiosError): StandardResponse<T> => {
   // Error with server response (4xx, 5xx)
   if (error.response && error.response.data) {
     const data = error.response.data;
@@ -118,10 +110,7 @@ export const apiClient = {
    * @param config - Additional Axios config (headers, params, etc.)
    * @returns Promise<StandardResponse<T>> - Normalized response
    */
-  get: async <T = any>(
-    url: string,
-    config?: any
-  ): Promise<StandardResponse<T>> => {
+  get: async <T = any>(url: string, config?: any): Promise<StandardResponse<T>> => {
     try {
       const response = await axiosInstance.get(url, config);
       return toStandardResponse<T>(response);
@@ -138,11 +127,7 @@ export const apiClient = {
    * @param config - Additional Axios config
    * @returns Promise<StandardResponse<T>> - Normalized response
    */
-  post: async <T = any>(
-    url: string,
-    data?: any,
-    config?: any
-  ): Promise<StandardResponse<T>> => {
+  post: async <T = any>(url: string, data?: any, config?: any): Promise<StandardResponse<T>> => {
     try {
       const response = await axiosInstance.post(url, data, config);
       return toStandardResponse<T>(response);
@@ -159,11 +144,7 @@ export const apiClient = {
    * @param config - Additional Axios config
    * @returns Promise<StandardResponse<T>> - Normalized response
    */
-  put: async <T = any>(
-    url: string,
-    data?: any,
-    config?: any
-  ): Promise<StandardResponse<T>> => {
+  put: async <T = any>(url: string, data?: any, config?: any): Promise<StandardResponse<T>> => {
     try {
       const response = await axiosInstance.put(url, data, config);
       return toStandardResponse<T>(response);
@@ -180,11 +161,7 @@ export const apiClient = {
    * @param config - Additional Axios config
    * @returns Promise<StandardResponse<T>> - Normalized response
    */
-  patch: async <T = any>(
-    url: string,
-    data?: any,
-    config?: any
-  ): Promise<StandardResponse<T>> => {
+  patch: async <T = any>(url: string, data?: any, config?: any): Promise<StandardResponse<T>> => {
     try {
       const response = await axiosInstance.patch(url, data, config);
       return toStandardResponse<T>(response);
@@ -200,10 +177,7 @@ export const apiClient = {
    * @param config - Additional Axios config
    * @returns Promise<StandardResponse<T>> - Normalized response
    */
-  delete: async <T = any>(
-    url: string,
-    config?: any
-  ): Promise<StandardResponse<T>> => {
+  delete: async <T = any>(url: string, config?: any): Promise<StandardResponse<T>> => {
     try {
       const response = await axiosInstance.delete(url, config);
       return toStandardResponse<T>(response);

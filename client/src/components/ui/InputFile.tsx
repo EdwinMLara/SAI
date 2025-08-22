@@ -27,9 +27,7 @@ const InputFile: React.FC<InputFileProps> = ({
 }) => {
   if (!accept) throw new Error('El prop "accept" es obligatorio en InputFile.');
   if (!onContinue)
-    throw new Error(
-      'El prop "onContinue" es obligatorio en InputFile para el botón.'
-    );
+    throw new Error('El prop "onContinue" es obligatorio en InputFile para el botón.');
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragActive, setDragActive] = useState(false);
   const [fileNames, setFileNames] = useState<string[]>([]);
@@ -178,11 +176,7 @@ const InputFile: React.FC<InputFileProps> = ({
           {helperText}
         </span>
       )}
-      {error && (
-        <span className="block mt-1 text-xs text-error dark:text-error">
-          {error}
-        </span>
-      )}
+      {error && <span className="block mt-1 text-xs text-error dark:text-error">{error}</span>}
     </div>
   );
 };

@@ -38,9 +38,7 @@ export async function comprobeInvite(email: string): Promise<void> {
   }
 }
 
-export async function findRole(
-  email: string
-): Promise<'super' | 'admin' | 'user'> {
+export async function findRole(email: string): Promise<'super' | 'admin' | 'user'> {
   try {
     const invite = await getInvite(email);
     if (!invite) {

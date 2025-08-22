@@ -4,9 +4,7 @@ import { ProductInterface } from '@interfaces/Procuct.interface';
 
 const useProductSearch = () => {
   const [search, setSearch] = useState<string>('');
-  const [productSearch, setProductSearch] = useState<ProductInterface | null>(
-    null
-  );
+  const [productSearch, setProductSearch] = useState<ProductInterface | null>(null);
   const [listProducts, setListProducts] = useState<ProductInterface[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [searchError, setSearchError] = useState<string>('');

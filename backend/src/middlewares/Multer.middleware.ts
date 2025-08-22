@@ -9,11 +9,7 @@ import AppError from '@utils/system/AppError';
 const upload = multer({
   storage: multer.memoryStorage(),
   limits: { fileSize: 5 * 1024 * 1024 },
-  fileFilter: (
-    req: Request,
-    file: Express.Multer.File,
-    callback: FileFilterCallback
-  ): void => {
+  fileFilter: (req: Request, file: Express.Multer.File, callback: FileFilterCallback): void => {
     if (file.mimetype === 'application/pdf' || file.mimetype === 'image/jpeg') {
       callback(null, true);
     } else {

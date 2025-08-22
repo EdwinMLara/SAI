@@ -7,11 +7,7 @@ interface LastUpdateInfoProps {
   formatDate: (date: Date | null) => string;
 }
 
-const LastUpdateInfo: React.FC<LastUpdateInfoProps> = ({
-  lastUpdate,
-  isLoading,
-  formatDate,
-}) => {
+const LastUpdateInfo: React.FC<LastUpdateInfoProps> = ({ lastUpdate, isLoading, formatDate }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}
@@ -21,11 +17,7 @@ const LastUpdateInfo: React.FC<LastUpdateInfoProps> = ({
     >
       <p className="text-primary-color text-sm">
         <span className="font-medium">Última actualización:</span>{' '}
-        {isLoading ? (
-          <span className="animate-pulse">Cargando...</span>
-        ) : (
-          formatDate(lastUpdate)
-        )}
+        {isLoading ? <span className="animate-pulse">Cargando...</span> : formatDate(lastUpdate)}
       </p>
     </motion.div>
   );

@@ -53,8 +53,7 @@ const useLogin = (): UseLoginReturn => {
   };
 
   const handleLoginInputChange =
-    (field: keyof UserCredentials) =>
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (field: keyof UserCredentials) => (e: React.ChangeEvent<HTMLInputElement>) => {
       let value = e.target.value;
 
       if (field === 'email' || field === 'password') {

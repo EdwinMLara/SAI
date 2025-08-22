@@ -19,16 +19,10 @@ const Header: React.FC = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (
-        userMenuRef.current &&
-        !userMenuRef.current.contains(event.target as Node)
-      ) {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target as Node)) {
         setIsUserMenuOpen(false);
       }
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target as Node)
-      ) {
+      if (notificationRef.current && !notificationRef.current.contains(event.target as Node)) {
         setIsNotificationOpen(false);
       }
     };
@@ -68,9 +62,7 @@ const Header: React.FC = () => {
                 className="flex items-center gap-3 p-2 rounded-md hover-bg-secondary transition-colors"
               >
                 <div className="hidden sm:block text-right">
-                  <p className="text-sm font-medium text-primary-color">
-                    {user.name}
-                  </p>
+                  <p className="text-sm font-medium text-primary-color">{user.name}</p>
                   <p className="text-xs text-secondary-color capitalize">
                     {user.role === 'admin' ? 'Administrador' : 'Usuario'}
                   </p>
@@ -113,30 +105,18 @@ const Header: React.FC = () => {
                     className="absolute right-0 mt-2 w-56 bg-card border border-light shadow-medium rounded-md z-50"
                   >
                     <div className="p-3 border-b border-light">
-                      <p className="text-sm font-medium text-primary-color">
-                        {user.name}
-                      </p>
-                      <p className="text-xs text-secondary-color">
-                        {user.email}
-                      </p>
+                      <p className="text-sm font-medium text-primary-color">{user.name}</p>
+                      <p className="text-xs text-secondary-color">{user.email}</p>
                     </div>
 
                     <div className="p-2">
                       <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors">
-                        <Icon
-                          name="FaUser"
-                          size={16}
-                          className="text-secondary-color"
-                        />
+                        <Icon name="FaUser" size={16} className="text-secondary-color" />
                         Mi perfil
                       </button>
 
                       <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors">
-                        <Icon
-                          name="FaCog"
-                          size={16}
-                          className="text-secondary-color"
-                        />
+                        <Icon name="FaCog" size={16} className="text-secondary-color" />
                         Configuración
                       </button>
 

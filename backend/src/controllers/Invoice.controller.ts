@@ -27,11 +27,7 @@ export async function createInvoice(
   }
 }
 
-export async function getInvoice(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function getInvoice(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const invoiceId = helpers.getQuery(req.query.id);
     await helpers.comprobeExistence(invoiceId);

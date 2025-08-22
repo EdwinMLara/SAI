@@ -1,0 +1,24 @@
+# Prettier ignore file
+
+docs/
+
+node_modules/
+dist/
+build/
+coverage/
+.next/
+
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+npm-debug.log
+
+.env
+.env.*
+
+test-results/
+coverage/
+reports/
+
+.vscode/
+.idea/

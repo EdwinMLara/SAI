@@ -12,8 +12,7 @@ const baseClass =
   'flex items-center justify-center rounded-md font-sans font-semibold text-base h-11 min-h-11 transition-colors';
 const variantBase = {
   primary: 'bg-brand text-white',
-  secondary:
-    'bg-secondary text-primary-color dark:bg-background-dark-secondary',
+  secondary: 'bg-secondary text-primary-color dark:bg-background-dark-secondary',
   ghost: 'text-brand',
 };
 const variantHover = {
@@ -27,9 +26,7 @@ const disabledClass =
 function isIconOnly(children: React.ReactNode): boolean {
   if (React.Children.count(children) === 1) {
     const onlyChild = React.Children.toArray(children)[0];
-    return (
-      React.isValidElement(onlyChild) && typeof onlyChild.type !== 'string'
-    );
+    return React.isValidElement(onlyChild) && typeof onlyChild.type !== 'string';
   }
   return false;
 }

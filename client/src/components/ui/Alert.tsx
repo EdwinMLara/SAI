@@ -19,14 +19,7 @@ interface AlertProps {
   className?: string;
 }
 
-const Alert: React.FC<AlertProps> = ({
-  open,
-  icon,
-  message,
-  actions,
-  onClose,
-  className = '',
-}) => {
+const Alert: React.FC<AlertProps> = ({ open, icon, message, actions, onClose, className = '' }) => {
   const displayIcon = icon || 'FaExclamationTriangle';
   return (
     <AnimatePresence>
@@ -48,18 +41,14 @@ const Alert: React.FC<AlertProps> = ({
               <div className="flex justify-center w-full pb-5">
                 <Icon name={displayIcon} size={64} className="text-info" />
               </div>
-              <span className="text-lg text-primary-color text-center">
-                {message}
-              </span>
+              <span className="text-lg text-primary-color text-center">{message}</span>
               <div className="flex gap-3 mt-4">
                 {actions.map((action, idx) => (
                   <Button
                     key={action.label + idx}
                     variant={
                       action.variant ||
-                      (action.label.toLowerCase().includes('cancelar')
-                        ? 'secondary'
-                        : 'primary')
+                      (action.label.toLowerCase().includes('cancelar') ? 'secondary' : 'primary')
                     }
                     onClick={action.onClick}
                   >

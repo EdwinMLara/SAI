@@ -147,9 +147,7 @@ const useProcessFile = () => {
 
         setError(null);
       } catch (err) {
-        setError(
-          'Error al procesar el archivo. Verifica que sea un archivo Excel válido'
-        );
+        setError('Error al procesar el archivo. Verifica que sea un archivo Excel válido');
         setProcessedData({
           rawData: [],
           validProducts: [],

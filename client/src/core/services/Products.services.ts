@@ -15,9 +15,7 @@ export async function getProduct(
   };
 }
 
-export async function replaceAllProducts(
-  products: ProductInterface[]
-): Promise<{
+export async function replaceAllProducts(products: ProductInterface[]): Promise<{
   status: number;
   message: string;
 }> {
@@ -37,8 +35,6 @@ export async function getLastUpdate(): Promise<{
   return {
     status: response.status,
     message: response.data.message,
-    lastUpdate: response.data.data?.lastUpdate
-      ? new Date(response.data.data.lastUpdate)
-      : null,
+    lastUpdate: response.data.data?.lastUpdate ? new Date(response.data.data.lastUpdate) : null,
   };
 }

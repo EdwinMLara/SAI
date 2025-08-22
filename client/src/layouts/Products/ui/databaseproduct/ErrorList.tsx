@@ -11,10 +11,7 @@ interface ErrorListProps {
   maxDisplay?: number;
 }
 
-const ErrorList: React.FC<ErrorListProps> = ({
-  invalidRows,
-  maxDisplay = 10,
-}) => {
+const ErrorList: React.FC<ErrorListProps> = ({ invalidRows, maxDisplay = 10 }) => {
   const displayErrors = invalidRows.slice(0, maxDisplay);
   const hasMoreErrors = invalidRows.length > maxDisplay;
 
@@ -27,9 +24,7 @@ const ErrorList: React.FC<ErrorListProps> = ({
       transition={{ duration: 0.5 }}
       className="mb-6"
     >
-      <h4 className="font-semibold text-primary-color mb-3">
-        Errores encontrados
-      </h4>
+      <h4 className="font-semibold text-primary-color mb-3">Errores encontrados</h4>
 
       <div className="bg-error-light p-4 rounded-md border border-error max-h-48 overflow-y-auto scrollbar-thin">
         {displayErrors.map((invalid, index) => (

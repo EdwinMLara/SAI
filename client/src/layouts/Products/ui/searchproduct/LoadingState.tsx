@@ -28,9 +28,7 @@ const LoadingState: React.FC<LoadingStateProps> = ({
       </div>
 
       <div className="text-center">
-        <h3 className="text-xl font-semibold text-primary-color mb-2">
-          Procesando búsqueda
-        </h3>
+        <h3 className="text-xl font-semibold text-primary-color mb-2">Procesando búsqueda</h3>
         <p className="text-secondary-color mb-4">{message}</p>
         <div className="flex items-center justify-center gap-1">
           <div className="w-2 h-2 bg-brand rounded-full animate-bounce"></div>

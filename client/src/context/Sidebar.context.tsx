@@ -13,9 +13,7 @@ interface SidebarProviderProps {
   children: React.ReactNode;
 }
 
-export const SidebarProvider: React.FC<SidebarProviderProps> = ({
-  children,
-}) => {
+export const SidebarProvider: React.FC<SidebarProviderProps> = ({ children }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   useEffect(() => {

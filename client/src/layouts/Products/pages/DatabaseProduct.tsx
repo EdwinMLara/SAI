@@ -15,16 +15,9 @@ import {
 import { ProductInterface } from '@interfaces/Procuct.interface';
 
 const DatabaseProduct = () => {
-  const { processedData, isProcessing, error, processFile, resetData } =
-    useProcessFile();
-  const {
-    lastUpdate,
-    isLoading: isLoadingUpdate,
-    formatDate,
-    refetch,
-  } = useLastUpdate();
-  const { isUploading, uploadSuccess, uploadProducts, resetUpload } =
-    useUpload(refetch);
+  const { processedData, isProcessing, error, processFile, resetData } = useProcessFile();
+  const { lastUpdate, isLoading: isLoadingUpdate, formatDate, refetch } = useLastUpdate();
+  const { isUploading, uploadSuccess, uploadProducts, resetUpload } = useUpload(refetch);
 
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [resetKey, setResetKey] = useState(0);
@@ -109,11 +102,7 @@ const DatabaseProduct = () => {
 
       {renderProcessingResults()}
 
-      <LastUpdateInfo
-        lastUpdate={lastUpdate}
-        isLoading={isLoadingUpdate}
-        formatDate={formatDate}
-      />
+      <LastUpdateInfo lastUpdate={lastUpdate} isLoading={isLoadingUpdate} formatDate={formatDate} />
     </div>
   );
 };

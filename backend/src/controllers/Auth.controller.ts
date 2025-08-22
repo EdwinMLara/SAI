@@ -42,19 +42,13 @@ export async function register(
   }
 }
 
-export async function login(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function login(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { email, password } = req.body;
     if (!email || !password) {
       throw new AppError(responses.System.missingFieldBody, 400);
     }
-    const user = await userServices.getUserByObject(
-      await userServices.getIdUser(email)
-    );
+    const user = await userServices.getUserByObject(await userServices.getIdUser(email));
     await services.login(user, password);
     await cookies.setAuthToken(res, user);
     await cookies.setRefreshToken(res, user);
@@ -68,17 +62,10 @@ export async function login(
   }
 }
 
-export async function refreshToken(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function refreshToken(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const { refreshToken } = req.cookies;
-    const { user, publicUser } = await services.refreshUserTokens(
-      refreshToken,
-      res
-    );
+    const { user, publicUser } = await services.refreshUserTokens(refreshToken, res);
     const returnUser = await helpers.returnUser(user);
 
     res.status(200).json({
@@ -96,11 +83,7 @@ export async function refreshToken(
   }
 }
 
-export async function logout(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function logout(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     cookies.clearAuthCookies(res);
 
@@ -113,11 +96,7 @@ export async function logout(
   }
 }
 
-export async function sessionState(
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> {
+export async function sessionState(req: Request, res: Response, next: NextFunction): Promise<void> {
   try {
     const tokenStatus = req.tokenStatus || {
       hasValidAccess: false,

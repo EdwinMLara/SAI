@@ -8,10 +8,7 @@ interface SearchHeaderProps {
   onClearAll: () => void;
 }
 
-const SearchHeader: React.FC<SearchHeaderProps> = ({
-  hasResults,
-  onClearAll,
-}) => {
+const SearchHeader: React.FC<SearchHeaderProps> = ({ hasResults, onClearAll }) => {
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}

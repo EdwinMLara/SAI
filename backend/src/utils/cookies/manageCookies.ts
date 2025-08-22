@@ -5,10 +5,7 @@ import { UserInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
-export async function setRefreshToken(
-  res: Response,
-  user: UserInt
-): Promise<void> {
+export async function setRefreshToken(res: Response, user: UserInt): Promise<void> {
   const token = await getRefreshData(user);
 
   try {
@@ -24,10 +21,7 @@ export async function setRefreshToken(
   }
 }
 
-export async function setAuthToken(
-  res: Response,
-  user: UserInt
-): Promise<void> {
+export async function setAuthToken(res: Response, user: UserInt): Promise<void> {
   const token = await getAuthData(user);
 
   try {

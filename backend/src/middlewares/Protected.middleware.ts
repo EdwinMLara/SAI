@@ -11,9 +11,7 @@ const Protect = (...allow: string[]) => {
   return (req: Request, res: Response, next: NextFunction): void => {
     try {
       const userRole = req.user.role.toLowerCase();
-      const hasPermission = allow.some(
-        (role) => role.toLowerCase() === userRole
-      );
+      const hasPermission = allow.some((role) => role.toLowerCase() === userRole);
 
       if (!hasPermission) {
         throw new AppError(responses.System.authenticationError, 403);

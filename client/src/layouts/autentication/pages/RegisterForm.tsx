@@ -160,11 +160,7 @@ const RegisterForm: React.FC = () => {
                             ? 'bg-success-light text-success border border-success'
                             : ''
                         }
-                        ${
-                          resStatus !== 200
-                            ? 'bg-error-light text-error border border-error'
-                            : ''
-                        }
+                        ${resStatus !== 200 ? 'bg-error-light text-error border border-error' : ''}
                       `}
             >
               {resMessage}

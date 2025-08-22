@@ -71,9 +71,7 @@ const Authentication = () => {
               <motion.button
                 onClick={() => setIsLoginForm(true)}
                 className={`relative z-10 flex-1 py-3 px-4 text-sm font-semibold rounded-md transition-colors duration-200 ${
-                  isLoginForm
-                    ? 'text-white'
-                    : 'text-secondary-color hover:text-primary-color'
+                  isLoginForm ? 'text-white' : 'text-secondary-color hover:text-primary-color'
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -84,9 +82,7 @@ const Authentication = () => {
               <motion.button
                 onClick={() => setIsLoginForm(false)}
                 className={`relative z-10 flex-1 py-3 px-4 text-sm font-semibold rounded-md transition-colors duration-200 ${
-                  !isLoginForm
-                    ? 'text-white'
-                    : 'text-secondary-color hover:text-primary-color'
+                  !isLoginForm ? 'text-white' : 'text-secondary-color hover:text-primary-color'
                 }`}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -107,9 +103,7 @@ const Authentication = () => {
               </motion.div>
             </motion.div>
           </div>
-          <div className="px-6 pb-6">
-            {isLoginForm ? <LoginForm /> : <RegisterForm />}
-          </div>
+          <div className="px-6 pb-6">{isLoginForm ? <LoginForm /> : <RegisterForm />}</div>
         </motion.div>
       </div>
     </motion.div>
