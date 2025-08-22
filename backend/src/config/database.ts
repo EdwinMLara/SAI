@@ -4,7 +4,12 @@ import env from '@config/env';
 
 /* ------------------ Code ------------------ */
 
-export const connect = async () => {
+/**
+ * Establishes a connection to the MongoDB database using Mongoose.
+ * Logs a message indicating whether the connection was successful or failed.
+ * @returns {Promise<void>} Resolves when the connection process is complete.
+ */
+export const connect = async (): Promise<void> => {
   try {
     await mongoose.connect(env.MONGO_URI);
     console.log('Mongoose connection successful');
@@ -13,7 +18,12 @@ export const connect = async () => {
   }
 };
 
-export const disconnect = async () => {
+/**
+ * Disconnects from the MongoDB database using Mongoose.
+ * Logs a message indicating whether the disconnection was successful or failed.
+ * @returns {Promise<void>} Resolves when the disconnection process is complete.
+ */
+export const disconnect = async (): Promise<void> => {
   try {
     await mongoose.disconnect();
     console.log('Mongoose disconnection successful');
