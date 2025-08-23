@@ -4,8 +4,9 @@ import axios, {
    InternalAxiosRequestConfig,
 } from 'axios';
 
-import env from '@config/env.config';
 import { StandardResponse } from '@cmm_interfaces/index';
+
+import { baseURL } from './apiPaths.config';
 
 /* ------------------ Code ------------------ */
 
@@ -17,7 +18,7 @@ import { StandardResponse } from '@cmm_interfaces/index';
  * - Default headers for JSON content
  */
 const axiosInstance = axios.create({
-   baseURL: `${env.VITE_API_HOST}:${env.VITE_API_PORT}`,
+   baseURL: baseURL,
    timeout: 10000,
    withCredentials: true,
    headers: {
