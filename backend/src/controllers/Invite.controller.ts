@@ -4,7 +4,7 @@ import * as userServices from '@services/User.services';
 import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */

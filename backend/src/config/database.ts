@@ -1,6 +1,16 @@
 import mongoose from 'mongoose';
+import winston from 'winston';
 
 import env from '@config/env';
+
+const logger = winston.createLogger({
+   level: 'info',
+   format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.json()
+   ),
+   transports: [new winston.transports.Console()],
+});
 
 /* ------------------ Code ------------------ */
 
@@ -12,9 +22,9 @@ import env from '@config/env';
 export const connect = async (): Promise<void> => {
    try {
       await mongoose.connect(env.MONGO_URI);
-      console.log('Mongoose connection successful');
+      logger.info('Mongoose connection successful');
    } catch (error) {
-      console.log('Mongoose connection failed', error);
+      logger.error('Mongoose connection failed', error);
    }
 };
 
@@ -26,8 +36,8 @@ export const connect = async (): Promise<void> => {
 export const disconnect = async (): Promise<void> => {
    try {
       await mongoose.disconnect();
-      console.log('Mongoose disconnection successful');
+      logger.info('Mongoose disconnection successful');
    } catch (error) {
-      console.log('Mongoose disconnection failed', error);
+      logger.error('Mongoose disconnection failed', error);
    }
 };

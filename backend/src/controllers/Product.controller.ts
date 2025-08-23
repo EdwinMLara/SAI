@@ -4,13 +4,13 @@ import { ProductInt } from '@cmm_interfaces/index';
 import * as helpers from '@helpers/Product.helpers';
 import * as services from '@services/Product.services';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
 export async function createProduct(
-   req: Request<{}, {}, ProductInt>,
+   req: Request<object, object, ProductInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {
@@ -28,7 +28,7 @@ export async function createProduct(
 
 export async function getProduct(
    req: Request,
-   res: Response<{}, ProductInt>,
+   res: Response<object, ProductInt>,
    next: NextFunction
 ): Promise<void> {
    try {
@@ -66,7 +66,7 @@ export async function deleteProduct(
 }
 
 export async function replaceAllProducts(
-   req: Request<{}, {}, ProductInt[]>,
+   req: Request<object, object, ProductInt[]>,
    res: Response,
    next: NextFunction
 ): Promise<void> {

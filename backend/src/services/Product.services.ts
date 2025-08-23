@@ -2,49 +2,33 @@ import ProductModel from '@models/Product.model';
 
 import { ProductInt } from '@cmm_interfaces/index';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
 export async function createProduct(product: ProductInt): Promise<void> {
-   try {
-      const newProduct = new ProductModel(product);
-      await newProduct.save();
-   } catch (error) {
-      throw error;
-   }
+   const newProduct = new ProductModel(product);
+   await newProduct.save();
 }
 
 export async function getProduct(keyProduct: string): Promise<ProductInt> {
-   try {
-      const response = await ProductModel.findOne({ key: keyProduct });
+   const response = await ProductModel.findOne({ key: keyProduct });
 
-      if (!response) {
-         throw new AppError(responses.Product.notFound, 404);
-      }
-
-      return response as ProductInt;
-   } catch (error) {
-      throw error;
+   if (!response) {
+      throw new AppError(responses.Product.notFound, 404);
    }
+
+   return response as ProductInt;
 }
 
 export async function deleteProduct(keyProduct: string): Promise<void> {
-   try {
-      await ProductModel.deleteOne({ key: keyProduct });
-   } catch (error) {
-      throw error;
-   }
+   await ProductModel.deleteOne({ key: keyProduct });
 }
 
 export async function existProduct(keyProduct: string): Promise<boolean> {
-   try {
-      const product = await ProductModel.findOne({ key: keyProduct });
-      return !!product;
-   } catch (error) {
-      throw error;
-   }
+   const product = await ProductModel.findOne({ key: keyProduct });
+   return !!product;
 }
 
 export async function replaceAllProducts(data: ProductInt[]): Promise<void> {

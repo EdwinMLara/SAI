@@ -1,38 +1,26 @@
 import * as services from '@services/Invoice.services';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 export async function comprobeInexistence(invoiceId: string): Promise<void> {
-   try {
-      const exist = await services.existInvoice(invoiceId);
-      if (exist) {
-         throw new AppError(responses.Invoice.alreadyExists, 409);
-      }
-   } catch (error) {
-      throw error;
+   const exist = await services.existInvoice(invoiceId);
+   if (exist) {
+      throw new AppError(responses.Invoice.alreadyExists, 409);
    }
 }
 
 export async function comprobeExistence(invoiceId: string): Promise<void> {
-   try {
-      const exist = await services.existInvoice(invoiceId);
-      if (!exist) {
-         throw new AppError(responses.Invoice.notFound, 404);
-      }
-   } catch (error) {
-      throw error;
+   const exist = await services.existInvoice(invoiceId);
+   if (!exist) {
+      throw new AppError(responses.Invoice.notFound, 404);
    }
 }
 
-export function getQuery(queryParam: any): string {
-   try {
-      const query = queryParam as string;
-      if (!query) {
-         throw new AppError(responses.Invoice.requiredId, 400);
-      }
-      return query;
-   } catch (error) {
-      throw error;
+export function getQuery(queryParam: unknown): string {
+   const query = queryParam as string;
+   if (!query) {
+      throw new AppError(responses.Invoice.requiredId, 400);
    }
+   return query;
 }

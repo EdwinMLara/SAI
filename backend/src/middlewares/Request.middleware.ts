@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
@@ -50,7 +50,6 @@ const RequestMiddleware = (
       }
       throw new AppError(responses.System.missingFieldBody, 415);
    } catch (error) {
-      console.log(error);
       next(error);
    }
 };

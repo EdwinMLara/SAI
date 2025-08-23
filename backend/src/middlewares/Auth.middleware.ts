@@ -2,7 +2,7 @@ import { Request, NextFunction, Response } from 'express';
 
 import * as helpers from '@helpers/Auth.helpers';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 const Identity = (req: Request, res: Response, next: NextFunction): void => {
@@ -78,7 +78,7 @@ const SessionChecker = (
       }
 
       next();
-   } catch (error) {
+   } catch {
       req.tokenStatus = {
          hasValidAccess: false,
          hasValidRefresh: false,

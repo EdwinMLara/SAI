@@ -3,19 +3,18 @@ import { Request, Response, NextFunction } from 'express';
 import * as auth from '@auth/crypt';
 import * as services from '@services/Auth.services';
 import * as helpers from '@helpers/User.helpers';
-import * as authHelpers from '@helpers/Auth.helpers';
 import * as userServices from '@services/User.services';
 import * as cookies from '@utils/cookies/manageCookies';
 
 import { UserInt } from '@cmm_interfaces/index';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
 export async function register(
-   req: Request<{}, {}, UserInt>,
+   req: Request<object, object, UserInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {
@@ -75,10 +74,7 @@ export async function refreshToken(
 ): Promise<void> {
    try {
       const { refreshToken } = req.cookies;
-      const { user, publicUser } = await services.refreshUserTokens(
-         refreshToken,
-         res
-      );
+      const { user } = await services.refreshUserTokens(refreshToken, res);
       const returnUser = await helpers.returnUser(user);
 
       res.status(200).json({

@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as services from '@services/Document.services';
 import * as helpers from '@helpers/Document.helpers';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
@@ -17,7 +17,7 @@ export async function uploadFile(
       const invoiceId = helpers.getQuery(req.query.invoiceId);
       const filename = `document_${invoiceId}.pdf`;
       await helpers.comprobeInexistence(filename);
-      const file = (req as any).file as Express.Multer.File;
+      const file = (req as Request & { file: Express.Multer.File }).file;
       const url = await services.uploadFile(file, filename);
       res.status(200).json({
          message: responses.Document.uploadSuccess,
@@ -62,7 +62,7 @@ export async function updateDocument(
       const invoiceId = helpers.getQuery(req.query.invoiceId);
       const filename = `document_${invoiceId}.pdf`;
       await helpers.comprobeExistence(filename);
-      const file = (req as any).file as Express.Multer.File;
+      const file = (req as Request & { file: Express.Multer.File }).file;
       const url = await services.updateFile(file, filename);
       res.status(200).json({
          message: responses.Document.updated,

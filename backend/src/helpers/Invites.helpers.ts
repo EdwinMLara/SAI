@@ -4,7 +4,7 @@ import { hasInvite } from '@services/Invite.services';
 import { getIdUser } from '@services/User.services';
 
 import * as token from '@auth/tokens';
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */

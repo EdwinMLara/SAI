@@ -2,7 +2,7 @@ import * as tokens from '@auth/tokens';
 
 import { UserInfoAtToken } from '../types/index';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 export function verifyToken(token: string): boolean {
@@ -45,7 +45,7 @@ export function validateTokenPair(
          hasValidAccess: verifyToken(accessToken),
          hasValidRefresh: verifyToken(refreshToken),
       };
-   } catch (error) {
+   } catch {
       return {
          hasValidAccess: false,
          hasValidRefresh: false,

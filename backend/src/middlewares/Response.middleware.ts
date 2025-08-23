@@ -11,12 +11,14 @@ const ResponseMiddleware = (
 ): void => {
    const originalJson = res.json;
 
-   res.json = function <T = any>(payload: any): Response {
+   res.json = function <T = unknown>(
+      payload: Record<string, unknown>
+   ): Response {
       const response: StandardResponse<T> = {
          status: res.statusCode,
          success: res.statusCode < 400,
-         message: payload.message,
-         data: payload.data ?? payload ?? null,
+         message: payload.message as string,
+         data: (payload.data as T) ?? (payload as T) ?? null,
       };
 
       return originalJson.call(this, response);

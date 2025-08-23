@@ -3,7 +3,7 @@ import { Request, Response, NextFunction } from 'express';
 import * as services from '@services/Ticket.services';
 import * as helpers from '@helpers/Ticket.helpers';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
@@ -17,7 +17,7 @@ export async function uploadFile(
       const ticketId = helpers.getQuery(req.query.ticketId);
       const filename = `ticket_${ticketId}.pdf`;
       await helpers.comprobeInexistence(filename);
-      const file = (req as any).file as Express.Multer.File;
+      const file = (req as Request & { file: Express.Multer.File }).file;
       const url = await services.uploadFile(file, filename);
       res.status(200).json({
          message: responses.Ticket.generated,
@@ -62,7 +62,7 @@ export async function updateTicket(
       const ticketId = helpers.getQuery(req.query.ticketId);
       const filename = `ticket_${ticketId}.pdf`;
       await helpers.comprobeExistence(filename);
-      const file = (req as any).file as Express.Multer.File;
+      const file = (req as Request & { file: Express.Multer.File }).file;
       const url = await services.updateFile(file, filename);
       res.status(200).json({
          message: responses.Ticket.updated,

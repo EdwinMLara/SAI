@@ -5,13 +5,13 @@ import * as services from '@services/Invoice.services';
 
 import { InvoiceInt } from '@cmm_interfaces/index';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
 export async function createInvoice(
-   req: Request<{}, {}, InvoiceInt>,
+   req: Request<object, object, InvoiceInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {
@@ -49,7 +49,7 @@ export async function getInvoice(
 }
 
 export async function updateInvoice(
-   req: Request<{}, {}, InvoiceInt>,
+   req: Request<object, object, InvoiceInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {

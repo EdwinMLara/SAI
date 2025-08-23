@@ -9,7 +9,7 @@ const ErrorMiddleware = (
    err: AppError,
    req: Request,
    res: Response,
-   next: NextFunction
+   _next: NextFunction
 ): void => {
    const statusCode = err instanceof AppError ? err.statusCode || 500 : 500;
 

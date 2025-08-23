@@ -1,8 +1,6 @@
 import { Request, NextFunction, Response } from 'express';
 
-import * as helpers from '@helpers/Auth.helpers';
-
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */

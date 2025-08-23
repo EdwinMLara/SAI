@@ -6,13 +6,13 @@ import * as cookies from '@utils/cookies/manageCookies';
 
 import { UserChangesInt } from '@cmm_interfaces/index';
 
-import responses from '@responses';
+import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
 
 export async function updateUser(
-   req: Request<{}, {}, Partial<UserChangesInt>>,
+   req: Request<object, object, Partial<UserChangesInt>>,
    res: Response,
    next: NextFunction
 ): Promise<void> {

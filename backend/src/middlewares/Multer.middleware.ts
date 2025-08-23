@@ -1,7 +1,6 @@
 import multer, { FileFilterCallback } from 'multer';
 import { Request, Response, NextFunction } from 'express';
 
-import responses from '@responses';
 import AppError from '@utils/system/AppError';
 
 /* ------------------ Code ------------------ */
@@ -27,7 +26,7 @@ const upload = multer({
 
 function requireFile(req: Request, res: Response, next: NextFunction) {
    try {
-      upload.single('file')(req, res, (err: any) => {
+      upload.single('file')(req, res, (err: unknown) => {
          try {
             if (err) {
                throw new AppError('Tipo de archivo no permitido', 415);
