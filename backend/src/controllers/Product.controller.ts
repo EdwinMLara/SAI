@@ -10,73 +10,73 @@ import AppError from '@utils/system/AppError';
 /* ------------------ Code ------------------ */
 
 export async function createProduct(
-  req: Request<{}, {}, ProductInt>,
-  res: Response,
-  next: NextFunction
+   req: Request<{}, {}, ProductInt>,
+   res: Response,
+   next: NextFunction
 ): Promise<void> {
-  try {
-    await helpers.comprobeInexistence(req.body.key);
-    await services.createProduct(req.body);
-    res.status(200).json({ message: responses.Product.created });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
-    return next(new AppError(responses.System.serverError, 500, error));
-  }
+   try {
+      await helpers.comprobeInexistence(req.body.key);
+      await services.createProduct(req.body);
+      res.status(200).json({ message: responses.Product.created });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
 }
 
 export async function getProduct(
-  req: Request,
-  res: Response<{}, ProductInt>,
-  next: NextFunction
+   req: Request,
+   res: Response<{}, ProductInt>,
+   next: NextFunction
 ): Promise<void> {
-  try {
-    const keyProduct = helpers.getQuery(req.query.key);
-    await helpers.comprobeExistence(keyProduct);
-    const product = await services.getProduct(keyProduct);
-    res.status(200).json({
-      message: responses.System.ok,
-      data: { product: product },
-    });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
-    return next(new AppError(responses.System.serverError, 500, error));
-  }
+   try {
+      const keyProduct = helpers.getQuery(req.query.key);
+      await helpers.comprobeExistence(keyProduct);
+      const product = await services.getProduct(keyProduct);
+      res.status(200).json({
+         message: responses.System.ok,
+         data: { product: product },
+      });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
 }
 
 export async function deleteProduct(
-  req: Request,
-  res: Response,
-  next: NextFunction
+   req: Request,
+   res: Response,
+   next: NextFunction
 ): Promise<void> {
-  try {
-    const keyProduct = helpers.getQuery(req.query.key);
-    await helpers.comprobeExistence(keyProduct);
-    await services.deleteProduct(keyProduct);
-    res.status(200).json({ message: responses.Product.deleted });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
-    return next(new AppError(responses.System.serverError, 500, error));
-  }
+   try {
+      const keyProduct = helpers.getQuery(req.query.key);
+      await helpers.comprobeExistence(keyProduct);
+      await services.deleteProduct(keyProduct);
+      res.status(200).json({ message: responses.Product.deleted });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
 }
 
 export async function replaceAllProducts(
-  req: Request<{}, {}, ProductInt[]>,
-  res: Response,
-  next: NextFunction
+   req: Request<{}, {}, ProductInt[]>,
+   res: Response,
+   next: NextFunction
 ): Promise<void> {
-  try {
-    await services.replaceAllProducts(req.body);
-    res.status(200).json({ message: responses.Product.replaced });
-  } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
-    return next(new AppError(responses.System.serverError, 500, error));
-  }
+   try {
+      await services.replaceAllProducts(req.body);
+      res.status(200).json({ message: responses.Product.replaced });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
 }

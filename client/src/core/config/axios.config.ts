@@ -1,4 +1,8 @@
-import axios, { AxiosResponse, AxiosError, InternalAxiosRequestConfig } from 'axios';
+import axios, {
+   AxiosResponse,
+   AxiosError,
+   InternalAxiosRequestConfig,
+} from 'axios';
 
 import env from '@config/env.config';
 import { StandardResponse } from '@cmm_interfaces/index';
@@ -13,12 +17,12 @@ import { StandardResponse } from '@cmm_interfaces/index';
  * - Default headers for JSON content
  */
 const axiosInstance = axios.create({
-  baseURL: `${env.VITE_API_HOST}:${env.VITE_API_PORT}`,
-  timeout: 10000,
-  withCredentials: true,
-  headers: {
-    'Content-Type': 'application/json',
-  },
+   baseURL: `${env.VITE_API_HOST}:${env.VITE_API_PORT}`,
+   timeout: 10000,
+   withCredentials: true,
+   headers: {
+      'Content-Type': 'application/json',
+   },
 });
 
 /**
@@ -29,13 +33,15 @@ const axiosInstance = axios.create({
  * @param response - Axios response with backend structure
  * @returns StandardResponse typed with backend data
  */
-const toStandardResponse = <T = any>(response: AxiosResponse): StandardResponse<T> => {
-  return {
-    status: response.status,
-    success: response.data.success,
-    message: response.data.message,
-    data: response.data.data,
-  } as StandardResponse<T>;
+const toStandardResponse = <T = any>(
+   response: AxiosResponse
+): StandardResponse<T> => {
+   return {
+      status: response.status,
+      success: response.data.success,
+      message: response.data.message,
+      data: response.data.data,
+   } as StandardResponse<T>;
 };
 
 /**
@@ -49,49 +55,51 @@ const toStandardResponse = <T = any>(response: AxiosResponse): StandardResponse<
  * @param error - Full Axios error
  * @returns StandardResponse with normalized error info
  */
-const errorToStandardResponse = <T = any>(error: AxiosError): StandardResponse<T> => {
-  // Error with server response (4xx, 5xx)
-  if (error.response && error.response.data) {
-    const data = error.response.data;
+const errorToStandardResponse = <T = any>(
+   error: AxiosError
+): StandardResponse<T> => {
+   // Error with server response (4xx, 5xx)
+   if (error.response && error.response.data) {
+      const data = error.response.data;
 
-    // If backend already returns StandardResponse
-    if (
-      data &&
-      typeof data === 'object' &&
-      'status' in data &&
-      'success' in data &&
-      'message' in data &&
-      'data' in data
-    ) {
-      return data as StandardResponse<T>;
-    }
+      // If backend already returns StandardResponse
+      if (
+         data &&
+         typeof data === 'object' &&
+         'status' in data &&
+         'success' in data &&
+         'message' in data &&
+         'data' in data
+      ) {
+         return data as StandardResponse<T>;
+      }
 
-    // Create StandardResponse from non-standard backend response
-    return {
-      status: error.response.status,
-      success: error.response.status < 400,
-      message: 'Ocurrió un error inesperado',
-      data: data as T,
-    } as StandardResponse<T>;
-  }
+      // Create StandardResponse from non-standard backend response
+      return {
+         status: error.response.status,
+         success: error.response.status < 400,
+         message: 'Ocurrió un error inesperado',
+         data: data as T,
+      } as StandardResponse<T>;
+   }
 
-  // Network, timeout, or server unavailable error
-  if (error.request) {
-    return {
-      status: 0,
+   // Network, timeout, or server unavailable error
+   if (error.request) {
+      return {
+         status: 0,
+         success: false,
+         message: 'Error de comunicación. Intente más tarde',
+         data: null,
+      } as StandardResponse<T>;
+   }
+
+   // Config or unknown error
+   return {
+      status: 500,
       success: false,
-      message: 'Error de comunicación. Intente más tarde',
+      message: 'Ocurrió un error inesperado. Vuelva a intentar',
       data: null,
-    } as StandardResponse<T>;
-  }
-
-  // Config or unknown error
-  return {
-    status: 500,
-    success: false,
-    message: 'Ocurrió un error inesperado. Vuelva a intentar',
-    data: null,
-  } as StandardResponse<T>;
+   } as StandardResponse<T>;
 };
 
 /**
@@ -103,88 +111,106 @@ const errorToStandardResponse = <T = any>(error: AxiosError): StandardResponse<T
  * All include generic typing for expected data.
  */
 export const apiClient = {
-  /**
-   * Performs a GET request to the specified endpoint
-   * @template T - Expected data type in the response
-   * @param url - Endpoint relative to baseURL
-   * @param config - Additional Axios config (headers, params, etc.)
-   * @returns Promise<StandardResponse<T>> - Normalized response
-   */
-  get: async <T = any>(url: string, config?: any): Promise<StandardResponse<T>> => {
-    try {
-      const response = await axiosInstance.get(url, config);
-      return toStandardResponse<T>(response);
-    } catch (error) {
-      return errorToStandardResponse<T>(error as AxiosError);
-    }
-  },
+   /**
+    * Performs a GET request to the specified endpoint
+    * @template T - Expected data type in the response
+    * @param url - Endpoint relative to baseURL
+    * @param config - Additional Axios config (headers, params, etc.)
+    * @returns Promise<StandardResponse<T>> - Normalized response
+    */
+   get: async <T = any>(
+      url: string,
+      config?: any
+   ): Promise<StandardResponse<T>> => {
+      try {
+         const response = await axiosInstance.get(url, config);
+         return toStandardResponse<T>(response);
+      } catch (error) {
+         return errorToStandardResponse<T>(error as AxiosError);
+      }
+   },
 
-  /**
-   * Performs a POST request to the specified endpoint
-   * @template T - Expected data type in the response
-   * @param url - Endpoint relative to baseURL
-   * @param data - Data to send in the request body
-   * @param config - Additional Axios config
-   * @returns Promise<StandardResponse<T>> - Normalized response
-   */
-  post: async <T = any>(url: string, data?: any, config?: any): Promise<StandardResponse<T>> => {
-    try {
-      const response = await axiosInstance.post(url, data, config);
-      return toStandardResponse<T>(response);
-    } catch (error) {
-      return errorToStandardResponse<T>(error as AxiosError);
-    }
-  },
+   /**
+    * Performs a POST request to the specified endpoint
+    * @template T - Expected data type in the response
+    * @param url - Endpoint relative to baseURL
+    * @param data - Data to send in the request body
+    * @param config - Additional Axios config
+    * @returns Promise<StandardResponse<T>> - Normalized response
+    */
+   post: async <T = any>(
+      url: string,
+      data?: any,
+      config?: any
+   ): Promise<StandardResponse<T>> => {
+      try {
+         const response = await axiosInstance.post(url, data, config);
+         return toStandardResponse<T>(response);
+      } catch (error) {
+         return errorToStandardResponse<T>(error as AxiosError);
+      }
+   },
 
-  /**
-   * Performs a PUT request to the specified endpoint
-   * @template T - Expected data type in the response
-   * @param url - Endpoint relative to baseURL
-   * @param data - Data to send in the request body
-   * @param config - Additional Axios config
-   * @returns Promise<StandardResponse<T>> - Normalized response
-   */
-  put: async <T = any>(url: string, data?: any, config?: any): Promise<StandardResponse<T>> => {
-    try {
-      const response = await axiosInstance.put(url, data, config);
-      return toStandardResponse<T>(response);
-    } catch (error) {
-      return errorToStandardResponse<T>(error as AxiosError);
-    }
-  },
+   /**
+    * Performs a PUT request to the specified endpoint
+    * @template T - Expected data type in the response
+    * @param url - Endpoint relative to baseURL
+    * @param data - Data to send in the request body
+    * @param config - Additional Axios config
+    * @returns Promise<StandardResponse<T>> - Normalized response
+    */
+   put: async <T = any>(
+      url: string,
+      data?: any,
+      config?: any
+   ): Promise<StandardResponse<T>> => {
+      try {
+         const response = await axiosInstance.put(url, data, config);
+         return toStandardResponse<T>(response);
+      } catch (error) {
+         return errorToStandardResponse<T>(error as AxiosError);
+      }
+   },
 
-  /**
-   * Performs a PATCH request to the specified endpoint
-   * @template T - Expected data type in the response
-   * @param url - Endpoint relative to baseURL
-   * @param data - Data to send in the request body
-   * @param config - Additional Axios config
-   * @returns Promise<StandardResponse<T>> - Normalized response
-   */
-  patch: async <T = any>(url: string, data?: any, config?: any): Promise<StandardResponse<T>> => {
-    try {
-      const response = await axiosInstance.patch(url, data, config);
-      return toStandardResponse<T>(response);
-    } catch (error) {
-      return errorToStandardResponse<T>(error as AxiosError);
-    }
-  },
+   /**
+    * Performs a PATCH request to the specified endpoint
+    * @template T - Expected data type in the response
+    * @param url - Endpoint relative to baseURL
+    * @param data - Data to send in the request body
+    * @param config - Additional Axios config
+    * @returns Promise<StandardResponse<T>> - Normalized response
+    */
+   patch: async <T = any>(
+      url: string,
+      data?: any,
+      config?: any
+   ): Promise<StandardResponse<T>> => {
+      try {
+         const response = await axiosInstance.patch(url, data, config);
+         return toStandardResponse<T>(response);
+      } catch (error) {
+         return errorToStandardResponse<T>(error as AxiosError);
+      }
+   },
 
-  /**
-   * Performs a DELETE request to the specified endpoint
-   * @template T - Expected data type in the response
-   * @param url - Endpoint relative to baseURL
-   * @param config - Additional Axios config
-   * @returns Promise<StandardResponse<T>> - Normalized response
-   */
-  delete: async <T = any>(url: string, config?: any): Promise<StandardResponse<T>> => {
-    try {
-      const response = await axiosInstance.delete(url, config);
-      return toStandardResponse<T>(response);
-    } catch (error) {
-      return errorToStandardResponse<T>(error as AxiosError);
-    }
-  },
+   /**
+    * Performs a DELETE request to the specified endpoint
+    * @template T - Expected data type in the response
+    * @param url - Endpoint relative to baseURL
+    * @param config - Additional Axios config
+    * @returns Promise<StandardResponse<T>> - Normalized response
+    */
+   delete: async <T = any>(
+      url: string,
+      config?: any
+   ): Promise<StandardResponse<T>> => {
+      try {
+         const response = await axiosInstance.delete(url, config);
+         return toStandardResponse<T>(response);
+      } catch (error) {
+         return errorToStandardResponse<T>(error as AxiosError);
+      }
+   },
 };
 
 export default apiClient;

@@ -9,40 +9,40 @@ import responses from '@responses';
 import AppError from '@utils/system/AppError';
 
 export async function login(user: UserInt, password: string): Promise<void> {
-  try {
-    const isValidPassword = await compareHash(password, user.password);
-    if (!isValidPassword) {
-      throw new AppError(responses.User.invalidpassword, 401);
-    }
-  } catch (error) {
-    throw error;
-  }
+   try {
+      const isValidPassword = await compareHash(password, user.password);
+      if (!isValidPassword) {
+         throw new AppError(responses.User.invalidpassword, 401);
+      }
+   } catch (error) {
+      throw error;
+   }
 }
 
 export async function refreshUserTokens(
-  refreshToken: string,
-  res: Response
+   refreshToken: string,
+   res: Response
 ): Promise<{ user: UserInt; publicUser: any }> {
-  try {
-    if (!refreshToken) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
+   try {
+      if (!refreshToken) {
+         throw new AppError(responses.System.authenticationError, 401);
+      }
 
-    if (!authHelpers.verifyToken(refreshToken)) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
+      if (!authHelpers.verifyToken(refreshToken)) {
+         throw new AppError(responses.System.authenticationError, 401);
+      }
 
-    const userData = authHelpers.userData(refreshToken);
-    if (!userData || !userData.id) {
-      throw new AppError(responses.System.authenticationError, 401);
-    }
+      const userData = authHelpers.userData(refreshToken);
+      if (!userData || !userData.id) {
+         throw new AppError(responses.System.authenticationError, 401);
+      }
 
-    const user = await userServices.getUserById(userData.id);
-    await cookies.setAuthToken(res, user);
-    await cookies.setRefreshToken(res, user);
+      const user = await userServices.getUserById(userData.id);
+      await cookies.setAuthToken(res, user);
+      await cookies.setRefreshToken(res, user);
 
-    return { user, publicUser: userData };
-  } catch (error) {
-    throw error;
-  }
+      return { user, publicUser: userData };
+   } catch (error) {
+      throw error;
+   }
 }

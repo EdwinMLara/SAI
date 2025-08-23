@@ -8,17 +8,17 @@ import { SidebarProvider } from '@context/Sidebar.context';
 /* ------------------ Code ------------------ */
 
 function App() {
-  return (
-    <BrowserRouter>
-      <AuthProvider>
-        <SidebarProvider>
-          <Theme>
-            <AppRoutes />
-          </Theme>
-        </SidebarProvider>
-      </AuthProvider>
-    </BrowserRouter>
-  );
+   return (
+      <BrowserRouter>
+         <AuthProvider>
+            <SidebarProvider>
+               <Theme>
+                  <AppRoutes />
+               </Theme>
+            </SidebarProvider>
+         </AuthProvider>
+      </BrowserRouter>
+   );
 }
 
 export default App;

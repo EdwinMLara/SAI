@@ -4,21 +4,25 @@ import { StandardResponse } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
-const ResponseMiddleware = (req: Request, res: Response, next: NextFunction): void => {
-  const originalJson = res.json;
+const ResponseMiddleware = (
+   req: Request,
+   res: Response,
+   next: NextFunction
+): void => {
+   const originalJson = res.json;
 
-  res.json = function <T = any>(payload: any): Response {
-    const response: StandardResponse<T> = {
-      status: res.statusCode,
-      success: res.statusCode < 400,
-      message: payload.message,
-      data: payload.data ?? payload ?? null,
-    };
+   res.json = function <T = any>(payload: any): Response {
+      const response: StandardResponse<T> = {
+         status: res.statusCode,
+         success: res.statusCode < 400,
+         message: payload.message,
+         data: payload.data ?? payload ?? null,
+      };
 
-    return originalJson.call(this, response);
-  };
+      return originalJson.call(this, response);
+   };
 
-  next();
+   next();
 };
 
 export default ResponseMiddleware;

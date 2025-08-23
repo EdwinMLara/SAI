@@ -9,15 +9,15 @@ import Quotations from '../pages/Quotations';
 /* ------------------ Code ------------------ */
 
 const Routing = () => {
-  return (
-    <Routes>
-      <Route element={<AdminProtected />}>
-        <Route path="/database" element={<DatabaseProduct />} />
-      </Route>
-      <Route path="/search" element={<SearchProduct />} />
-      <Route path="/quotations" element={<Quotations />} />
-    </Routes>
-  );
+   return (
+      <Routes>
+         <Route element={<AdminProtected />}>
+            <Route path="/database" element={<DatabaseProduct />} />
+         </Route>
+         <Route path="/search" element={<SearchProduct />} />
+         <Route path="/quotations" element={<Quotations />} />
+      </Routes>
+   );
 };
 
 export default Routing;
