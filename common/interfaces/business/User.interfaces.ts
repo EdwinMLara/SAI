@@ -25,3 +25,16 @@ export interface PublicUserInt {
    email: string;
    role: 'super' | 'admin' | 'user';
 }
+
+export interface NewUserInt {
+   name: string;
+   username: string;
+   email: string;
+   phone: string;
+   password: string;
+}
+
+export interface UserCredentialsInt {
+   email: string;
+   password: string;
+}
