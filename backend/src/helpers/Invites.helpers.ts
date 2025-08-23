@@ -7,8 +7,12 @@ import * as token from '@auth/tokens';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Validates authentication token for invite operations
+ * @param authToken - JWT token to validate
+ * @returns Promise<void>
+ * @throws AppError if token is missing or invalid
+ */
 export async function validateAuthToken(authToken: string): Promise<void> {
    try {
       if (!authToken) {
@@ -26,6 +30,12 @@ export async function validateAuthToken(authToken: string): Promise<void> {
    }
 }
 
+/**
+ * Extracts sender reference from authentication token
+ * @param authToken - JWT token containing sender information
+ * @returns Promise<ObjectId> - ObjectId of the user sending the invitation
+ * @throws AppError if token payload is invalid or user not found
+ */
 export async function getRef(authToken: string): Promise<ObjectId> {
    try {
       const payload = token.getPayload(authToken);
@@ -46,6 +56,12 @@ export async function getRef(authToken: string): Promise<ObjectId> {
    }
 }
 
+/**
+ * Validates that an email address is not already invited
+ * @param email - Email address to check for existing invitations
+ * @returns Promise<void>
+ * @throws AppError if email is missing or already has an invitation
+ */
 export async function validateState(email: string): Promise<void> {
    try {
       if (!email) {

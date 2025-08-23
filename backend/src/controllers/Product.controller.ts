@@ -7,8 +7,14 @@ import * as services from '@services/Product.services';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Creates a new product in the system
+ * Validates that the product key doesn't already exist before creation
+ * @param req - Express request object containing product data in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function createProduct(
    req: Request<object, object, ProductInt>,
    res: Response,
@@ -26,6 +32,14 @@ export async function createProduct(
    }
 }
 
+/**
+ * Retrieves a specific product by its key
+ * Validates product existence before returning data
+ * @param req - Express request object with product key in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function getProduct(
    req: Request,
    res: Response<object, ProductInt>,
@@ -47,6 +61,14 @@ export async function getProduct(
    }
 }
 
+/**
+ * Deletes a product from the system
+ * Validates product existence before deletion
+ * @param req - Express request object with product key in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function deleteProduct(
    req: Request,
    res: Response,
@@ -65,6 +87,14 @@ export async function deleteProduct(
    }
 }
 
+/**
+ * Replaces all existing products with a new set of products
+ * Removes all current products and creates new ones from the provided array
+ * @param req - Express request object containing array of product data in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function replaceAllProducts(
    req: Request<object, object, ProductInt[]>,
    res: Response,

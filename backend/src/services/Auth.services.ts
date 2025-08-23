@@ -8,6 +8,13 @@ import { Response } from 'express';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
+/**
+ * Validates user login credentials by comparing provided password with stored hash
+ * @param user - User object containing encrypted password
+ * @param password - Plain text password to validate
+ * @returns Promise<void>
+ * @throws AppError if password is invalid
+ */
 export async function login(user: UserInt, password: string): Promise<void> {
    const isValidPassword = await compareHash(password, user.password);
    if (!isValidPassword) {
@@ -15,6 +22,14 @@ export async function login(user: UserInt, password: string): Promise<void> {
    }
 }
 
+/**
+ * Refreshes user authentication tokens using a valid refresh token
+ * Validates refresh token, retrieves user data, and sets new authentication cookies
+ * @param refreshToken - JWT refresh token from client cookies
+ * @param res - Express response object for setting new cookies
+ * @returns Promise containing user data and public user information
+ * @throws AppError if refresh token is invalid or missing
+ */
 export async function refreshUserTokens(
    refreshToken: string,
    res: Response

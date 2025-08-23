@@ -1,8 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { ProductDocument } from '@interfaces/ExtendsModel';
 
-/* ------------------ Code ------------------ */
-
 const ProductSchema: Schema = new Schema<ProductDocument>({
    code: { type: String, required: true, unique: true, index: true },
    key: { type: String, required: true, unique: true, index: true },

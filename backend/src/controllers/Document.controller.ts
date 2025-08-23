@@ -6,8 +6,14 @@ import * as helpers from '@helpers/Document.helpers';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Uploads a new PDF document file associated with an invoice
+ * Validates that the document doesn't already exist before uploading
+ * @param req - Express request object with invoiceId in query and file in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function uploadFile(
    req: Request,
    res: Response,
@@ -31,6 +37,14 @@ export async function uploadFile(
    }
 }
 
+/**
+ * Retrieves the URL of a document associated with an invoice
+ * Validates that the document exists before returning its URL
+ * @param req - Express request object with invoiceId in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function readDocumentURL(
    req: Request,
    res: Response,
@@ -53,6 +67,14 @@ export async function readDocumentURL(
    }
 }
 
+/**
+ * Updates an existing document by replacing it with a new file
+ * Validates document existence before updating
+ * @param req - Express request object with invoiceId in query and new file in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function updateDocument(
    req: Request,
    res: Response,
@@ -76,6 +98,14 @@ export async function updateDocument(
    }
 }
 
+/**
+ * Deletes a document associated with an invoice
+ * Validates document existence before deletion
+ * @param req - Express request object with invoiceId in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function deleteDocument(
    req: Request,
    res: Response,

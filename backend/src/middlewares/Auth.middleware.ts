@@ -5,6 +5,14 @@ import * as helpers from '@helpers/Auth.helpers';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
+/**
+ * Authentication middleware that validates access and refresh tokens
+ * Skips authentication for auth-related endpoints
+ * Requires valid tokens for protected routes
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ */
 const Identity = (req: Request, res: Response, next: NextFunction): void => {
    if (req.url.startsWith('/api/auth/')) {
       return next();
@@ -53,6 +61,14 @@ const Identity = (req: Request, res: Response, next: NextFunction): void => {
    }
 };
 
+/**
+ * Session checking middleware that validates tokens without blocking requests
+ * Sets token status and user information in request object for downstream use
+ * Does not reject requests with invalid tokens, just provides status information
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ */
 const SessionChecker = (
    req: Request,
    res: Response,

@@ -3,6 +3,10 @@ import winston from 'winston';
 
 import env from '@config/env';
 
+/**
+ * Winston logger configuration for database connection events
+ * Provides structured logging for MongoDB connection status
+ */
 const logger = winston.createLogger({
    level: 'info',
    format: winston.format.combine(
@@ -12,12 +16,10 @@ const logger = winston.createLogger({
    transports: [new winston.transports.Console()],
 });
 
-/* ------------------ Code ------------------ */
-
 /**
- * Establishes a connection to the MongoDB database using Mongoose.
- * Logs a message indicating whether the connection was successful or failed.
- * @returns {Promise<void>} Resolves when the connection process is complete.
+ * Establishes a connection to the MongoDB database using Mongoose
+ * Uses environment configuration for connection URI and handles connection errors
+ * @returns Promise<void> - Resolves when connection process is complete
  */
 export const connect = async (): Promise<void> => {
    try {
@@ -29,9 +31,9 @@ export const connect = async (): Promise<void> => {
 };
 
 /**
- * Disconnects from the MongoDB database using Mongoose.
- * Logs a message indicating whether the disconnection was successful or failed.
- * @returns {Promise<void>} Resolves when the disconnection process is complete.
+ * Safely disconnects from the MongoDB database using Mongoose
+ * Logs the disconnection process and handles potential errors
+ * @returns Promise<void> - Resolves when disconnection process is complete
  */
 export const disconnect = async (): Promise<void> => {
    try {

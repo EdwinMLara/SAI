@@ -6,8 +6,14 @@ import * as helpers from '@helpers/Ticket.helpers';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Uploads a new PDF ticket file
+ * Validates that the ticket doesn't already exist before uploading
+ * @param req - Express request object with ticketId in query and file in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function uploadFile(
    req: Request,
    res: Response,
@@ -31,6 +37,14 @@ export async function uploadFile(
    }
 }
 
+/**
+ * Retrieves the URL of a ticket file
+ * Validates that the ticket exists before returning its URL
+ * @param req - Express request object with ticketId in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function readTicketURL(
    req: Request,
    res: Response,
@@ -53,6 +67,14 @@ export async function readTicketURL(
    }
 }
 
+/**
+ * Updates an existing ticket by replacing it with a new file
+ * Validates ticket existence before updating
+ * @param req - Express request object with ticketId in query and new file in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function updateTicket(
    req: Request,
    res: Response,
@@ -76,6 +98,14 @@ export async function updateTicket(
    }
 }
 
+/**
+ * Deletes a ticket file from the system
+ * Validates ticket existence before deletion
+ * @param req - Express request object with ticketId in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function deleteTicket(
    req: Request,
    res: Response,

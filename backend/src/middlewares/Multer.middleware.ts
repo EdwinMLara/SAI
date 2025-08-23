@@ -3,8 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Multer configuration for file uploads
+ * Accepts PDF and JPEG files with 5MB size limit
+ * Uses memory storage for temporary file handling
+ */
 const upload = multer({
    storage: multer.memoryStorage(),
    limits: { fileSize: 5 * 1024 * 1024 },
@@ -24,6 +27,14 @@ const upload = multer({
    },
 });
 
+/**
+ * File upload middleware that requires a file to be present in the request
+ * Validates file type and ensures file is provided
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ * @throws AppError if file is invalid or missing
+ */
 function requireFile(req: Request, res: Response, next: NextFunction) {
    try {
       upload.single('file')(req, res, (err: unknown) => {

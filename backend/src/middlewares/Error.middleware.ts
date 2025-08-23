@@ -3,8 +3,15 @@ import { NextFunction, Request, Response } from 'express';
 import log from '@utils/system/Logger.utils';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Global error handling middleware
+ * Logs all errors with detailed metadata and responds with appropriate HTTP status codes
+ * Distinguishes between custom AppError instances and generic errors
+ * @param err - Error object (AppError or generic Error)
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param _next - Express next function (unused)
+ */
 const ErrorMiddleware = (
    err: AppError,
    req: Request,

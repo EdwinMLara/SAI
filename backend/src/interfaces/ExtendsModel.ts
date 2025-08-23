@@ -6,8 +6,11 @@ import {
    InviteInt,
 } from '@cmm_interfaces/index';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Extended Document interfaces for Mongoose models
+ * Combines business interfaces with MongoDB Document functionality
+ * Provides type safety for database operations
+ */
 export interface UserDocument extends UserInt, Document {}
 export interface ProductDocument extends ProductInt, Document {}
 export interface InvoiceDocument extends InvoiceInt, Document {}

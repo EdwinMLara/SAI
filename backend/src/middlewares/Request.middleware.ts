@@ -3,8 +3,15 @@ import { Request, Response, NextFunction } from 'express';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Request validation middleware
+ * Validates request content type and body presence based on HTTP method and route
+ * Handles special cases for file uploads and different content types
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function
+ * @throws AppError for invalid requests or missing required data
+ */
 const RequestMiddleware = (
    req: Request,
    res: Response,

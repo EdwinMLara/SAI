@@ -9,8 +9,14 @@ import { UserChangesInt } from '@cmm_interfaces/index';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Updates user information with provided data
+ * Updates authentication tokens after successful user data modification
+ * @param req - Express request object containing user updates in body and user ID in user property
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function updateUser(
    req: Request<object, object, Partial<UserChangesInt>>,
    res: Response,

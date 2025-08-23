@@ -1,8 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { InvoiceDocument } from '@interfaces/ExtendsModel';
 
-/* ------------------ Code ------------------ */
-
 const InvoiceSchema: Schema = new Schema<InvoiceDocument>({
    invoiceId: { type: String, required: true, unique: true, index: true },
    documentId: { type: String, unique: true, index: true },

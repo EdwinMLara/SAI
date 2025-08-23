@@ -3,8 +3,13 @@ import { Request, NextFunction, Response } from 'express';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Role-based access control middleware
+ * Restricts access to routes based on user roles
+ * @param allow - Array of allowed roles for the route
+ * @returns Express middleware function that checks user permissions
+ * @throws AppError if user lacks required permissions
+ */
 const Protect = (...allow: string[]) => {
    return (req: Request, res: Response, next: NextFunction): void => {
       try {

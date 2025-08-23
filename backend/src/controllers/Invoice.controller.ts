@@ -8,8 +8,14 @@ import { InvoiceInt } from '@cmm_interfaces/index';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Creates a new invoice in the system
+ * Validates that the invoice ID doesn't already exist before creation
+ * @param req - Express request object containing invoice data in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function createInvoice(
    req: Request<object, object, InvoiceInt>,
    res: Response,
@@ -27,6 +33,14 @@ export async function createInvoice(
    }
 }
 
+/**
+ * Retrieves a specific invoice by its ID
+ * Validates invoice existence before returning data
+ * @param req - Express request object with invoice ID in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function getInvoice(
    req: Request,
    res: Response,
@@ -48,6 +62,14 @@ export async function getInvoice(
    }
 }
 
+/**
+ * Updates an existing invoice with new data
+ * Validates invoice existence before updating
+ * @param req - Express request object containing updated invoice data in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function updateInvoice(
    req: Request<object, object, InvoiceInt>,
    res: Response,
@@ -65,6 +87,14 @@ export async function updateInvoice(
    }
 }
 
+/**
+ * Deletes an invoice from the system
+ * Validates invoice existence before deletion
+ * @param req - Express request object with invoice ID in query parameters
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function deleteInvoice(
    req: Request,
    res: Response,

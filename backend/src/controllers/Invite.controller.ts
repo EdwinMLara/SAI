@@ -7,8 +7,14 @@ import * as services from '@services/Invite.services';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Creates a new invitation for a user to join the system
+ * Validates auth token, email availability, and creates invite with specified role
+ * @param req - Express request object containing auth token, email, and role in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function createInvite(
    req: Request,
    res: Response,
@@ -33,6 +39,14 @@ export async function createInvite(
    }
 }
 
+/**
+ * Retrieves all invitations created by the authenticated user
+ * Returns a list of pending invitations sent by the current user
+ * @param req - Express request object containing user information
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function getInvites(
    req: Request,
    res: Response,
@@ -54,6 +68,14 @@ export async function getInvites(
    }
 }
 
+/**
+ * Removes an existing invitation from the system
+ * Validates that the invitation exists before deletion
+ * @param req - Express request object containing email of invitation to remove in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function removeInvite(
    req: Request,
    res: Response,

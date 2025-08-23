@@ -1,8 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 import { UserDocument } from '@interfaces/ExtendsModel';
 
-/* ------------------ Code ------------------ */
-
 const UserSchema: Schema = new Schema<UserDocument>({
    image: { type: String, required: false },
    name: { type: String, required: true },

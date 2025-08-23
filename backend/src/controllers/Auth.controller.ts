@@ -11,8 +11,14 @@ import { UserInt } from '@cmm_interfaces/index';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Registers a new user in the system
+ * Validates user uniqueness, invite existence, encrypts password and sets authentication cookies
+ * @param req - Express request object containing user registration data in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function register(
    req: Request<object, object, UserInt>,
    res: Response,
@@ -41,6 +47,14 @@ export async function register(
    }
 }
 
+/**
+ * Authenticates a user with email and password
+ * Sets authentication and refresh tokens as HTTP cookies upon successful login
+ * @param req - Express request object containing email and password in body
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function login(
    req: Request,
    res: Response,
@@ -67,6 +81,14 @@ export async function login(
    }
 }
 
+/**
+ * Refreshes user authentication tokens using a valid refresh token
+ * Validates the refresh token and issues new authentication tokens
+ * @param req - Express request object containing refresh token in cookies
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function refreshToken(
    req: Request,
    res: Response,
@@ -92,6 +114,14 @@ export async function refreshToken(
    }
 }
 
+/**
+ * Logs out a user by clearing authentication cookies
+ * Removes both access and refresh tokens from client
+ * @param req - Express request object
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function logout(
    req: Request,
    res: Response,
@@ -109,6 +139,14 @@ export async function logout(
    }
 }
 
+/**
+ * Checks the current session state and token validity
+ * Returns user authentication status, user data, and token validity information
+ * @param req - Express request object containing user and token status information
+ * @param res - Express response object
+ * @param next - Express next function for error handling
+ * @returns Promise<void>
+ */
 export async function sessionState(
    req: Request,
    res: Response,

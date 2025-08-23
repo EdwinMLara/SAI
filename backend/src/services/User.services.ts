@@ -6,13 +6,23 @@ import { UserChangesInt, UserInt } from '@cmm_interfaces/index';
 import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
 
-/* ------------------ Code ------------------ */
-
+/**
+ * Creates a new user in the database
+ * @param user - User data object conforming to UserInt interface
+ * @returns Promise<void>
+ */
 export async function createUser(user: UserInt): Promise<void> {
    const newUser = new UserModel(user);
    await newUser.save();
 }
 
+/**
+ * Updates user information with partial data and returns the updated user
+ * @param user - User ID string
+ * @param updates - Partial user data to update
+ * @returns Promise<UserInt> - Updated user data
+ * @throws AppError if user is not found or update fails
+ */
 export async function updatedUser(
    user: string,
    updates: Partial<UserChangesInt>
@@ -26,6 +36,12 @@ export async function updatedUser(
    return updated as UserInt;
 }
 
+/**
+ * Retrieves user ObjectId by email address
+ * @param email - User email address
+ * @returns Promise<ObjectId> - The user's ObjectId
+ * @throws AppError if user is not found
+ */
 export async function getIdUser(email: string): Promise<ObjectId> {
    const user = await UserModel.findOne({ email });
    if (!user) {
@@ -34,6 +50,12 @@ export async function getIdUser(email: string): Promise<ObjectId> {
    return user._id as ObjectId;
 }
 
+/**
+ * Retrieves user data by ObjectId
+ * @param userId - User ObjectId
+ * @returns Promise<UserInt> - The user data
+ * @throws AppError if user is not found
+ */
 export async function getUserByObject(userId: ObjectId): Promise<UserInt> {
    const user = await UserModel.findOne({ _id: userId });
    if (!user) {
@@ -42,6 +64,12 @@ export async function getUserByObject(userId: ObjectId): Promise<UserInt> {
    return user as UserInt;
 }
 
+/**
+ * Retrieves user data by string ID
+ * @param userId - User ID as string
+ * @returns Promise<UserInt> - The user data
+ * @throws AppError if user is not found
+ */
 export async function getUserById(userId: string): Promise<UserInt> {
    const user = await UserModel.findOne({ _id: userId });
    if (!user) {
@@ -50,6 +78,12 @@ export async function getUserById(userId: string): Promise<UserInt> {
    return user as UserInt;
 }
 
+/**
+ * Searches for existing users with the same unique field values
+ * Checks email, username, name, and phone for uniqueness
+ * @param fields - Object containing user fields to check for uniqueness
+ * @returns Promise<{field: string} | void> - Returns field name if duplicate found, void if unique
+ */
 export async function findUserByUniqueFields({
    email,
    username,
