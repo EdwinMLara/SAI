@@ -10,14 +10,12 @@ export default defineConfig({
    plugins: [react()],
    resolve: {
       alias: {
+         // Intern paths
          '@': resolve(__dirname, './src'),
          '@components': resolve(__dirname, './src/components'),
-         '@cmm_interfaces': resolve(__dirname, '../common/interfaces/*'),
          '@ui': resolve(__dirname, './src/components/ui'),
          '@services': resolve(__dirname, './src/core/services'),
          '@interfaces': resolve(__dirname, './src/core/interfaces'),
-         '@common': resolve(__dirname, '../common'),
-         '@managment': resolve(__dirname, './src/core/managment'),
          '@config': resolve(__dirname, './src/core/config'),
          '@utils': resolve(__dirname, './src/utils'),
          '@pages': resolve(__dirname, './src/pages'),
@@ -25,12 +23,16 @@ export default defineConfig({
          '@context': resolve(__dirname, './src/context'),
          '@layouts': resolve(__dirname, './src/layouts'),
          '@routes': resolve(__dirname, './src/routes'),
+
+         // Common paths
+         '@cmm': resolve(__dirname, '../common'),
+         '@cmm_interfaces': resolve(__dirname, '../common/interfaces/*'),
       },
    },
    server: {
       proxy: {
          '/api': {
-            target: `http://${process.env.VITE_API_HOST}:${process.env.VITE_API_PORT}`,
+            target: 'http://localhost:5001',
             changeOrigin: true,
          },
       },
