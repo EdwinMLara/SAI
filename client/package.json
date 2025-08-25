@@ -1,21 +1,21 @@
 {
-   "name": "client",
+   "name": "sai-client",
    "private": true,
-   "version": "0.0.0",
+   "version": "1.0.0",
+   "description": "Sistema de Administración INSOEL - Client",
    "type": "module",
+   "engines": {
+      "node": ">=20.0.0"
+   },
    "scripts": {
       "dev": "vite --host",
       "build": "tsc -b && vite build",
-      "lint": "eslint .",
-      "preview": "vite preview"
-   },
-   "engines": {
-      "node": "22.15.0"
+      "preview": "vite preview",
+      "lint": "eslint src --ext .ts,.tsx",
+      "lint:fix": "eslint src --ext .ts,.tsx --fix"
    },
    "dependencies": {
-      "@types/axios": "^0.9.36",
       "axios": "^1.11.0",
-      "dotenv": "^17.2.1",
       "framer-motion": "^12.19.1",
       "react": "^19.1.0",
       "react-dom": "^19.1.0",
@@ -24,7 +24,6 @@
       "xlsx": "^0.18.5"
    },
    "devDependencies": {
-      "@types/dotenv": "^6.1.1",
       "@types/node": "^24.0.4",
       "@types/react": "^19.1.8",
       "@types/react-dom": "^19.1.6",
@@ -32,7 +31,6 @@
       "autoprefixer": "^10.4.21",
       "postcss": "^8.5.6",
       "tailwindcss": "^3.4.17",
-      "typescript": "^5.8.3",
       "vite": "^7.0.0"
    }
 }
