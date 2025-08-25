@@ -1,114 +1,54 @@
-import axios from '@config/axios.config';
+import apiClient from '../config/axios.config';
+import apiPaths from '../config/apiPaths.config';
 
 import {
-   UserCredentials,
-   PublicUser,
-   NewUser,
-} from '@interfaces/User.interfaces';
+   UserCredentialsInt,
+   NewUserInt,
+   StandardResponse,
+} from '@common/interfaces';
 
 /* ------------------ Code ------------------ */
 
-export async function login(user: UserCredentials): Promise<{
-   status: number;
-   message: string;
-}> {
-   const response = await axios.post('/auth/login', user);
-   return {
-      status: response.status,
-      message: response.data.message,
-   };
+/**
+ * Logs in with the user's credentials.
+ * @param {UserCredentialsInt} credentials - User credentials (email and password).
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function login(
+   credentials: UserCredentialsInt
+): Promise<StandardResponse> {
+   return await apiClient.post(apiPaths.auth.login, credentials);
 }
 
-export async function register(user: NewUser): Promise<{
-   status: number;
-   message: string;
-   user: PublicUser | null;
-}> {
-   const response = await axios.post('/auth/register', user);
-   return {
-      status: response.status,
-      message: response.data.message,
-      user: response.data.data?.user || null,
-   };
+/**
+ * Registers a new user in the system.
+ * @param {NewUserInt} data - New user data.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function register(data: NewUserInt): Promise<StandardResponse> {
+   return await apiClient.post(apiPaths.auth.register, data);
 }
 
-export async function session(): Promise<{
-   user: PublicUser | null;
-   isAuthenticated: boolean;
-   access: boolean;
-   refresh: boolean;
-}> {
-   try {
-      const response = await axios.get('/auth/session');
-      const data = response.data.data || response.data;
-
-      return {
-         user: data.user || null,
-         isAuthenticated: data.isAuthenticated || false,
-         access: data.access !== false,
-         refresh: data.refresh !== false,
-      };
-   } catch (error) {
-      // Para manejar respuestas de error, extraemos los datos directamente
-      const errorResponse = error as any;
-      if (errorResponse?.status === 401 && errorResponse?.data) {
-         const errorData = errorResponse.data.data || errorResponse.data;
-         return {
-            user: null,
-            isAuthenticated: false,
-            access: errorData.access || false,
-            refresh: errorData.refresh || false,
-         };
-      }
-      console.warn('Error in session service:', error);
-      return {
-         user: null,
-         isAuthenticated: false,
-         access: false,
-         refresh: false,
-      };
-   }
+/**
+ * Logs out the current user.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function logout(): Promise<StandardResponse> {
+   return await apiClient.post(apiPaths.auth.logout);
 }
 
-export async function logout(): Promise<{
-   status: number;
-}> {
-   const response = await axios.post('/auth/logout');
-   return {
-      status: response.status,
-   };
+/**
+ * Refreshes the user's authentication token.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function refresh(): Promise<StandardResponse> {
+   return await apiClient.post(apiPaths.auth.refresh);
 }
 
-export async function refresh(): Promise<{
-   status: number;
-   user?: PublicUser | null;
-   isAuthenticated?: boolean;
-   message?: string;
-}> {
-   try {
-      const response = await axios.get('/auth/refresh');
-      return {
-         status: response.status,
-         user: response.data.data?.user || null,
-         isAuthenticated: response.data.data?.isAuthenticated || false,
-      };
-   } catch (error) {
-      // Para manejar respuestas de error con el nuevo formato
-      const errorResponse = error as any;
-      if (errorResponse?.status && errorResponse?.data) {
-         return {
-            status: errorResponse.status,
-            message:
-               errorResponse.data.message || 'Error al refrescar el token',
-            user: null,
-            isAuthenticated: false,
-         };
-      }
-      return {
-         status: 500,
-         message: 'Error de conexión al servidor',
-         user: null,
-         isAuthenticated: false,
-      };
-   }
+/**
+ * Gets the current session of the authenticated user.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function getSession(): Promise<StandardResponse> {
+   return await apiClient.get(apiPaths.auth.session);
 }
