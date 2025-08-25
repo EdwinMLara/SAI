@@ -1,117 +1,67 @@
-# SAI - Sistema de Administración INSOEL
+# SAI - INSOEL Administration System
 
-Monorepo que contiene el backend (Node.js/TypeScript) y frontend (React/TypeScript) del Sistema de Administración INSOEL.
+Monorepo for backend (Node.js/TypeScript) and frontend (React/TypeScript).
 
-## 🚀 Configuración Inicial
-
-### Instalación
+## Quick Start
 
 ```bash
+git clone <repository-url>
+cd sai
 npm install
 ```
 
-Este comando instala todas las dependencias tanto de la raíz como de los workspaces (backend y client).
+## Main Scripts (root)
 
-## 🛠️ Scripts Disponibles
+- `npm run dev` – Run backend and client in parallel
+- `npm run lint` – Lint all workspaces
+- `npm run lint:fix` – Lint and fix all workspaces
+- `npm run prettier` – Check formatting
+- `npm run format` – Format all code
 
-### Desarrollo
-
-- `npm run dev` - Ejecuta backend y client en paralelo
-- `npm run dev:backend` - Solo ejecuta el backend en modo desarrollo
-- `npm run dev:client` - Solo ejecuta el client en modo desarrollo
-
-### Construcción
-
-- `npm run build` - Construye todo el proyecto
-- `npm run build:backend` - Construye solo el backend
-- `npm run build:client` - Construye solo el client
-
-### Linting
-
-- `npm run lint` - Ejecuta linting en todo el código
-- `npm run lint:fix` - Ejecuta linting y corrige automáticamente
-- `npm run lint:backend` - Linting solo del backend
-- `npm run lint:client` - Linting solo del client
-
-## 📁 Estructura del Proyecto
+## Structure
 
 ```
 sai/
-├── .env                      # Variables de entorno compartidas
-├── .prettierrc              # Configuración de Prettier
-├── package.json             # Dependencias y scripts del monorepo
-├── backend/                 # API Backend (Node.js + TypeScript)
-├── client/                  # Frontend (React + TypeScript)
-├── common/                  # Interfaces compartidas
-└── packages/                # Paquetes compartidos
+├── .env              # Shared environment variables
+├── .prettierrc        # Prettier config
+├── eslint.config.js   # ESLint config (flat config)
+├── package.json       # Monorepo config & workspaces
+├── package-lock.json  # Single lockfile for all
+├── backend/           # API (Node.js + TypeScript)
+├── client/            # Frontend (React + TypeScript)
+├── common/            # Shared interfaces (optional)
+└── docs/              # Documentation
 ```
 
-## 🔧 Variables de Entorno
+## Environment Variables
 
-El archivo `.env` en la raíz contiene todas las variables de entorno para ambos proyectos:
+- All variables are in the root `.env` file.
+- Backend and client both read from this file.
+- For frontend, use variables with the `VITE_` prefix.
 
-- **Backend**: Variables sin prefijo (NODE_ENV, SERVER_PORT, etc.)
-- **Frontend**: Variables con prefijo VITE\_ (VITE_API_HOST, VITE_API_PORT, etc.)
+## Dependencies
 
-## 📦 Gestión de Dependencias
-
-### Dependencias Compartidas
-
-Las siguientes dependencias se gestionan desde la raíz:
-
-- `dotenv` - Variables de entorno
-- `prettier` - Formateo de código
-- `eslint` - Linting
-- `typescript` - Soporte de TypeScript
-
-### Dependencias Específicas
-
-Cada workspace mantiene sus propias dependencias específicas:
-
-**Backend:**
-
-- Express, MongoDB, JWT, etc.
-
-**Client:**
-
-- React, Vite, Tailwind, etc.
-
-## 🚀 Desarrollo
-
-1. **Clonar el repositorio**
-
+- Shared dev dependencies (eslint, prettier, typescript, etc.) are installed in the root.
+- To add a dependency to a workspace:
    ```bash
-   git clone <repository-url>
-   cd sai
+   npm install <package> --workspace=backend
+   npm install <package> --workspace=client
+   # For devDependencies:
+   npm install <package> -D --workspace=backend
+   npm install <package> -D --workspace=client
    ```
 
-2. **Instalar dependencias**
+## package-lock.json
 
-   ```bash
-   npm install
-   ```
+- Only exists in the root. Do not add lockfiles in workspaces.
 
-3. **Configurar variables de entorno**
-   - El archivo `.env` ya está configurado con valores de desarrollo
+## Best Practices
 
-4. **Iniciar desarrollo**
-   ```bash
-   npm run dev
-   ```
+- Keep shared dev dependencies in the root.
+- Add specific dependencies only to the relevant workspace.
+- Use root scripts for global tasks.
+- Do not duplicate ESLint, Prettier, or config files.
 
-Esto iniciará:
-
-- Backend en `http://localhost:5001`
-- Frontend en `http://localhost:5173`
-
-## 🏗️ Arquitectura
-
-- **Monorepo**: Utilizando npm workspaces
-- **Backend**: Node.js + TypeScript + Express + MongoDB
-- **Frontend**: React + TypeScript + Vite + Tailwind CSS
-- **Dependencias compartidas**: Gestionadas en la raíz del proyecto
-- **Configuración unificada**: ESLint y Prettier compartidos
-
-## 📄 Licencia
+## License
 
 ISC
