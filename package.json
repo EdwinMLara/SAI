@@ -12,6 +12,8 @@
    },
    "scripts": {
       "dev": "npm-run-all --parallel dev:backend dev:client",
+      "dev:backend": "npm --prefix backend run dev",
+      "dev:client": "npm --prefix client run dev",
       "lint": "npm-run-all lint:backend lint:client",
       "lint:fix": "npm-run-all lint:fix:backend lint:fix:client",
       "prettier": "prettier --check .",
