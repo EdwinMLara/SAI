@@ -6,8 +6,6 @@ import axios, {
 
 import { StandardResponse } from '@cmm_interfaces/index';
 
-import { baseURL } from './apiPaths.config';
-
 /* ------------------ Code ------------------ */
 
 /**
@@ -18,7 +16,7 @@ import { baseURL } from './apiPaths.config';
  * - Default headers for JSON content
  */
 const axiosInstance = axios.create({
-   baseURL: baseURL,
+   baseURL: 'http://localhost:5001',
    timeout: 10000,
    withCredentials: true,
    headers: {

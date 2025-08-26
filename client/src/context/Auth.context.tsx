@@ -1,157 +1,196 @@
 import React, {
    createContext,
-   useState,
+   useContext,
+   useReducer,
    useEffect,
    ReactNode,
-   useContext,
 } from 'react';
-import { useNavigate } from 'react-router-dom';
-import * as services from '@services/Auth.services';
+import * as AuthServices from '@/core/services/Auth.services';
 import {
-   NewUser,
-   PublicUser,
-   UserCredentials,
-} from '@interfaces/User.interfaces';
+   PublicUserInt,
+   UserCredentialsInt,
+   NewUserInt,
+} from '@common/interfaces';
 
-/* ------------------ Code ------------------ */
-
-interface AuthContextType {
-   user: PublicUser | null;
+interface AuthState {
+   user: PublicUserInt | null;
    isAuthenticated: boolean;
    isLoading: boolean;
-   logout: () => Promise<void>;
-   register: (user: NewUser) => Promise<{ message: string; status: number }>;
-   login: (
-      user: UserCredentials
-   ) => Promise<{ message: string; status: number }>;
+   error: string | null;
 }
 
+interface AuthContextType extends AuthState {
+   login: (credentials: UserCredentialsInt) => Promise<void>;
+   register: (userData: NewUserInt) => Promise<void>;
+   logout: () => Promise<void>;
+   checkSession: () => Promise<void>;
+   clearError: () => void;
+}
+
+type AuthAction =
+   | { type: 'SET_LOADING'; payload: boolean }
+   | { type: 'SET_USER'; payload: PublicUserInt | null }
+   | { type: 'SET_AUTHENTICATED'; payload: boolean }
+   | { type: 'SET_ERROR'; payload: string | null }
+   | { type: 'CLEAR_ERROR' }
+   | { type: 'LOGOUT' };
+
+const initialState: AuthState = {
+   user: null,
+   isAuthenticated: false,
+   isLoading: true,
+   error: null,
+};
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+function authReducer(state: AuthState, action: AuthAction): AuthState {
+   switch (action.type) {
+      case 'SET_LOADING':
+         return { ...state, isLoading: action.payload };
+      case 'SET_USER':
+         return { ...state, user: action.payload };
+      case 'SET_AUTHENTICATED':
+         return { ...state, isAuthenticated: action.payload };
+      case 'SET_ERROR':
+         return { ...state, error: action.payload, isLoading: false };
+      case 'CLEAR_ERROR':
+         return { ...state, error: null };
+      case 'LOGOUT':
+         return { ...initialState, isLoading: false };
+      default:
+         return state;
+   }
+}
 
 interface AuthProviderProps {
    children: ReactNode;
 }
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-   const [user, setUser] = useState<PublicUser | null>(null);
-   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
-   const [isLoading, setIsLoading] = useState<boolean>(true);
-   const [sessionChecked, setSessionChecked] = useState<boolean>(false);
-   const navigate = useNavigate();
+export function AuthProvider({ children }: AuthProviderProps) {
+   const [state, dispatch] = useReducer(authReducer, initialState);
 
-   useEffect(() => {
-      const handleAutoLogout = () => {
-         setUser(null);
-         setIsAuthenticated(false);
-         setIsLoading(false);
-         setSessionChecked(true);
-         navigate('/auth/login');
-      };
+   const checkSession = async () => {
+      try {
+         dispatch({ type: 'SET_LOADING', payload: true });
+         const response = await AuthServices.getSession();
 
-      window.addEventListener('auth:logout', handleAutoLogout);
-      return () => window.removeEventListener('auth:logout', handleAutoLogout);
-   }, [navigate]);
-
-   useEffect(() => {
-      if (sessionChecked) return;
-
-      const fetchSession = async () => {
-         try {
-            const sessionData = await services.session();
-            setSessionChecked(true);
-
-            if (sessionData.isAuthenticated && sessionData.user) {
-               setUser(sessionData.user);
-               setIsAuthenticated(true);
-            } else if (sessionData.refresh && !sessionData.access) {
-               try {
-                  const refreshResponse = await services.refresh();
-                  if (refreshResponse.status === 200 && refreshResponse.user) {
-                     setUser(refreshResponse.user);
-                     setIsAuthenticated(
-                        refreshResponse.isAuthenticated || false
-                     );
-                  } else {
-                     setUser(null);
-                     setIsAuthenticated(false);
-                  }
-               } catch (error) {
-                  console.warn('Error during token refresh:', error);
-                  setUser(null);
-                  setIsAuthenticated(false);
-               }
+         if (response.data && response.data.isAuthenticated) {
+            dispatch({ type: 'SET_USER', payload: response.data.user });
+            dispatch({ type: 'SET_AUTHENTICATED', payload: true });
+         } else {
+            if (!response.data.access && response.data.refresh) {
+               await refreshToken();
             } else {
-               setUser(null);
-               setIsAuthenticated(false);
+               dispatch({ type: 'SET_AUTHENTICATED', payload: false });
+               dispatch({ type: 'SET_USER', payload: null });
             }
-         } catch (error) {
-            console.warn('Error fetching session:', error);
-            setUser(null);
-            setIsAuthenticated(false);
-            setSessionChecked(true);
-         } finally {
-            setIsLoading(false);
          }
-      };
-      fetchSession();
-   }, [sessionChecked]);
-
-   const login = async (
-      user: UserCredentials
-   ): Promise<{ message: string; status: number }> => {
-      const loginRequest = await services.login(user);
-      if (loginRequest.status === 200) {
-         const sessionRequest = await services.session();
-         setUser(sessionRequest.user || null);
-         setIsAuthenticated(sessionRequest.isAuthenticated);
-         setSessionChecked(true);
-         return { message: 'Redirigiendo...', status: loginRequest.status };
+      } catch (error) {
+         dispatch({
+            type: 'SET_ERROR',
+            payload: 'Error al verificar la sesión',
+         });
+         dispatch({ type: 'SET_AUTHENTICATED', payload: false });
+         dispatch({ type: 'SET_USER', payload: null });
+      } finally {
+         dispatch({ type: 'SET_LOADING', payload: false });
       }
-      return { message: loginRequest.message, status: loginRequest.status };
    };
 
-   const register = async (
-      user: NewUser
-   ): Promise<{ message: string; status: number }> => {
-      const registerRequest = await services.register(user);
-      if (registerRequest.status !== 200) {
-         return {
-            status: registerRequest.status,
-            message: registerRequest.message,
-         };
+   const refreshToken = async () => {
+      try {
+         const response = await AuthServices.refresh();
+
+         if (response.data && response.data.isAuthenticated) {
+            dispatch({ type: 'SET_USER', payload: response.data.user });
+            dispatch({ type: 'SET_AUTHENTICATED', payload: true });
+         } else {
+            dispatch({ type: 'LOGOUT' });
+         }
+      } catch (error) {
+         dispatch({ type: 'LOGOUT' });
+         throw error;
       }
-      setIsAuthenticated(true);
-      setUser(registerRequest.user);
-      setSessionChecked(true);
-      setIsLoading(false);
-      return {
-         message: registerRequest.message,
-         status: registerRequest.status,
-      };
    };
 
-   const logout = async (): Promise<void> => {
-      const response = await services.logout();
-      if (response.status === 200) {
-         setUser(null);
-         setIsAuthenticated(false);
-         setIsLoading(false);
+   const login = async (credentials: UserCredentialsInt) => {
+      try {
+         dispatch({ type: 'SET_LOADING', payload: true });
+         dispatch({ type: 'CLEAR_ERROR' });
+
+         await AuthServices.login(credentials);
+         await checkSession();
+      } catch (error: any) {
+         const errorMessage =
+            error?.response?.data?.message || 'Error al iniciar sesión';
+         dispatch({ type: 'SET_ERROR', payload: errorMessage });
+         throw error;
+      } finally {
+         dispatch({ type: 'SET_LOADING', payload: false });
       }
+   };
+
+   const register = async (userData: NewUserInt) => {
+      try {
+         dispatch({ type: 'SET_LOADING', payload: true });
+         dispatch({ type: 'CLEAR_ERROR' });
+
+         const response = await AuthServices.register(userData);
+
+         if (response.data && response.data.user) {
+            dispatch({ type: 'SET_USER', payload: response.data.user });
+            dispatch({ type: 'SET_AUTHENTICATED', payload: true });
+         }
+      } catch (error: any) {
+         const errorMessage =
+            error?.response?.data?.message || 'Error al registrar usuario';
+         dispatch({ type: 'SET_ERROR', payload: errorMessage });
+         throw error;
+      } finally {
+         dispatch({ type: 'SET_LOADING', payload: false });
+      }
+   };
+
+   const logout = async () => {
+      try {
+         dispatch({ type: 'SET_LOADING', payload: true });
+         await AuthServices.logout();
+      } catch (error) {
+         console.error('Error during logout:', error);
+      } finally {
+         dispatch({ type: 'LOGOUT' });
+      }
+   };
+
+   const clearError = () => {
+      dispatch({ type: 'CLEAR_ERROR' });
+   };
+
+   useEffect(() => {
+      checkSession();
+   }, []);
+
+   const contextValue: AuthContextType = {
+      ...state,
+      login,
+      register,
+      logout,
+      checkSession,
+      clearError,
    };
 
    return (
-      <AuthContext.Provider
-         value={{ user, isAuthenticated, isLoading, login, register, logout }}
-      >
+      <AuthContext.Provider value={contextValue}>
          {children}
       </AuthContext.Provider>
    );
-};
+}
 
-export const useAuth = (): AuthContextType => {
+export function useAuth() {
    const context = useContext(AuthContext);
    if (context === undefined) {
       throw new Error('useAuth must be used within an AuthProvider');
    }
    return context;
-};
+}
