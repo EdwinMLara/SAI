@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useAuth } from '@context/Auth.context';
+import { useAuth } from '@/context/Auth.context';
 import { useSidebar } from '@context/Sidebar.context';
 
 import { Logo } from '../helpers/Brand';
