@@ -8,8 +8,6 @@ import Authentication from '@/pages/Authentication';
 
 import Home from '@/pages/Home';
 
-import RoutingProducts from '@/layouts/products/config/Routing';
-
 /* ------------------ Code ------------------ */
 
 const AppRoutes = () => {
@@ -20,7 +18,6 @@ const AppRoutes = () => {
          <Route path="/" element={<MainLayout />}>
             <Route element={<Protected />}>
                <Route index element={<Home />} />
-               <Route path="products/*" element={<RoutingProducts />} />
             </Route>
          </Route>
          <Route path="*" element={<NotFound />} />
