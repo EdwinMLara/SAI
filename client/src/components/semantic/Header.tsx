@@ -11,6 +11,12 @@ const Header: React.FC = () => {
    const { user, logout } = useAuth();
    const { toggle } = useSidebar();
 
+   const [userImageError, setUserImageError] = useState(false);
+
+   useEffect(() => {
+      setUserImageError(false);
+   }, [user?.image]);
+
    const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
    const [isNotificationOpen, setIsNotificationOpen] = useState(false);
 
@@ -81,17 +87,20 @@ const Header: React.FC = () => {
 
                         <div className="relative">
                            <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-light">
-                              {user.image ? (
+                              {user.image && !userImageError ? (
                                  <img
                                     src={user.image}
                                     alt={`Foto de ${user.name}`}
                                     className="w-full h-full object-cover"
+                                    onError={() => setUserImageError(true)}
                                  />
                               ) : (
                                  <div className="w-full h-full bg-accent flex items-center justify-center">
-                                    <span className="text-primary-color text-sm font-medium">
-                                       {user.name?.charAt(0)}
-                                    </span>
+                                    <Icon
+                                       name="FaUser"
+                                       size={20}
+                                       className="text-primary-color"
+                                    />
                                  </div>
                               )}
                            </div>
