@@ -21,7 +21,6 @@ const apiPaths = {
    products: {
       base: '/products',
       replaceAll: '/products/replaceAll',
-      lastUpdate: '/products/lastUpdate',
    },
 
    // Documents
