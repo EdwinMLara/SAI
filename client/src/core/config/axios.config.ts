@@ -16,7 +16,7 @@ import { StandardResponse } from '@cmm_interfaces/index';
  * - Default headers for JSON content
  */
 const axiosInstance = axios.create({
-   baseURL: 'http://localhost:3000/api',
+   baseURL: '/api',
    timeout: 10000,
    withCredentials: true,
    headers: {

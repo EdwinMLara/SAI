@@ -38,7 +38,7 @@ app.use(cookieParser());
 // CORS configuration for client-server communication
 app.use(
    cors({
-      origin: env.ORIGIN_SERVER,
+      origin: env.ORIGIN_CLIENT,
       credentials: true,
    })
 );

@@ -25,6 +25,7 @@ const envOptions = [
    'SERVER_IP',
    'SERVER_PORT',
    'ORIGIN_SERVER',
+   'ORIGIN_CLIENT',
 ];
 
 /**
@@ -53,6 +54,7 @@ const env = {
    SERVER_IP: process.env.SERVER_IP || '',
    SERVER_PORT: process.env.SERVER_PORT || '',
    ORIGIN_SERVER: process.env.ORIGIN_SERVER || '',
+   ORIGIN_CLIENT: process.env.ORIGIN_CLIENT || '',
 };
 
 export default env;
