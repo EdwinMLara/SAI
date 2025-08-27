@@ -4,19 +4,6 @@ import winston from 'winston';
 import env from '@config/env';
 
 /**
- * Winston logger configuration for database connection events
- * Provides structured logging for MongoDB connection status
- */
-const logger = winston.createLogger({
-   level: 'info',
-   format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.json()
-   ),
-   transports: [new winston.transports.Console()],
-});
-
-/**
  * Establishes a connection to the MongoDB database using Mongoose
  * Uses environment configuration for connection URI and handles connection errors
  * @returns Promise<void> - Resolves when connection process is complete
@@ -24,9 +11,9 @@ const logger = winston.createLogger({
 export const connect = async (): Promise<void> => {
    try {
       await mongoose.connect(env.MONGO_URI);
-      logger.info('Mongoose connection successful');
+      console.log('Mongoose connection successful');
    } catch (error) {
-      logger.error('Mongoose connection failed', error);
+      console.error('Mongoose connection failed', error);
    }
 };
 
@@ -38,8 +25,8 @@ export const connect = async (): Promise<void> => {
 export const disconnect = async (): Promise<void> => {
    try {
       await mongoose.disconnect();
-      logger.info('Mongoose disconnection successful');
+      console.log('Mongoose disconnection successful');
    } catch (error) {
-      logger.error('Mongoose disconnection failed', error);
+      console.error('Mongoose disconnection failed', error);
    }
 };
