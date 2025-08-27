@@ -1,49 +1,47 @@
-const entrypoint = '/api';
-
 const apiPaths = {
    // Health & Info
-   health: `${entrypoint}/health`,
-   info: `${entrypoint}/`,
+   health: '/health',
+   info: '/',
 
    // Authentication
    auth: {
-      register: `${entrypoint}/auth/register`,
-      login: `${entrypoint}/auth/login`,
-      logout: `${entrypoint}/auth/logout`,
-      refresh: `${entrypoint}/auth/refresh`,
-      session: `${entrypoint}/auth/session`,
+      register: '/auth/register',
+      login: '/auth/login',
+      logout: '/auth/logout',
+      refresh: '/auth/refresh',
+      session: '/auth/session',
    },
 
    // Admin (Invites)
    admin: {
-      invites: `${entrypoint}/admin/invites`,
+      invites: '/admin/invites',
    },
 
    // Products
    products: {
-      base: `${entrypoint}/products`,
-      replaceAll: `${entrypoint}/products/replaceAll`,
-      lastUpdate: `${entrypoint}/products/lastUpdate`,
+      base: '/products',
+      replaceAll: '/products/replaceAll',
+      lastUpdate: '/products/lastUpdate',
    },
 
    // Documents
    documents: {
-      base: `${entrypoint}/documents`,
+      base: '/documents',
    },
 
    // Tickets
    tickets: {
-      base: `${entrypoint}/tickets`,
+      base: '/tickets',
    },
 
    // Invoices
    invoices: {
-      base: `${entrypoint}/invoices`,
+      base: '/invoices',
    },
 
    // User
    user: {
-      base: `${entrypoint}/user`,
+      base: '/user',
    },
 };
 
