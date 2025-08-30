@@ -7,6 +7,8 @@
 
 import dotenv from 'dotenv';
 
+/* ------------------ Code ------------------ */
+
 // Load environment variables from the root .env file
 dotenv.config({ path: '../.env' });
 
