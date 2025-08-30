@@ -1,5 +1,10 @@
 import jwt from 'jsonwebtoken';
 import env from '@config/env';
+import { UserInfoAtToken } from '@types';
+
+import ms from 'jsonwebtoken';
+
+/* ------------------ Code ------------------ */
 
 const jwtSecret = env.JWT_SECRET;
 
@@ -20,22 +25,6 @@ export function verifyToken(tokenToVerify: string): boolean {
    }
 }
 
-export function generateAccessToken(payload: object): string {
-   return jwt.sign(payload, jwtSecret, { expiresIn: '1h' });
-}
-
-export function generateRefreshToken(payload: object): string {
-   return jwt.sign(payload, jwtSecret, { expiresIn: '15d' });
-}
-
-export function generateToken(payload: object): string {
-   return jwt.sign(payload, jwtSecret, { expiresIn: '30d' });
-}
-
-export function getPayload(token: string): any | null {
-   try {
-      return jwt.verify(token, jwtSecret);
-   } catch (error) {
-      return null;
-   }
+export function createToken(infoToken: any, ageToken: number): string {
+   return jwt.sign(infoToken, jwtSecret, { expiresIn: ageToken });
 }
