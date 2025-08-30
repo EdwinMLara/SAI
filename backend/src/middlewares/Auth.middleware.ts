@@ -1,107 +1,48 @@
-import { Request, NextFunction, Response } from 'express';
+import { Request, NextFunction, Response, RequestHandler } from 'express';
 
 import * as helpers from '@helpers/Auth.helpers';
 
-import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
+
+/* ------------------ Code ------------------ */
+
+type accessType = 'admin' | 'user';
 
 /**
- * Authentication middleware that validates access and refresh tokens
- * Skips authentication for auth-related endpoints
- * Requires valid tokens for protected routes
- * @param req - Express request object
- * @param res - Express response object
- * @param next - Express next function
+ * Express middleware to authenticate and authorize users based on their role.
+ *
+ * @param {accessType} access - The required access level ('admin' or 'user').
+ * @returns {RequestHandler} An Express request handler that validates the user's authentication cookie and role.
+ *
+ * @throws {AppError} If authentication fails or the user does not have the required role.
  */
-const Identity = (req: Request, res: Response, next: NextFunction): void => {
-   if (req.url.startsWith('/api/auth/')) {
-      return next();
-   }
+function Auth(access: accessType): RequestHandler {
+   return async (
+      req: Request,
+      res: Response,
+      next: NextFunction
+   ): Promise<void> => {
+      try {
+         const { authCookie } = req.cookies;
+         const dataOnCookie = helpers.useAuthCookie(authCookie);
+         if (!dataOnCookie) throw new AppError(responses.Auth.authError, 401);
 
-   try {
-      const { accessToken, refreshToken } = req.cookies;
-      const tokenValidation = helpers.validateTokenPair(
-         accessToken,
-         refreshToken
-      );
+         req.user.id = dataOnCookie.id;
+         req.user.role = dataOnCookie.role;
+         const userRole = req.user.role;
 
-      if (tokenValidation.hasValidRefresh) {
-         if (tokenValidation.hasValidAccess) {
-            const user = helpers.userData(accessToken);
-            if (!user || !user.email) {
-               throw new AppError(responses.System.authenticationError, 401);
-            }
-            req.user = user;
-            next();
-         } else {
-            res.status(401).json({
-               message: responses.System.authenticationError,
-               data: {
-                  access: false,
-                  refresh: true,
-               },
-            });
-            return;
-         }
-      } else {
-         res.status(401).json({
-            message: responses.System.authenticationError,
-            data: {
-               access: false,
-               refresh: false,
-            },
-         });
-         return;
+         if (access === 'admin' && userRole !== 'admin')
+            throw new AppError(responses.Auth.unauthorized, 403);
+
+         if (access === 'user' && userRole !== 'admin' && userRole !== 'user')
+            throw new AppError(responses.Auth.unauthorized, 403);
+
+         next();
+      } catch (error) {
+         next(error);
       }
-   } catch (error) {
-      if (error instanceof AppError) {
-         return next(error);
-      }
-      return next(new AppError(responses.System.serverError, 500, error));
-   }
-};
+   };
+}
 
-/**
- * Session checking middleware that validates tokens without blocking requests
- * Sets token status and user information in request object for downstream use
- * Does not reject requests with invalid tokens, just provides status information
- * @param req - Express request object
- * @param res - Express response object
- * @param next - Express next function
- */
-const SessionChecker = (
-   req: Request,
-   res: Response,
-   next: NextFunction
-): void => {
-   try {
-      const { accessToken, refreshToken } = req.cookies;
-      const tokenValidation = helpers.validateTokenPair(
-         accessToken,
-         refreshToken
-      );
-
-      req.tokenStatus = {
-         hasValidAccess: tokenValidation.hasValidAccess,
-         hasValidRefresh: tokenValidation.hasValidRefresh,
-      };
-
-      if (tokenValidation.hasValidAccess) {
-         const user = helpers.userData(accessToken);
-         if (user && user.email) {
-            req.user = user;
-         }
-      }
-
-      next();
-   } catch {
-      req.tokenStatus = {
-         hasValidAccess: false,
-         hasValidRefresh: false,
-      };
-      next();
-   }
-};
-
-export default Identity;
-export { SessionChecker };
+export default Auth;
