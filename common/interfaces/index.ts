@@ -6,3 +6,4 @@ export * from './business/Invite.interfaces';
 
 // System logic interfaces
 export * from './system/Api.interfaces';
+export * from './system/Logs.interfaces';
