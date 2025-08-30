@@ -5,7 +5,6 @@ import { Document } from 'mongoose';
  * Used for tracking and debugging system operations
  */
 export interface LogMetadataInt {
-   user: string;
    clientIp: string;
    stackTrace: string;
    endpoint: string;
