@@ -1,6 +1,4 @@
-import { ObjectId } from 'mongoose';
-
 export interface UserInfoAtToken {
-   id: ObjectId;
+   id: string;
    role: 'admin' | 'user';
 }
