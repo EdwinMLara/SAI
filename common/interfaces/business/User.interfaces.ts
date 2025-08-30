@@ -5,7 +5,7 @@ export interface UserInt {
    phone: string;
    email: string;
    password: string;
-   role: 'super' | 'admin' | 'user';
+   role: 'admin' | 'user';
 }
 
 export interface UserChangesInt {
@@ -23,7 +23,7 @@ export interface PublicUserInt {
    username: string;
    phone: string;
    email: string;
-   role: 'super' | 'admin' | 'user';
+   role: 'admin' | 'user';
 }
 
 export interface NewUserInt {
