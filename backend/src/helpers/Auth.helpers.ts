@@ -13,5 +13,5 @@ import { UserInfoAtToken } from '@types';
 export function useAuthCookie(cookie: string): UserInfoAtToken | null {
    if (!cookie) return null;
    if (!tokens.verifyToken(cookie)) return null;
-   return tokens.getPayload(cookie);
+   return tokens.decodeToken(cookie);
 }
