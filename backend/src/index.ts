@@ -13,7 +13,6 @@ import router from '@routes';
 import * as database from '@config/database';
 
 import ErrorMiddleware from '@middlewares/Error.middleware';
-import RequestMiddleware from '@middlewares/Request.middleware';
 import ResponseMiddleware from '@middlewares/Response.middleware';
 
 const app = express();
@@ -43,8 +42,6 @@ app.use(
    })
 );
 
-// Request/Response logging and processing middleware
-app.use(RequestMiddleware);
 app.use(ResponseMiddleware);
 
 /**
