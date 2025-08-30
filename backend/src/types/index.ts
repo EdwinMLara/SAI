@@ -1,2 +1,3 @@
-import './modules/globals/express';
+import './modules/globals';
+
 export * from './modules/User.types';

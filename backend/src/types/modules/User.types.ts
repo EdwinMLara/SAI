@@ -1,10 +1,6 @@
-export interface UserInfoAtToken {
-   id: string;
-   name: string;
-   role: string;
-   email: string;
-}
+import { ObjectId } from 'mongoose';
 
-export interface RefreshTokenInfo {
-   id: string;
+export interface UserInfoAtToken {
+   id: ObjectId;
+   role: string;
 }
