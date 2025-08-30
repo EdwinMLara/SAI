@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
-import winston from 'winston';
 
 import env from '@config/env';
+
+/* ------------------ Code ------------------ */
 
 /**
  * Establishes a connection to the MongoDB database using Mongoose
