@@ -1,7 +1,10 @@
 import { NextFunction, Request, Response } from 'express';
 
+import env from '@config/env';
 import log from '@utils/system/Logger.utils';
 import AppError from '@utils/system/AppError';
+
+/* ------------------ Code ------------------ */
 
 /**
  * Global error handling middleware
@@ -24,7 +27,6 @@ const ErrorMiddleware = (
       level: 'error',
       message: err.message,
       metadata: {
-         user: req.user?.name || 'Undefined',
          clientIp: req.ip as string,
          stackTrace: err.stack as string,
          endpoint: req.path,

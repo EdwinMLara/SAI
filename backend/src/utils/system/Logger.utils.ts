@@ -3,7 +3,7 @@ import Transport from 'winston-transport';
 
 import env from '@config/env';
 import LogModel from '@models/Log.model';
-import { LogMetadataInt } from '@interfaces/Logs.interfaces';
+import { LogMetadataInt } from '@cmm_interfaces/system/Logs.interfaces';
 
 /**
  * Type definitions for logging system

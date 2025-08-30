@@ -1,5 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
-import { LogDocument } from '@interfaces/Logs.interfaces';
+import { LogDocument } from '@cmm_interfaces/system/Logs.interfaces';
 
 const LogSchema: Schema = new Schema<LogDocument>(
    {
@@ -7,7 +7,6 @@ const LogSchema: Schema = new Schema<LogDocument>(
       type: { type: String, required: true },
       message: { type: String, required: true },
       metadata: {
-         user: { type: String, required: true },
          clientIp: { type: String, required: true },
          stackTrace: { type: String, required: true },
          endpoint: { type: String, required: true },
