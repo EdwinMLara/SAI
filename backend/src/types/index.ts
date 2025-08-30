@@ -1,3 +1,3 @@
-import './modules/globals';
+import './globals';
 
-export * from './modules/User.types';
+export * from './User.types';
