@@ -2,5 +2,5 @@ import { ObjectId } from 'mongoose';
 
 export interface UserInfoAtToken {
    id: ObjectId;
-   role: string;
+   role: 'admin' | 'user';
 }
