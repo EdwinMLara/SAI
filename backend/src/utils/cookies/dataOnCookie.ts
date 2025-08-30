@@ -1,22 +1,25 @@
 import { ObjectId } from 'mongoose';
+
 import * as tokens from '@auth/tokens';
+import AppError from '@utils/system/AppError';
 
 import { UserInfoAtToken } from '@types';
 import { UserInt } from '@cmm_interfaces/index';
-import { getIdUser, getUserById } from '@services/User.services';
-
-import AppError from '@utils/system/AppError';
+import { getIdUser } from '@services/User.services';
 
 /* ------------------ Code ------------------ */
 
-export async function onAuthCookie(user: UserInt): Promise<string> {
+export async function onAuthCookie(
+   user: UserInt,
+   ageToken: number
+): Promise<string> {
    try {
       const infoToken = {
          id: await getIdUser(user.email),
          role: user.role,
       };
 
-      return tokens.authToken(infoToken);
+      return tokens.createToken(infoToken, ageToken);
    } catch (error) {
       throw error;
    }
