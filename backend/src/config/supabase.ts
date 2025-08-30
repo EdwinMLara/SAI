@@ -1,7 +1,6 @@
 /**
  * Supabase client configuration
  * Initializes and configures Supabase client for storage services
- * Used primarily for file upload/download operations (documents and tickets)
  * Authentication sessions are disabled as this is a backend service
  */
 
@@ -9,9 +8,11 @@ import { createClient } from '@supabase/supabase-js';
 
 import env from '@config/env';
 
+/* ------------------ Code ------------------ */
+
 /**
  * Configured Supabase client instance
- * Provides access to Supabase storage services with disabled auth persistence
+ * Provides access to Supabase storage services
  */
 const supabase = createClient(env.SUPA_URL, env.SUPA_KEY, {
    auth: { persistSession: false },
