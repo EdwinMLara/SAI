@@ -1,7 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
-import { UserDocument } from '@interfaces/ExtendsModel';
+import mongoose, { Schema, Document } from 'mongoose';
 
-const UserSchema: Schema = new Schema<UserDocument>({
+import { UserInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
+
+export interface UserDoc extends UserInt, Document {}
+
+const UserSchema: Schema = new Schema<UserDoc>({
    image: { type: String, required: false },
    name: { type: String, required: true },
    username: { type: String, required: true },
@@ -15,4 +20,4 @@ const UserSchema: Schema = new Schema<UserDocument>({
    },
 });
 
-export default mongoose.model<UserDocument>('User', UserSchema);
+export default mongoose.model<UserDoc>('User', UserSchema);

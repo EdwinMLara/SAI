@@ -1,7 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
-import { LogDocument } from '@cmm_interfaces/system/Logs.interfaces';
+import mongoose, { Schema, Document } from 'mongoose';
 
-const LogSchema: Schema = new Schema<LogDocument>(
+import { LogInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
+
+export interface LogDoc extends LogInt, Document {}
+
+const LogSchema: Schema = new Schema<LogDoc>(
    {
       timestamp: { type: Date, required: true },
       type: { type: String, required: true },
@@ -19,4 +24,4 @@ const LogSchema: Schema = new Schema<LogDocument>(
    }
 );
 
-export default mongoose.model<LogDocument>('Log', LogSchema);
+export default mongoose.model<LogDoc>('Log', LogSchema);

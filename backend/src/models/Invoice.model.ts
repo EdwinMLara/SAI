@@ -1,7 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
-import { InvoiceDocument } from '@interfaces/ExtendsModel';
+import mongoose, { Document, Schema } from 'mongoose';
 
-const InvoiceSchema: Schema = new Schema<InvoiceDocument>({
+import { InvoiceInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
+
+export interface InvoiceDoc extends InvoiceInt, Document {}
+
+const InvoiceSchema: Schema = new Schema<InvoiceDoc>({
    invoiceId: { type: String, required: true, unique: true, index: true },
    documentId: { type: String, unique: true, index: true },
    initDate: { type: Date, required: true },
@@ -54,4 +59,4 @@ const InvoiceSchema: Schema = new Schema<InvoiceDocument>({
    documentURL: { type: String, unique: true },
 });
 
-export default mongoose.model<InvoiceDocument>('Invoices', InvoiceSchema);
+export default mongoose.model<InvoiceDoc>('Invoices', InvoiceSchema);

@@ -1,7 +1,12 @@
-import mongoose, { Schema } from 'mongoose';
-import { ProductDocument } from '@interfaces/ExtendsModel';
+import mongoose, { Schema, Document } from 'mongoose';
 
-const ProductSchema: Schema = new Schema<ProductDocument>({
+import { ProductInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
+
+export interface ProductDoc extends ProductInt, Document {}
+
+const ProductSchema: Schema = new Schema<ProductDoc>({
    code: { type: String, required: true, unique: true, index: true },
    key: { type: String, required: true, unique: true, index: true },
    description: { type: String, required: true },
@@ -17,4 +22,4 @@ const ProductSchema: Schema = new Schema<ProductDocument>({
    },
 });
 
-export default mongoose.model<ProductDocument>('Products', ProductSchema);
+export default mongoose.model<ProductDoc>('Products', ProductSchema);
