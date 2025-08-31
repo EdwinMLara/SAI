@@ -8,6 +8,7 @@ import { createUser } from '@services/User.services';
 import { userByEmail } from '@services/User.services';
 import { comprobeFields } from '@helpers/User.helpers';
 import { returnPublicUser } from '@helpers/User.helpers';
+import { clearCookies } from '@utils/cookies/manageCookies';
 import { NewUserInt, UserCredentialsInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
@@ -58,6 +59,20 @@ export async function sessionRequest(
    try {
       const publicUser = await returnPublicUser(req.user.id);
       res.json({ data: { publicUser } });
+   } catch (error) {
+      if (error instanceof AppError) return next(error);
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
+}
+
+export async function logout(
+   req: Request,
+   res: Response,
+   next: NextFunction
+): Promise<void> {
+   try {
+      clearCookies(res);
+      res.json({ message: responses.System.ok });
    } catch (error) {
       if (error instanceof AppError) return next(error);
       return next(new AppError(responses.System.serverError, 500, error));
