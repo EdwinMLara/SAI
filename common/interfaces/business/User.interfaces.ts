@@ -9,7 +9,7 @@ export interface UserInt {
 }
 
 export interface UserChangesInt {
-   image?: string;
+   image: string;
    name: string;
    username: string;
    phone: string;
