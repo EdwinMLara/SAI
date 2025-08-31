@@ -1,86 +1,35 @@
-import { ObjectId } from 'mongoose';
-
-import { hasInvite, getInvite } from '@services/Invite.services';
-import { findUserByUniqueFields } from '@services/User.services';
-import UserModel from '@models/User.model';
 import AppError from '@utils/system/AppError';
-import responses from '@utils/responses';
-import { UserInt, PublicUserInt } from '@cmm_interfaces/index';
+import responses from '@utils/system/responses';
 
-/**
- * Checks if a user exists by email address
- * @param email - Email address to check
- * @returns Promise<boolean> - True if user exists, false otherwise
- */
-export async function existsUserByEmail(email: string): Promise<boolean> {
-   const exist = await UserModel.findOne({ email });
-   return !!exist;
+import { comprobeUniqueFields, getUserById } from '@services/User.services';
+import { PublicUserInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
+
+export async function comprobeFields(
+   username?: string,
+   email?: string,
+   phone?: string
+): Promise<string | void> {
+   const fields: { username?: string; email?: string; phone?: string } = {};
+   if (username !== undefined) fields.username = username;
+   if (email !== undefined) fields.email = email;
+   if (phone !== undefined) fields.phone = phone;
+   const findField = await comprobeUniqueFields(fields);
+
+   const message = `El ${findField} ya está en uso.`;
 }
 
-/**
- * Checks if a user exists by ObjectId
- * @param user - ObjectId of the user to check
- * @returns Promise<boolean> - True if user exists, false otherwise
- */
-export async function existsUserById(user: ObjectId): Promise<boolean> {
-   const exist = await UserModel.findById(user);
-   return !!exist;
-}
-
-/**
- * Validates that a user has a valid invitation before registration
- * @param email - Email address to check for invitation
- * @returns Promise<void>
- * @throws AppError if invitation does not exist
- */
-export async function comprobeInvite(email: string): Promise<void> {
-   const exist = await hasInvite(email);
-   if (!exist) {
-      throw new AppError(responses.Invite.notWasInvite, 401);
-   }
-}
-
-/**
- * Retrieves the assigned role from a user invitation
- * @param email - Email address to find role for
- * @returns Promise<'super' | 'admin' | 'user'> - Role assigned in the invitation
- * @throws AppError if invitation does not exist
- */
-export async function findRole(
-   email: string
-): Promise<'super' | 'admin' | 'user'> {
-   const invite = await getInvite(email);
-   if (!invite) {
-      throw new AppError(responses.Invite.notWasInvite, 401);
-   }
-   return invite.asignedRole;
-}
-
-/**
- * Creates a public user object removing sensitive information
- * @param user - Full user object with all properties
- * @returns Promise<PublicUserInt> - Public user object without sensitive data
- */
-export async function returnUser(user: UserInt): Promise<PublicUserInt> {
-   const { image, name, username, phone, email, role } = user;
-   return { image: image ?? '', name, username, phone, email, role };
-}
-
-/**
- * Validates that all user fields are unique before creation
- * Checks email, username, name, and phone for uniqueness
- * @param user - User object containing fields to validate
- * @returns Promise<void>
- * @throws AppError if any field is already in use
- */
-export async function comprobeUnicity(user: UserInt): Promise<void> {
-   const result = await findUserByUniqueFields({
-      email: user.email,
-      username: user.username,
+export async function returnPublicUser(userId: string): Promise<PublicUserInt> {
+   const user = await getUserById(userId);
+   const publicUser: PublicUserInt = {
+      image: user.image ?? '',
       name: user.name,
+      username: user.username,
       phone: user.phone,
-   });
-   if (result) {
-      throw new AppError(`El ${result.field} ya está en uso.`);
-   }
+      email: user.email,
+      role: user.role,
+   };
+
+   return publicUser;
 }

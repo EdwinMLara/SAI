@@ -1,22 +1,18 @@
 import { Request, Response, NextFunction } from 'express';
 
-import * as helpers from '@helpers/User.helpers';
-import * as services from '@services/User.services';
-import * as cookies from '@utils/cookies/manageCookies';
-
-import { UserChangesInt } from '@cmm_interfaces/index';
-
-import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 
-/**
- * Updates user information with provided data
- * Updates authentication tokens after successful user data modification
- * @param req - Express request object containing user updates in body and user ID in user property
- * @param res - Express response object
- * @param next - Express next function for error handling
- * @returns Promise<void>
- */
+import { getUserById, updatedUser } from '@services/User.services';
+import { changeRole } from '@services/User.services';
+import { UserChangesInt } from '@cmm_interfaces/index';
+import { comprobeUniqueFields } from '@services/User.services';
+import getParam from '@utils/system/getParam';
+import { comprobeFields } from '@helpers/User.helpers';
+import { useAuthCookie } from '@helpers/Auth.helpers';
+
+/* ------------------ Code ------------------ */
+
 export async function updateUser(
    req: Request<object, object, Partial<UserChangesInt>>,
    res: Response,
@@ -24,17 +20,39 @@ export async function updateUser(
 ): Promise<void> {
    try {
       const updates: Partial<UserChangesInt> = req.body;
-      const changes = await services.updatedUser(req.user.id, updates);
-      await cookies.setAuthToken(res, changes);
 
-      res.status(200).json({
-         message: responses.User.updated,
-         data: { user: await helpers.returnUser(changes) },
-      });
+      const repeatFields = await comprobeFields(
+         updates.username,
+         updates.email,
+         updates.phone
+      );
+      if (repeatFields) res.status(404).json({ message: repeatFields });
+      const changes = await updatedUser(req.user.id, updates);
+
+      res.json({ message: responses.User.updated });
    } catch (error) {
-      if (error instanceof AppError) {
-         return next(error);
+      if (error instanceof AppError) return next(error);
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
+}
+
+export async function changeUserRole(
+   req: Request,
+   res: Response,
+   next: NextFunction
+): Promise<void> {
+   try {
+      type typeRole = 'admin' | 'user';
+      const paramRole = getParam(req.params.role);
+      if (paramRole !== 'admin' && paramRole !== 'user') {
+         return next(new AppError(responses.System.missingFieldBody, 400));
       }
+      const role: typeRole = paramRole;
+      await changeRole(role, req.user.id);
+
+      res.json({ message: responses.System.ok });
+   } catch (error) {
+      if (error instanceof AppError) return next(error);
       return next(new AppError(responses.System.serverError, 500, error));
    }
 }

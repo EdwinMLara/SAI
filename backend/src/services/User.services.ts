@@ -1,17 +1,19 @@
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 import UserModel from '@models/User.model';
-import { UserChangesInt, UserInt } from '@cmm_interfaces/index';
+import { compareHash } from '@utils/auth/crypt';
+import { UserChangesInt, UserInt, NewUserInt } from '@cmm_interfaces/index';
 
-import responses from '@utils/responses';
+import responses from '@utils/system/responses';
 import AppError from '@utils/system/AppError';
+/* ------------------ Code ------------------ */
 
 /**
  * Creates a new user in the database
  * @param user - User data object conforming to UserInt interface
  * @returns Promise<void>
  */
-export async function createUser(user: UserInt): Promise<void> {
+export async function createUser(user: NewUserInt): Promise<void> {
    const newUser = new UserModel(user);
    await newUser.save();
 }
@@ -24,15 +26,14 @@ export async function createUser(user: UserInt): Promise<void> {
  * @throws AppError if user is not found or update fails
  */
 export async function updatedUser(
-   user: string,
+   userId: string,
    updates: Partial<UserChangesInt>
 ): Promise<UserInt> {
-   const updated = await UserModel.findOneAndUpdate({ _id: user }, updates, {
-      new: true,
-   });
-   if (!updated) {
-      throw new AppError(responses.User.updateError, 500);
-   }
+   const updated = await UserModel.findOneAndUpdate(
+      { _id: new Types.ObjectId(userId) },
+      updates
+   );
+   if (!updated) throw new AppError(responses.User.updateError, 500);
    return updated as UserInt;
 }
 
@@ -42,12 +43,12 @@ export async function updatedUser(
  * @returns Promise<ObjectId> - The user's ObjectId
  * @throws AppError if user is not found
  */
-export async function getIdUser(email: string): Promise<ObjectId> {
+export async function getIdUser(email: string): Promise<string> {
    const user = await UserModel.findOne({ email });
    if (!user) {
       throw new AppError(responses.User.notfound, 404);
    }
-   return user._id as ObjectId;
+   return user._id as string;
 }
 
 /**
@@ -56,8 +57,8 @@ export async function getIdUser(email: string): Promise<ObjectId> {
  * @returns Promise<UserInt> - The user data
  * @throws AppError if user is not found
  */
-export async function getUserByObject(userId: ObjectId): Promise<UserInt> {
-   const user = await UserModel.findOne({ _id: userId });
+export async function getUserByObject(userId: string): Promise<UserInt> {
+   const user = await UserModel.findOne({ _id: new Types.ObjectId(userId) });
    if (!user) {
       throw new AppError(responses.User.notfound, 404);
    }
@@ -84,31 +85,39 @@ export async function getUserById(userId: string): Promise<UserInt> {
  * @param fields - Object containing user fields to check for uniqueness
  * @returns Promise<{field: string} | void> - Returns field name if duplicate found, void if unique
  */
-export async function findUserByUniqueFields({
+export async function comprobeUniqueFields({
    email,
    username,
-   name,
    phone,
 }: {
    email?: string;
    username?: string;
-   name?: string;
    phone?: string;
-}): Promise<{ field: string } | void> {
+}): Promise<string | void> {
    if (email) {
       const user = await UserModel.findOne({ email });
-      if (user) return { field: 'correo electrónico' };
+      if (user) return 'correo electrónico';
    }
    if (username) {
       const user = await UserModel.findOne({ username });
-      if (user) return { field: 'nombre de usuario' };
-   }
-   if (name) {
-      const user = await UserModel.findOne({ name });
-      if (user) return { field: 'nombre' };
+      if (user) return 'nombre de usuario';
    }
    if (phone) {
       const user = await UserModel.findOne({ phone });
-      if (user) return { field: 'numero de telefono' };
+      if (user) return 'numero de telefono';
    }
+}
+
+export async function userByEmail(email: string): Promise<UserInt | null> {
+   return await UserModel.findOne({ email }).lean();
+}
+
+export async function changeRole(
+   role: 'admin' | 'user',
+   userId: string
+): Promise<void> {
+   const user = await UserModel.findById(userId);
+   if (!user) throw new AppError(responses.System.serverError, 500);
+   user.role = role;
+   await user.save();
 }
