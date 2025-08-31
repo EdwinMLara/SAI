@@ -1,6 +1,6 @@
 import * as services from '@services/Ticket.services';
 
-import responses from '@utils/responses';
+import responses from '@utils/system/responses';
 import AppError from '@utils/system/AppError';
 
 /**

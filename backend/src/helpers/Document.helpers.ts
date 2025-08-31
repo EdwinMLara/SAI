@@ -1,7 +1,8 @@
+import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 import * as services from '@services/Document.services';
 
-import responses from '@utils/responses';
-import AppError from '@utils/system/AppError';
+/* ------------------ Code ------------------ */
 
 /**
  * Extracts and validates query parameter for document operations

@@ -1,9 +1,10 @@
+import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 import ProductModel from '@models/Product.model';
 
 import { ProductInt } from '@cmm_interfaces/index';
 
-import responses from '@utils/responses';
-import AppError from '@utils/system/AppError';
+/* ------------------ Code ------------------ */
 
 /**
  * Creates a new product in the database

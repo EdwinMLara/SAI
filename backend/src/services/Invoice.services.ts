@@ -1,9 +1,10 @@
+import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 import InvoiceModel from '@models/Invoice.model';
 
 import { InvoiceInt } from '@cmm_interfaces/index';
 
-import responses from '@utils/responses';
-import AppError from '@utils/system/AppError';
+/* ------------------ Code ------------------ */
 
 /**
  * Creates a new invoice in the database

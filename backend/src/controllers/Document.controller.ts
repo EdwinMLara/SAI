@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 
-import * as services from '@services/Document.services';
-import * as helpers from '@helpers/Document.helpers';
-
-import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
+import * as helpers from '@helpers/Document.helpers';
+import * as services from '@services/Document.services';
+
+/* ------------------ Code ------------------ */
 
 /**
  * Uploads a new PDF document file associated with an invoice

@@ -1,11 +1,13 @@
 import { Request, Response, NextFunction } from 'express';
-import { ProductInt } from '@cmm_interfaces/index';
 
+import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 import * as helpers from '@helpers/Product.helpers';
 import * as services from '@services/Product.services';
 
-import responses from '@utils/responses';
-import AppError from '@utils/system/AppError';
+import { ProductInt } from '@cmm_interfaces/index';
+
+/* ------------------ Code ------------------ */
 
 /**
  * Creates a new product in the system

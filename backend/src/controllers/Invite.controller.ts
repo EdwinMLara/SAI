@@ -1,11 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 
-import * as userServices from '@services/User.services';
+import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
+import * as userServices from '@services/User.services';
 
-import responses from '@utils/responses';
-import AppError from '@utils/system/AppError';
+/* ------------------ Code ------------------ */
 
 /**
  * Creates a new invitation for a user to join the system
@@ -29,7 +30,7 @@ export async function createInvite(
 
       await services.createInvite(ref, email, role);
       res.status(201).json({
-         message: responses.Invite.successfull,
+         message: responses.System.ok,
       });
    } catch (error) {
       if (error instanceof AppError) {
@@ -53,12 +54,11 @@ export async function getInvites(
    next: NextFunction
 ): Promise<void> {
    try {
-      const user = await userServices.getIdUser(req.user.email);
-      const list = await services.getInvites(user);
+      const list = await services.getInvites(req.user.id);
 
       res.status(200).json({
          message: responses.System.ok,
-         data: { invites: list.data },
+         data: { list },
       });
    } catch (error) {
       if (error instanceof AppError) {

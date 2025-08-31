@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 
+import getParam from '@utils/system/getParam';
 import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
@@ -7,7 +8,6 @@ import { getUserById, updatedUser } from '@services/User.services';
 import { changeRole } from '@services/User.services';
 import { UserChangesInt } from '@cmm_interfaces/index';
 import { comprobeUniqueFields } from '@services/User.services';
-import getParam from '@utils/system/getParam';
 import { comprobeFields } from '@helpers/User.helpers';
 import { useAuthCookie } from '@helpers/Auth.helpers';
 

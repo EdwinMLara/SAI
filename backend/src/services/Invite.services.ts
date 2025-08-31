@@ -25,11 +25,9 @@ export async function createInvite(
  * @param user - ObjectId of the user whose sent invitations to retrieve
  * @returns Promise containing array of invitation data
  */
-export async function getInvites(user: ObjectId): Promise<{
-   data?: InviteInt[];
-}> {
-   const invites = await InviteModel.find({ senderId: user }).lean();
-   return { data: invites as InviteInt[] };
+export async function getInvites(userId: string): Promise<InviteInt[] | null> {
+   const invites = await InviteModel.find({ senderId: userId }).lean();
+   return invites;
 }
 
 /**

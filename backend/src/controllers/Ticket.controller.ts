@@ -1,10 +1,11 @@
 import { Request, Response, NextFunction } from 'express';
 
-import * as services from '@services/Ticket.services';
-import * as helpers from '@helpers/Ticket.helpers';
-
-import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
+import * as helpers from '@helpers/Ticket.helpers';
+import * as services from '@services/Ticket.services';
+
+/* ------------------ Code ------------------ */
 
 /**
  * Uploads a new PDF ticket file

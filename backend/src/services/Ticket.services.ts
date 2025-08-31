@@ -1,8 +1,9 @@
 import env from '@config/env';
 import supabase from '@config/supabase';
-
-import responses from '@utils/responses';
 import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
+
+/* ------------------ Code ------------------ */
 
 const bucket = env.BUCKET_TICKET;
 
