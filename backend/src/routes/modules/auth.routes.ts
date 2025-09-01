@@ -1,14 +1,21 @@
 import { Router } from 'express';
 
-import * as Auth from '@controllers/Auth.controller';
-import Identity, { SessionChecker } from '@middlewares/Auth.middleware';
+import Auth from '@middlewares/Auth.middleware';
+
+import {
+   register,
+   login,
+   sessionRequest,
+   logout,
+} from '@controllers/Auth.controller';
+
+/* ------------------ Code ------------------ */
 
 const router = Router();
 
-router.post('/register', Auth.register);
-router.post('/login', Auth.login);
-router.get('/refresh', Auth.refreshToken);
-router.post('/logout', Auth.logout);
-router.get('/session', SessionChecker, Auth.sessionState);
+router.post('/login', login);
+router.post('/logout', logout);
+router.post('/register', register);
+router.get('/session', Auth('user'), sessionRequest);
 
 export default router;

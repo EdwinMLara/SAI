@@ -1,10 +1,13 @@
 import { Router } from 'express';
 
+import Auth from '@middlewares/Auth.middleware';
 import * as User from '@controllers/User.controller';
-import Identity from '@middlewares/Auth.middleware';
+
+/* ------------------ Code ------------------ */
 
 const router = Router();
 
-router.put('/', Identity, User.updateUser);
+router.patch('/', Auth('user'), User.updateUser);
+router.post('role/:role', Auth('user'), User.changeUserRole);
 
 export default router;

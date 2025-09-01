@@ -1,14 +1,16 @@
 import { Router } from 'express';
 
-import * as Ticket from '@controllers/Ticket.controller';
+import Auth from '@middlewares/Auth.middleware';
 import FileFilter from '@middlewares/Multer.middleware';
-import Identity from '@middlewares/Auth.middleware';
+import * as Ticket from '@controllers/Ticket.controller';
+
+/* ------------------ Code ------------------ */
 
 const router = Router();
 
-router.post('/', Identity, FileFilter, Ticket.uploadFile);
-router.get('/', Identity, Ticket.readTicketURL);
-router.put('/', Identity, FileFilter, Ticket.updateTicket);
-router.delete('/', Identity, Ticket.deleteTicket);
+router.post('/:ticketId', Auth('user'), FileFilter, Ticket.uploadFile);
+router.get('/:ticketId', Auth('user'), Ticket.readTicketURL);
+router.put('/:ticketId', Auth('user'), FileFilter, Ticket.updateTicket);
+router.delete('/:ticketId', Auth('user'), Ticket.deleteTicket);
 
 export default router;

@@ -2,13 +2,17 @@ import { Router } from 'express';
 
 import * as Document from '@controllers/Document.controller';
 import FileFilter from '@middlewares/Multer.middleware';
-import Identity from '@middlewares/Auth.middleware';
+
+import Auth from '@middlewares/Auth.middleware';
+
+/* ------------------ Code ------------------ */
 
 const router = Router();
 
-router.post('/', Identity, FileFilter, Document.uploadFile);
-router.get('/', Identity, Document.readDocumentURL);
-router.put('/', Identity, FileFilter, Document.updateDocument);
-router.delete('/', Identity, Document.deleteDocument);
+// Rutas con parámetro invoiceId
+router.post('/:invoiceId', Auth('user'), FileFilter, Document.uploadFile);
+router.get('/:invoiceId', Auth('user'), Document.readDocumentURL);
+router.put('/:invoiceId', Auth('user'), FileFilter, Document.updateDocument);
+router.delete('/:invoiceId', Auth('user'), Document.deleteDocument);
 
 export default router;
