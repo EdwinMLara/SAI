@@ -2,8 +2,6 @@ import jwt from 'jsonwebtoken';
 import env from '@config/env';
 import { UserInfoAtToken } from '@types';
 
-import ms from 'jsonwebtoken';
-
 /* ------------------ Code ------------------ */
 
 const jwtSecret = env.JWT_SECRET;
