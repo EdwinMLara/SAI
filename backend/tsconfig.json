@@ -21,7 +21,6 @@
          "@interfaces/*": ["src/interfaces/*"],
          "@middlewares/*": ["src/middlewares/*"],
          "@models/*": ["src/models/*"],
-         "@routes": ["src/routes/api.routes.ts"],
          "@services/*": ["src/services/*"],
          "@utils/*": ["src/utils/*"],
          "@auth/*": ["src/utils/auth/*"],
