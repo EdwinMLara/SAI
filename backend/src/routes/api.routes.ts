@@ -7,7 +7,6 @@
 import { Router } from 'express';
 
 import authRoutes from './modules/auth.routes';
-import adminRoutes from './modules/admin.routes';
 import documentRoutes from './modules/document.routes';
 import ticketRoutes from './modules/ticket.routes';
 import invoiceRoutes from './modules/invoice.routes';
@@ -21,7 +20,6 @@ const router = Router();
  * Each route group handles a specific domain of the application
  */
 router.use('/auth', authRoutes); // Authentication and authorization
-router.use('/admin', adminRoutes); // Administrative functions (invites)
 router.use('/documents', documentRoutes); // Document file management
 router.use('/tickets', ticketRoutes); // Ticket file management
 router.use('/invoices', invoiceRoutes); // Invoice management
