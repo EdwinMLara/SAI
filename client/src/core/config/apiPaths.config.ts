@@ -1,46 +1,53 @@
 const apiPaths = {
-   // Health & Info
-   health: '/health',
-   info: '/',
-
    // Authentication
    auth: {
       register: '/auth/register',
       login: '/auth/login',
       logout: '/auth/logout',
-      refresh: '/auth/refresh',
       session: '/auth/session',
    },
 
-   // Admin (Invites)
-   admin: {
-      invites: '/admin/invites',
+   // Document management
+   documents: {
+      upload: (invoiceId: string) => `/documents/${invoiceId}`,
+      read: (invoiceId: string) => `/documents/${invoiceId}`,
+      update: (invoiceId: string) => `/documents/${invoiceId}`,
+      delete: (invoiceId: string) => `/documents/${invoiceId}`,
    },
 
-   // Products
+   // Invoice management
+   invoices: {
+      create: '/invoices',
+      get: (id: string) => `/invoices/${id}`,
+      update: (id: string) => `/invoices/${id}`,
+      delete: (id: string) => `/invoices/${id}`,
+   },
+
+   // Product management
    products: {
-      base: '/products',
+      create: '/products',
+      get: (key: string) => `/products/${key}`,
+      delete: (key: string) => `/products/${key}`,
       replaceAll: '/products/replaceAll',
    },
 
-   // Documents
-   documents: {
-      base: '/documents',
-   },
-
-   // Tickets
+   // Ticket management
    tickets: {
-      base: '/tickets',
+      upload: (ticketId: string) => `/tickets/${ticketId}`,
+      read: (ticketId: string) => `/tickets/${ticketId}`,
+      update: (ticketId: string) => `/tickets/${ticketId}`,
+      delete: (ticketId: string) => `/tickets/${ticketId}`,
    },
 
-   // Invoices
-   invoices: {
-      base: '/invoices',
-   },
-
-   // User
+   // User management
    user: {
-      base: '/user',
+      update: '/user',
+      changeRole: (role: string) => `/user/role/${role}`,
+      invites: {
+         create: '/user/invites',
+         get: '/user/invites',
+         delete: '/user/invites',
+      },
    },
 };
 

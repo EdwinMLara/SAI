@@ -5,6 +5,7 @@ import {
    UserCredentialsInt,
    NewUserInt,
    StandardResponse,
+   PublicUserInt,
 } from '@common/interfaces';
 
 /* ------------------ Code ------------------ */
@@ -12,21 +13,23 @@ import {
 /**
  * Logs in with the user's credentials.
  * @param {UserCredentialsInt} credentials - User credentials (email and password).
- * @returns {Promise<StandardResponse>} Standard backend response.
+ * @returns {Promise<StandardResponse<PublicUserInt>>} Standard backend response with user data.
  */
 export async function login(
    credentials: UserCredentialsInt
-): Promise<StandardResponse> {
+): Promise<StandardResponse<PublicUserInt>> {
    return await apiClient.post(apiPaths.auth.login, credentials);
 }
 
 /**
  * Registers a new user in the system.
- * @param {NewUserInt} data - New user data.
- * @returns {Promise<StandardResponse>} Standard backend response.
+ * @param {NewUserInt} userData - New user data to register.
+ * @returns {Promise<StandardResponse<PublicUserInt>>} Standard backend response with created user data.
  */
-export async function register(data: NewUserInt): Promise<StandardResponse> {
-   return await apiClient.post(apiPaths.auth.register, data);
+export async function register(
+   userData: NewUserInt
+): Promise<StandardResponse<PublicUserInt>> {
+   return await apiClient.post(apiPaths.auth.register, userData);
 }
 
 /**
@@ -38,17 +41,9 @@ export async function logout(): Promise<StandardResponse> {
 }
 
 /**
- * Refreshes the user's authentication token.
- * @returns {Promise<StandardResponse>} Standard backend response.
- */
-export async function refresh(): Promise<StandardResponse> {
-   return await apiClient.post(apiPaths.auth.refresh);
-}
-
-/**
  * Gets the current session of the authenticated user.
- * @returns {Promise<StandardResponse>} Standard backend response.
+ * @returns {Promise<StandardResponse<PublicUserInt>>} Standard backend response with session user data.
  */
-export async function getSession(): Promise<StandardResponse> {
+export async function getSession(): Promise<StandardResponse<PublicUserInt>> {
    return await apiClient.get(apiPaths.auth.session);
 }

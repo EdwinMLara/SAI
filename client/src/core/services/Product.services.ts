@@ -1,52 +1,50 @@
 import apiClient from '../config/axios.config';
 import apiPaths from '../config/apiPaths.config';
 
-import { StandardResponse } from '@common/interfaces';
+import { StandardResponse, ProductInt } from '@common/interfaces';
+
+/* ------------------ Code ------------------ */
 
 /**
- * Gets the list of products.
+ * Creates a new product in the system.
+ * @param {ProductInt} productData - Product data to create.
  * @returns {Promise<StandardResponse>} Standard backend response.
  */
-export async function getProduct(search: String): Promise<StandardResponse> {
-   return await apiClient.get(apiPaths.products.base, { key: search });
-}
-
-/**
- * Replaces all existing products with a new list.
- * @param {any} data - New list of products.
- * @returns {Promise<StandardResponse>} Standard backend response.
- */
-export async function replaceAllProducts(data: any): Promise<StandardResponse> {
-   return await apiClient.post(apiPaths.products.replaceAll, data);
-}
-
-/**
- * Creates a new product.
- * @param {any} data - New product data.
- * @returns {Promise<StandardResponse>} Standard backend response.
- */
-export async function createProduct(data: any): Promise<StandardResponse> {
-   return await apiClient.post(apiPaths.products.base, data);
-}
-
-/**
- * Updates an existing product.
- * @param {string} id - ID of the product to update.
- * @param {any} data - Updated product data.
- * @returns {Promise<StandardResponse>} Standard backend response.
- */
-export async function updateProduct(
-   id: string,
-   data: any
+export async function createProduct(
+   productData: ProductInt
 ): Promise<StandardResponse> {
-   return await apiClient.put(`${apiPaths.products.base}/${id}`, data);
+   return await apiClient.post(apiPaths.products.create, productData);
 }
 
 /**
- * Deletes a product by ID.
- * @param {string} id - ID of the product to delete.
+ * Gets a specific product by key.
+ * @param {string} key - The product key to retrieve.
+ * @returns {Promise<StandardResponse<ProductInt>>} Standard backend response with product data.
+ */
+export async function getProduct(
+   key: string
+): Promise<StandardResponse<ProductInt>> {
+   return await apiClient.get(apiPaths.products.get(key));
+}
+
+/**
+ * Deletes a product from the system (admin only).
+ * @param {string} key - The product key to delete.
  * @returns {Promise<StandardResponse>} Standard backend response.
  */
-export async function deleteProduct(id: string): Promise<StandardResponse> {
-   return await apiClient.delete(`${apiPaths.products.base}/${id}`);
+export async function deleteProduct(key: string): Promise<StandardResponse> {
+   return await apiClient.delete(apiPaths.products.delete(key));
+}
+
+/**
+ * Replaces all products in the system with new data (admin only).
+ * @param {ProductInt[]} productsData - Array of products to replace all existing products.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function replaceAllProducts(
+   productsData: ProductInt[]
+): Promise<StandardResponse> {
+   return await apiClient.post(apiPaths.products.replaceAll, {
+      products: productsData,
+   });
 }
