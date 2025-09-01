@@ -28,17 +28,3 @@ export async function comprobeExistence(keyProduct: string): Promise<void> {
       throw new AppError(responses.Product.notFound, 404);
    }
 }
-
-/**
- * Extracts and validates query parameter for product operations
- * @param queryParam - Raw query parameter from request
- * @returns string - Validated product key
- * @throws AppError if parameter is missing or invalid
- */
-export function getQuery(queryParam: unknown): string {
-   const query = queryParam as string;
-   if (!query) {
-      throw new AppError(responses.Product.requiredKey, 400);
-   }
-   return query;
-}

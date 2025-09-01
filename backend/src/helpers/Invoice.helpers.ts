@@ -28,17 +28,3 @@ export async function comprobeExistence(invoiceId: string): Promise<void> {
       throw new AppError(responses.Invoice.notFound, 404);
    }
 }
-
-/**
- * Extracts and validates query parameter for invoice operations
- * @param queryParam - Raw query parameter from request
- * @returns string - Validated invoice ID
- * @throws AppError if parameter is missing or invalid
- */
-export function getQuery(queryParam: unknown): string {
-   const query = queryParam as string;
-   if (!query) {
-      throw new AppError(responses.Invoice.requiredId, 400);
-   }
-   return query;
-}
