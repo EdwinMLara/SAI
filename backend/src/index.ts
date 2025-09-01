@@ -9,7 +9,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 
 import env from '@config/env';
-import router from '@routes';
+import router from 'src/routes/api.routes';
 import * as database from '@config/database';
 
 import ErrorMiddleware from '@middlewares/Error.middleware';
