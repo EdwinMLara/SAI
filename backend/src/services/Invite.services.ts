@@ -3,6 +3,8 @@ import { ObjectId } from 'mongoose';
 import InviteModel from '@models/Invite.model';
 import { InviteInt } from '@cmm_interfaces/index';
 
+/* ------------------ Code ------------------ */
+
 /**
  * Creates a new invitation in the database
  * @param senderId - ObjectId of the user sending the invitation
@@ -10,12 +12,7 @@ import { InviteInt } from '@cmm_interfaces/index';
  * @param asignedRole - Role to be assigned to the invited user ('super' | 'admin' | 'user')
  * @returns Promise<void>
  */
-export async function createInvite(
-   senderId: ObjectId,
-   invitedEmail: string,
-   asignedRole: 'super' | 'admin' | 'user'
-): Promise<void> {
-   const invite = { senderId, invitedEmail, asignedRole };
+export async function createInvite(invite: InviteInt): Promise<void> {
    const newInvite = new InviteModel(invite);
    await newInvite.save();
 }

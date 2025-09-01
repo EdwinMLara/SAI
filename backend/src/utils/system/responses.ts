@@ -31,6 +31,8 @@ const UserResponses = {
    notfound: 'No se encontró ningún usuario con la información proporcionada',
    invalidpassword: 'La contraseña ingresada es incorrecta',
    updateError: 'Hubo un error a guardar el usuario',
+   inviteNotFound: 'No tienes invitación para acceder',
+   dupliedInvite: 'Ya tiene invitación',
 };
 
 const DocumentResponses = {
@@ -68,7 +70,6 @@ const responses = {
    User: UserResponses,
    Product: ProductResponses,
    Invoice: InvoiceResponses,
-   Invite: InvoiceResponses,
    Document: DocumentResponses,
    Ticket: TicketResponses,
    Auth: AuthResponses,

@@ -4,8 +4,9 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
-import * as userServices from '@services/User.services';
 import getParam from '@utils/system/getParam';
+
+import { InviteInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
@@ -18,18 +19,16 @@ import getParam from '@utils/system/getParam';
  * @returns Promise<void>
  */
 export async function createInvite(
-   req: Request,
+   req: Request<unknown, unknown, InviteInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {
    try {
-      const { auth, email, role } = req.body;
+      const { senderId, invitedEmail, asignedRole } = req.body;
 
-      await helpers.validateAuthToken(auth);
-      await helpers.validateState(email);
-      const ref = await helpers.getRef(auth);
+      await helpers.validateState(invitedEmail);
 
-      await services.createInvite(ref, email, role);
+      await services.createInvite(req.body);
       res.status(201).json({
          message: responses.System.ok,
       });
@@ -89,12 +88,10 @@ export async function removeInvite(
       await services.removeInvite(email);
 
       res.status(200).json({
-         message: responses.Invite.deleted,
+         message: responses.System.ok,
       });
    } catch (error) {
-      if (error instanceof AppError) {
-         return next(error);
-      }
+      if (error instanceof AppError) return next(error);
       return next(new AppError(responses.System.serverError, 500, error));
    }
 }
