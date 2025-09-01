@@ -6,9 +6,9 @@ import responses from '@utils/system/responses';
 import { compareHash } from '@utils/auth/crypt';
 import { createUser } from '@services/User.services';
 import { userByEmail } from '@services/User.services';
-import { comprobeFields } from '@helpers/User.helpers';
+import { comprobeFields, returnPublicUserByUser } from '@helpers/User.helpers';
 import { returnPublicUser } from '@helpers/User.helpers';
-import { clearCookies } from '@utils/cookies/manageCookies';
+import * as cookies from '@utils/cookies/manageCookies';
 import { NewUserInt, UserCredentialsInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
@@ -24,9 +24,13 @@ export async function login(
 
       if (!user) throw new AppError(responses.User.notfound, 403);
       if (!compareHash(password, user.password))
-         throw new AppError(responses.User.invalidpassword);
+         throw new AppError(responses.User.invalidpassword, 403);
 
-      res.json({ message: responses.Auth.loginSuccess });
+      cookies.setAuthCookie(res, user);
+
+      res.json({
+         message: responses.Auth.loginSuccess,
+      });
    } catch (error) {
       if (error instanceof AppError) return next(error);
       return next(new AppError(responses.System.serverError, 500, error));
@@ -43,8 +47,12 @@ export async function register(
       const message = await comprobeFields(username, email, phone);
       if (message) throw new AppError(message, 401);
 
-      await createUser(req.body);
-      res.status(201).json({ message: responses.User.created });
+      const user = await createUser(req.body);
+      cookies.setAuthCookie(res, user);
+
+      res.status(201).json({
+         message: responses.User.created,
+      });
    } catch (error) {
       if (error instanceof AppError) return next(error);
       return next(new AppError(responses.System.serverError, 500, error));
@@ -71,7 +79,7 @@ export async function logout(
    next: NextFunction
 ): Promise<void> {
    try {
-      clearCookies(res);
+      cookies.clearCookies(res);
       res.json({ message: responses.System.ok });
    } catch (error) {
       if (error instanceof AppError) return next(error);

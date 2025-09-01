@@ -13,9 +13,10 @@ import AppError from '@utils/system/AppError';
  * @param user - User data object conforming to UserInt interface
  * @returns Promise<void>
  */
-export async function createUser(user: NewUserInt): Promise<void> {
+export async function createUser(user: NewUserInt): Promise<UserInt> {
    const newUser = new UserModel(user);
    await newUser.save();
+   return newUser;
 }
 
 /**

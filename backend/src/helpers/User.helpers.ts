@@ -1,8 +1,13 @@
 import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
-import { comprobeUniqueFields, getUserById } from '@services/User.services';
-import { PublicUserInt } from '@cmm_interfaces/index';
+import {
+   comprobeUniqueFields,
+   getUserById,
+   userByEmail,
+} from '@services/User.services';
+import { PublicUserInt, UserInt } from '@cmm_interfaces/index';
+import { User } from '@supabase/supabase-js';
 
 /* ------------------ Code ------------------ */
 
@@ -17,11 +22,26 @@ export async function comprobeFields(
    if (phone !== undefined) fields.phone = phone;
    const findField = await comprobeUniqueFields(fields);
 
-   const message = `El ${findField} ya está en uso.`;
+   if (findField) {
+      return `El ${findField} ya está en uso.`;
+   }
 }
 
 export async function returnPublicUser(userId: string): Promise<PublicUserInt> {
    const user = await getUserById(userId);
+   const publicUser: PublicUserInt = {
+      image: user.image ?? '',
+      name: user.name,
+      username: user.username,
+      phone: user.phone,
+      email: user.email,
+      role: user.role,
+   };
+
+   return publicUser;
+}
+
+export function returnPublicUserByUser(user: UserInt): PublicUserInt {
    const publicUser: PublicUserInt = {
       image: user.image ?? '',
       name: user.name,
