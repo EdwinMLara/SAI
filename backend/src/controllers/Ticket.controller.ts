@@ -4,13 +4,14 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 import * as helpers from '@helpers/Ticket.helpers';
 import * as services from '@services/Ticket.services';
+import getParam from '@utils/system/getParam';
 
 /* ------------------ Code ------------------ */
 
 /**
  * Uploads a new PDF ticket file
  * Validates that the ticket doesn't already exist before uploading
- * @param req - Express request object with ticketId in query and file in body
+ * @param req - Express request object with ticketId in params and file in body
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -21,7 +22,7 @@ export async function uploadFile(
    next: NextFunction
 ): Promise<void> {
    try {
-      const ticketId = helpers.getQuery(req.query.ticketId);
+      const ticketId = getParam(req.params.ticketId);
       const filename = `ticket_${ticketId}.pdf`;
       await helpers.comprobeInexistence(filename);
       const file = (req as Request & { file: Express.Multer.File }).file;
@@ -41,7 +42,7 @@ export async function uploadFile(
 /**
  * Retrieves the URL of a ticket file
  * Validates that the ticket exists before returning its URL
- * @param req - Express request object with ticketId in query parameters
+ * @param req - Express request object with ticketId in params parameters
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -52,7 +53,7 @@ export async function readTicketURL(
    next: NextFunction
 ): Promise<void> {
    try {
-      const ticketId = helpers.getQuery(req.query.ticketId);
+      const ticketId = getParam(req.params.ticketId);
       const filename = `ticket_${ticketId}.pdf`;
       await helpers.comprobeExistence(filename);
       const url = await services.getUrlFile(filename);
@@ -71,7 +72,7 @@ export async function readTicketURL(
 /**
  * Updates an existing ticket by replacing it with a new file
  * Validates ticket existence before updating
- * @param req - Express request object with ticketId in query and new file in body
+ * @param req - Express request object with ticketId in params and new file in body
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -82,7 +83,7 @@ export async function updateTicket(
    next: NextFunction
 ): Promise<void> {
    try {
-      const ticketId = helpers.getQuery(req.query.ticketId);
+      const ticketId = getParam(req.params.ticketId);
       const filename = `ticket_${ticketId}.pdf`;
       await helpers.comprobeExistence(filename);
       const file = (req as Request & { file: Express.Multer.File }).file;
@@ -102,7 +103,7 @@ export async function updateTicket(
 /**
  * Deletes a ticket file from the system
  * Validates ticket existence before deletion
- * @param req - Express request object with ticketId in query parameters
+ * @param req - Express request object with ticketId in params parameters
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -113,7 +114,7 @@ export async function deleteTicket(
    next: NextFunction
 ): Promise<void> {
    try {
-      const ticketId = helpers.getQuery(req.query.ticketId);
+      const ticketId = getParam(req.params.ticketId);
       const filename = `ticket_${ticketId}.pdf`;
       await helpers.comprobeExistence(filename);
       await services.deleteFile(filename);

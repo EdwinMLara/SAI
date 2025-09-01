@@ -5,6 +5,7 @@ import responses from '@utils/system/responses';
 import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
 import * as userServices from '@services/User.services';
+import getParam from '@utils/system/getParam';
 
 /* ------------------ Code ------------------ */
 
@@ -82,10 +83,7 @@ export async function removeInvite(
    next: NextFunction
 ): Promise<void> {
    try {
-      const { email } = req.body;
-      if (!email) {
-         throw new AppError(responses.System.missingFieldBody, 409);
-      }
+      const email = getParam(req.body);
 
       await helpers.validateState(email);
       await services.removeInvite(email);

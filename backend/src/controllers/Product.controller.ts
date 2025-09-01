@@ -6,6 +6,7 @@ import * as helpers from '@helpers/Product.helpers';
 import * as services from '@services/Product.services';
 
 import { ProductInt } from '@cmm_interfaces/index';
+import getParam from '@utils/system/getParam';
 
 /* ------------------ Code ------------------ */
 
@@ -37,7 +38,7 @@ export async function createProduct(
 /**
  * Retrieves a specific product by its key
  * Validates product existence before returning data
- * @param req - Express request object with product key in query parameters
+ * @param req - Express request object with product key in params parameters
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -48,7 +49,7 @@ export async function getProduct(
    next: NextFunction
 ): Promise<void> {
    try {
-      const keyProduct = helpers.getQuery(req.query.key);
+      const keyProduct = getParam(req.params.key);
       await helpers.comprobeExistence(keyProduct);
       const product = await services.getProduct(keyProduct);
       res.status(200).json({
@@ -66,7 +67,7 @@ export async function getProduct(
 /**
  * Deletes a product from the system
  * Validates product existence before deletion
- * @param req - Express request object with product key in query parameters
+ * @param req - Express request object with product key in params parameters
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -77,7 +78,7 @@ export async function deleteProduct(
    next: NextFunction
 ): Promise<void> {
    try {
-      const keyProduct = helpers.getQuery(req.query.key);
+      const keyProduct = getParam(req.params.key);
       await helpers.comprobeExistence(keyProduct);
       await services.deleteProduct(keyProduct);
       res.status(200).json({ message: responses.Product.deleted });

@@ -4,6 +4,7 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 import * as helpers from '@helpers/Document.helpers';
 import * as services from '@services/Document.services';
+import getParam from '@utils/system/getParam';
 
 /* ------------------ Code ------------------ */
 
@@ -21,7 +22,7 @@ export async function uploadFile(
    next: NextFunction
 ): Promise<void> {
    try {
-      const invoiceId = helpers.getQuery(req.query.invoiceId);
+      const invoiceId = getParam(req.params.invoiceId);
       const filename = `document_${invoiceId}.pdf`;
       await helpers.comprobeInexistence(filename);
       const file = (req as Request & { file: Express.Multer.File }).file;
@@ -52,7 +53,7 @@ export async function readDocumentURL(
    next: NextFunction
 ): Promise<void> {
    try {
-      const invoiceId = helpers.getQuery(req.query.invoiceId);
+      const invoiceId = getParam(req.params.invoiceId);
       const filename = `document_${invoiceId}.pdf`;
       await helpers.comprobeExistence(filename);
       const url = await services.getUrlFile(filename);
@@ -82,7 +83,7 @@ export async function updateDocument(
    next: NextFunction
 ): Promise<void> {
    try {
-      const invoiceId = helpers.getQuery(req.query.invoiceId);
+      const invoiceId = getParam(req.params.invoiceId);
       const filename = `document_${invoiceId}.pdf`;
       await helpers.comprobeExistence(filename);
       const file = (req as Request & { file: Express.Multer.File }).file;
@@ -113,7 +114,7 @@ export async function deleteDocument(
    next: NextFunction
 ): Promise<void> {
    try {
-      const invoiceId = helpers.getQuery(req.query.invoiceId);
+      const invoiceId = getParam(req.params.invoiceId);
       const filename = `document_${invoiceId}.pdf`;
       await helpers.comprobeExistence(filename);
       await services.deleteFile(filename);

@@ -6,6 +6,7 @@ import * as helpers from '@helpers/Invoice.helpers';
 import * as services from '@services/Invoice.services';
 
 import { InvoiceInt } from '@cmm_interfaces/index';
+import getParam from '@utils/system/getParam';
 
 /* ------------------ Code ------------------ */
 
@@ -37,7 +38,7 @@ export async function createInvoice(
 /**
  * Retrieves a specific invoice by its ID
  * Validates invoice existence before returning data
- * @param req - Express request object with invoice ID in query parameters
+ * @param req - Express request object with invoice ID in params parameters
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -48,7 +49,7 @@ export async function getInvoice(
    next: NextFunction
 ): Promise<void> {
    try {
-      const invoiceId = helpers.getQuery(req.query.id);
+      const invoiceId = getParam(req.params.id);
       await helpers.comprobeExistence(invoiceId);
       const invoice = await services.getInvoice(invoiceId);
       res.status(200).json({
@@ -91,7 +92,7 @@ export async function updateInvoice(
 /**
  * Deletes an invoice from the system
  * Validates invoice existence before deletion
- * @param req - Express request object with invoice ID in query parameters
+ * @param req - Express request object with invoice ID in params parameters
  * @param res - Express response object
  * @param next - Express next function for error handling
  * @returns Promise<void>
@@ -102,7 +103,7 @@ export async function deleteInvoice(
    next: NextFunction
 ): Promise<void> {
    try {
-      const invoiceId = helpers.getQuery(req.query.id);
+      const invoiceId = getParam(req.params.id);
       await helpers.comprobeExistence(invoiceId);
       await services.deleteInvoice(invoiceId);
       res.status(200).json({ message: responses.Invoice.deleted });
