@@ -1,4 +1,4 @@
-import { Types } from 'mongoose';
+import { Types, isValidObjectId } from 'mongoose';
 
 import UserModel from '@models/User.model';
 import { compareHash } from '@utils/auth/crypt';
@@ -121,4 +121,20 @@ export async function changeRole(
    if (!user) throw new AppError(responses.System.serverError, 500);
    user.role = role;
    await user.save();
+}
+
+/**
+ * Returns the user object for the given email or ObjectId, including the user's id as a string.
+ *
+ * @param index The user's email or ObjectId as string.
+ * @returns The user object with an id property.
+ * @throws {AppError} If no user is found with the provided value.
+ */
+export async function userByIndexed(index: string): Promise<UserInt> {
+   const query = isValidObjectId(index)
+      ? { _id: new Types.ObjectId(index) }
+      : { email: index };
+   const user = await UserModel.findOne(query).lean();
+   if (!user) throw new AppError(responses.User.notfound, 404);
+   return { ...user, _id: user._id.toString() };
 }
