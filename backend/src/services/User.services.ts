@@ -39,48 +39,6 @@ export async function updatedUser(
 }
 
 /**
- * Retrieves user ObjectId by email address
- * @param email - User email address
- * @returns Promise<ObjectId> - The user's ObjectId
- * @throws AppError if user is not found
- */
-export async function getIdUser(email: string): Promise<string> {
-   const user = await UserModel.findOne({ email });
-   if (!user) {
-      throw new AppError(responses.User.notfound, 404);
-   }
-   return user._id as string;
-}
-
-/**
- * Retrieves user data by ObjectId
- * @param userId - User ObjectId
- * @returns Promise<UserInt> - The user data
- * @throws AppError if user is not found
- */
-export async function getUserByObject(userId: string): Promise<UserInt> {
-   const user = await UserModel.findOne({ _id: new Types.ObjectId(userId) });
-   if (!user) {
-      throw new AppError(responses.User.notfound, 404);
-   }
-   return user as UserInt;
-}
-
-/**
- * Retrieves user data by string ID
- * @param userId - User ID as string
- * @returns Promise<UserInt> - The user data
- * @throws AppError if user is not found
- */
-export async function getUserById(userId: string): Promise<UserInt> {
-   const user = await UserModel.findOne({ _id: userId });
-   if (!user) {
-      throw new AppError(responses.User.notfound, 404);
-   }
-   return user as UserInt;
-}
-
-/**
  * Searches for existing users with the same unique field values
  * Checks email, username, name, and phone for uniqueness
  * @param fields - Object containing user fields to check for uniqueness
@@ -107,10 +65,6 @@ export async function comprobeUniqueFields({
       const user = await UserModel.findOne({ phone });
       if (user) return 'numero de telefono';
    }
-}
-
-export async function userByEmail(email: string): Promise<UserInt | null> {
-   return await UserModel.findOne({ email }).lean();
 }
 
 export async function changeRole(
