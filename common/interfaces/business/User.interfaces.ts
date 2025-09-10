@@ -1,4 +1,5 @@
 export interface UserInt {
+   _id: string;
    image?: string;
    name: string;
    username: string;
@@ -18,6 +19,7 @@ export interface UserChangesInt {
 }
 
 export interface PublicUserInt {
+   _id: string;
    image?: string;
    name: string;
    username: string;
