@@ -2,7 +2,12 @@ import { Types, isValidObjectId } from 'mongoose';
 
 import UserModel from '@models/User.model';
 import { compareHash } from '@utils/auth/crypt';
-import { UserChangesInt, UserInt, NewUserInt } from '@cmm_interfaces/index';
+import {
+   UserChangesInt,
+   UserInt,
+   NewUserInt,
+   PublicUserInt,
+} from '@cmm_interfaces/index';
 
 import responses from '@utils/system/responses';
 import AppError from '@utils/system/AppError';
@@ -13,10 +18,11 @@ import AppError from '@utils/system/AppError';
  * @param user - User data object conforming to UserInt interface
  * @returns Promise<void>
  */
-export async function createUser(user: NewUserInt): Promise<UserInt> {
+export async function createUser(user: NewUserInt): Promise<PublicUserInt> {
    const newUser = new UserModel(user);
    await newUser.save();
-   return newUser;
+   const userObj = newUser.toObject() as UserInt & { _id: any };
+   return { ...userObj, _id: userObj._id.toString() };
 }
 
 /**
@@ -29,7 +35,7 @@ export async function createUser(user: NewUserInt): Promise<UserInt> {
 export async function updatedUser(
    userId: string,
    updates: Partial<UserChangesInt>
-): Promise<UserInt> {
+): Promise<PublicUserInt> {
    const updated = await UserModel.findOneAndUpdate(
       { _id: new Types.ObjectId(userId) },
       updates
