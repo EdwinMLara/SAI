@@ -4,18 +4,17 @@ import * as tokens from '@auth/tokens';
 import AppError from '@utils/system/AppError';
 
 import { UserInfoAtToken } from '@types';
-import { UserInt } from '@cmm_interfaces/index';
-import { getIdUser } from '@services/User.services';
+import { PublicUserInt, UserInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
 export async function onAuthCookie(
-   user: UserInt,
+   user: PublicUserInt,
    ageToken: number
 ): Promise<string> {
    try {
       const infoToken = {
-         id: await getIdUser(user.email),
+         id: user._id,
          role: user.role,
       };
 

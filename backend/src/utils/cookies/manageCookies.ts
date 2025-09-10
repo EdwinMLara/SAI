@@ -3,13 +3,13 @@ import { Response } from 'express';
 import env from '@config/env';
 
 import { onAuthCookie } from './dataOnCookie';
-import { UserInt } from '@cmm_interfaces/index';
+import { PublicUserInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
 export async function setAuthCookie(
    res: Response,
-   user: UserInt
+   user: PublicUserInt
 ): Promise<void> {
    const age = 15 * 24 * 60 * 60 * 1000;
    const token = await onAuthCookie(user, age);
