@@ -1,5 +1,10 @@
 export interface InviteInt {
-   senderId: unknown;
+   senderId: string;
+   invitedEmail: string;
+   asignedRole: 'admin' | 'user';
+}
+
+export interface NewInviteInt {
    invitedEmail: string;
    asignedRole: 'admin' | 'user';
 }

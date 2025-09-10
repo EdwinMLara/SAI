@@ -65,6 +65,10 @@ const InvoiceResponses = {
    requiredId: 'ID de factura requerido',
 };
 
+const UnknownResponses = {
+   unk: 'Ocurrió un error desconocido, no puede proceder la acción',
+};
+
 const responses = {
    System: SystemResponses,
    User: UserResponses,
@@ -73,6 +77,7 @@ const responses = {
    Document: DocumentResponses,
    Ticket: TicketResponses,
    Auth: AuthResponses,
+   Unk: UnknownResponses,
 };
 
 export default responses;

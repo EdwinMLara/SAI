@@ -1,7 +1,7 @@
-import { ObjectId } from 'mongoose';
+import { Types } from 'mongoose';
 
 import InviteModel from '@models/Invite.model';
-import { InviteInt } from '@cmm_interfaces/index';
+import { InviteInt, NewInviteInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
@@ -22,7 +22,8 @@ export async function createInvite(invite: InviteInt): Promise<void> {
  * @param user - ObjectId of the user whose sent invitations to retrieve
  * @returns Promise containing array of invitation data
  */
-export async function getInvites(userId: string): Promise<InviteInt[] | null> {
+export async function getInvites(user: string): Promise<InviteInt[] | null> {
+   const userId = new Types.ObjectId(user);
    const invites = await InviteModel.find({ senderId: userId }).lean();
    return invites;
 }

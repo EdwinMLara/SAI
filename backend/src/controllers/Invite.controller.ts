@@ -6,7 +6,7 @@ import * as helpers from '@helpers/Invites.helpers';
 import * as services from '@services/Invite.services';
 import getParam from '@utils/system/getParam';
 
-import { InviteInt } from '@cmm_interfaces/index';
+import { InviteInt, NewInviteInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
@@ -19,16 +19,21 @@ import { InviteInt } from '@cmm_interfaces/index';
  * @returns Promise<void>
  */
 export async function createInvite(
-   req: Request<unknown, unknown, InviteInt>,
+   req: Request<unknown, unknown, NewInviteInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {
    try {
-      const { senderId, invitedEmail, asignedRole } = req.body;
-
+      const { invitedEmail, asignedRole } = req.body;
       await helpers.validateState(invitedEmail);
 
-      await services.createInvite(req.body);
+      const invite: InviteInt = {
+         senderId: req.user.id,
+         invitedEmail: invitedEmail,
+         asignedRole: asignedRole,
+      };
+
+      await services.createInvite(invite);
       res.status(201).json({
          message: responses.System.ok,
       });
@@ -58,7 +63,7 @@ export async function getInvites(
 
       res.status(200).json({
          message: responses.System.ok,
-         data: { list },
+         data: { invites: list },
       });
    } catch (error) {
       if (error instanceof AppError) {
@@ -82,9 +87,16 @@ export async function removeInvite(
    next: NextFunction
 ): Promise<void> {
    try {
-      const email = getParam(req.body);
+      const email = getParam(req.query.email);
 
-      await helpers.validateState(email);
+      try {
+         await helpers.validateState(email);
+      } catch (error) {
+         if (error instanceof AppError) {
+            throw new AppError(responses.Unk.unk);
+         }
+         throw error;
+      }
       await services.removeInvite(email);
 
       res.status(200).json({
