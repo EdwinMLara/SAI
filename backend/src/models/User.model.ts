@@ -4,7 +4,7 @@ import { UserInt } from '@cmm_interfaces/index';
 
 /* ------------------ Code ------------------ */
 
-export interface UserDoc extends UserInt, Document {}
+export interface UserDoc extends Omit<UserInt, '_id'>, Document {}
 
 const UserSchema: Schema = new Schema<UserDoc>({
    image: { type: String, required: false },
