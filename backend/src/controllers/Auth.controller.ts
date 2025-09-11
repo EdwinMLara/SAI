@@ -6,9 +6,9 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
 import { compareHash } from '@utils/auth/crypt';
-import { createUser, userByIndexed } from '@services/User.services';
+import { comprobeUnicity } from '@helpers/User.helpers';
 import { NewUserInt, UserCredentialsInt } from '@cmm_interfaces/index';
-import { comprobeFields, returnPublicUser } from '@helpers/User.helpers';
+import { createUser, userByIndexed, returnUser } from '@services/User.services';
 
 /* ------------------ Code ------------------ */
 
@@ -19,7 +19,7 @@ export async function login(
 ): Promise<void> {
    try {
       const { email, password } = req.body;
-      const user = await userByIndexed(email);
+      const user = await returnUser(email);
 
       const isValidPassword = !compareHash(password, user.password);
       if (!isValidPassword) {
@@ -46,12 +46,14 @@ export async function register(
 ): Promise<void> {
    try {
       const { email, password, username, phone } = req.body;
-      const message = await comprobeFields(username, email, phone);
+      const message = await comprobeUnicity(username, email, phone);
+
       if (message) {
          throw new AppError(message, 401);
       }
 
-      const user = await createUser(req.body);
+      await createUser(req.body);
+      const user = await userByIndexed(email);
       cookies.setAuthCookie(res, user);
 
       res.status(201).json({
@@ -71,8 +73,11 @@ export async function sessionRequest(
    next: NextFunction
 ): Promise<void> {
    try {
-      const publicUser = await returnPublicUser(req.user.id);
-      res.status(200).json({ data: { publicUser } });
+      const publicUser = await userByIndexed(req.user.id);
+      res.status(200).json({
+         message: responses.System.ok,
+         data: { publicUser },
+      });
    } catch (error) {
       if (error instanceof AppError) {
          return next(error);

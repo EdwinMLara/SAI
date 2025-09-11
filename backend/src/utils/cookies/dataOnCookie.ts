@@ -1,5 +1,3 @@
-import { ObjectId } from 'mongoose';
-
 import * as tokens from '@auth/tokens';
 import AppError from '@utils/system/AppError';
 
@@ -9,11 +7,11 @@ import { PublicUserInt, UserInt } from '@cmm_interfaces/index';
 /* ------------------ Code ------------------ */
 
 export async function onAuthCookie(
-   user: PublicUserInt,
+   user: PublicUserInt | UserInt,
    ageToken: number
 ): Promise<string> {
    try {
-      const infoToken = {
+      const infoToken: UserInfoAtToken = {
          id: user._id,
          role: user.role,
       };

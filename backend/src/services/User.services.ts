@@ -5,6 +5,7 @@ import {
    UserChangesInt,
    NewUserInt,
    PublicUserInt,
+   UserInt,
 } from '@cmm_interfaces/index';
 
 import AppError from '@utils/system/AppError';
@@ -136,4 +137,23 @@ export async function userByIndexed(index: string): Promise<PublicUserInt> {
    };
 
    return publicUser;
+}
+
+export async function returnUser(email: string): Promise<UserInt> {
+   const user = await UserModel.findOne({ email }).lean();
+   if (!user) {
+      throw new AppError(responses.User.notfound, 404);
+   }
+
+   const mappedUser: UserInt = {
+      _id: user._id.toString(),
+      image: user.image ?? '',
+      name: user.name,
+      username: user.username,
+      phone: user.phone,
+      email: user.email,
+      password: user.password,
+      role: user.role,
+   };
+   return mappedUser;
 }
