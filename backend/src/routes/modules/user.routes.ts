@@ -2,6 +2,7 @@ import { Router } from 'express';
 
 import Auth from '@middlewares/Auth.middleware';
 import * as User from '@controllers/User.controller';
+import FileFilter from '@middlewares/Multer.middleware';
 import * as Invite from '@controllers/Invite.controller';
 
 /* ------------------ Code ------------------ */
@@ -13,5 +14,6 @@ router.post('role/:role', Auth('user'), User.changeUserRole);
 router.post('/invites', Auth('admin'), Invite.createInvite);
 router.get('/invites', Auth('admin'), Invite.getInvites);
 router.delete('/invites', Auth('admin'), Invite.removeInvite);
+router.patch('imgprofile', Auth('user'), FileFilter, User.changeImage);
 
 export default router;

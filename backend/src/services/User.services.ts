@@ -8,6 +8,7 @@ import {
    UserInt,
 } from '@cmm_interfaces/index';
 
+import supabase from '@config/supabase';
 import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
@@ -156,4 +157,26 @@ export async function returnUser(email: string): Promise<UserInt> {
       role: user.role,
    };
    return mappedUser;
+}
+
+export async function changeImageProfile(
+   file: Express.Multer.File,
+   filename: string
+): Promise<string> {
+   const { error } = await supabase.storage
+      .from('profile-pictures')
+      .upload(filename, file.buffer, {
+         contentType: file.mimetype,
+         upsert: true,
+      });
+
+   if (error) {
+      throw new AppError(responses.Document.uploadError, 500, error);
+   }
+
+   const { data } = supabase.storage
+      .from('profile-pictures')
+      .getPublicUrl(filename);
+
+   return data.publicUrl;
 }
