@@ -3,6 +3,8 @@ import { Request, Response, NextFunction } from 'express';
 
 import AppError from '@utils/system/AppError';
 
+/* ------------------ Code ------------------ */
+
 /**
  * Multer configuration for file uploads
  * Accepts PDF and JPEG files with 5MB size limit
@@ -18,7 +20,9 @@ const upload = multer({
    ): void => {
       if (
          file.mimetype === 'application/pdf' ||
-         file.mimetype === 'image/jpeg'
+         file.mimetype === 'image/jpeg' ||
+         file.mimetype === 'image/png' ||
+         file.mimetype === 'image/jpg'
       ) {
          callback(null, true);
       } else {
