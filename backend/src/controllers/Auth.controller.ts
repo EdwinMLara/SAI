@@ -21,12 +21,12 @@ export async function login(
       const { email, password } = req.body;
       const user = await returnUser(email);
 
-      const isValidPassword = !compareHash(password, user.password);
+      const isValidPassword = await compareHash(password, user.password);
       if (!isValidPassword) {
          throw new AppError(responses.User.invalidpassword, 404);
       }
 
-      cookies.setAuthCookie(res, user);
+      await cookies.setAuthCookie(res, user);
 
       res.status(200).json({
          message: responses.Auth.loginSuccess,
@@ -54,7 +54,7 @@ export async function register(
 
       await createUser(req.body);
       const user = await userByIndexed(email);
-      cookies.setAuthCookie(res, user);
+      await cookies.setAuthCookie(res, user);
 
       res.status(201).json({
          message: responses.User.created,
