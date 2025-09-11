@@ -7,7 +7,7 @@ import { InviteInt } from '@cmm_interfaces/index';
 export interface InviteDoc extends InviteInt, Document {}
 
 const InviteSchema: Schema = new Schema<InviteDoc>({
-   senderId: { type: Schema.Types.ObjectId, required: true, ref: 'User' },
+   senderId: { type: String, required: true, ref: 'User' },
    invitedEmail: { type: String, required: true, unique: true, index: true },
    asignedRole: {
       type: String,
