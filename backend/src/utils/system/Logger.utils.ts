@@ -40,6 +40,8 @@ if (isProduction) {
             message,
             metadata: metadata,
          });
+
+         console.log(log);
          log.save();
       }
    }
