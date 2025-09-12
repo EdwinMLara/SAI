@@ -16,4 +16,5 @@ export interface ProductInt {
    description: string;
    prices: PricesProductInt;
    details: DetailsProduct;
+   catalog: boolean;
 }
