@@ -88,7 +88,7 @@ export async function updateProfileImage(
    file: File
 ): Promise<StandardResponse> {
    const formData = new FormData();
-   formData.append('image', file);
+   formData.append('file', file);
 
    return await apiClient.patch(apiPaths.user.changeImage, formData, {
       headers: {
