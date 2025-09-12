@@ -43,6 +43,7 @@ const apiPaths = {
    user: {
       update: '/user',
       changeRole: (role: string) => `/user/role/${role}`,
+      changeImage: '/user/image',
       invites: {
          create: '/user/invites',
          get: '/user/invites',

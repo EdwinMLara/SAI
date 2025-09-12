@@ -11,11 +11,11 @@ import {
 
 /**
  * Updates the current user's profile information.
- * @param {UserChangesInt} userData - User data to update.
+ * @param {Partial<UserChangesInt>} userData - User data to update.
  * @returns {Promise<StandardResponse>} Standard backend response.
  */
 export async function updateUser(
-   userData: UserChangesInt
+   userData: Partial<UserChangesInt>
 ): Promise<StandardResponse> {
    return await apiClient.patch(apiPaths.user.update, userData);
 }
@@ -60,5 +60,23 @@ export async function removeInvite(
 ): Promise<StandardResponse> {
    return await apiClient.delete(apiPaths.user.invites.delete, {
       data: { inviteId },
+   });
+}
+
+/**
+ * Updates the current user's profile picture.
+ * @param {File} file - Image file to upload.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function updateProfileImage(
+   file: File
+): Promise<StandardResponse> {
+   const formData = new FormData();
+   formData.append('image', file);
+
+   return await apiClient.patch(apiPaths.user.changeImage, formData, {
+      headers: {
+         'Content-Type': 'multipart/form-data',
+      },
    });
 }
