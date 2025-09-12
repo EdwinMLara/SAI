@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { InputFile, Message } from '@ui/index.ui';
+import { InputFile, Message } from '@ui/index';
 
 interface FileUploadSectionProps {
    onFileChange: (file: File | null) => void;

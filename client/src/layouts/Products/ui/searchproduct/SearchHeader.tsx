@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button, Icon } from '@ui/index.ui';
+import { Button, Icon } from '@ui/index';
 import { H1 } from '@components/semantic';
 
 interface SearchHeaderProps {

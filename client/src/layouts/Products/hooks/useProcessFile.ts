@@ -111,6 +111,7 @@ const useProcessFile = () => {
             description: String(descriptionValue),
             prices,
             details,
+            catalog: true,
          };
 
          return { product };

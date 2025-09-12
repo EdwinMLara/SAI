@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Icon } from '@ui/index.ui';
+import { Icon } from '@ui/index';
 
 interface EmptyStateProps {
    isVisible: boolean;

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Input, Button, Icon, Checkbox, Message } from '@ui/index.ui';
+import { Input, Button, Icon, Checkbox, Message } from '@ui/index';
 
 interface SearchFormProps {
   search: string;

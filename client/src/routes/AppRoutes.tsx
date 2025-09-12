@@ -9,6 +9,7 @@ import Authentication from '@/pages/Authentication';
 import Home from '@/pages/Home';
 
 import UserRouting from '@/layouts/user/config/Routing';
+import ProductRouting from '@layouts/Products/config/Routing';
 
 /* ------------------ Code ------------------ */
 
@@ -21,6 +22,7 @@ const AppRoutes = () => {
             <Route element={<Protected />}>
                <Route index element={<Home />} />
             </Route>
+            <Route path="products/*" element={<ProductRouting />}></Route>
          </Route>
          <Route path="user/*" element={<UserRouting />}></Route>
          <Route path="*" element={<NotFound />} />

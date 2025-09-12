@@ -12,10 +12,10 @@ const Routing = () => {
    return (
       <Routes>
          <Route element={<AdminProtected />}>
-            <Route path="/database" element={<DatabaseProduct />} />
+            <Route path="database" element={<DatabaseProduct />} />
          </Route>
-         <Route path="/search" element={<SearchProduct />} />
-         <Route path="/quotations" element={<Quotations />} />
+         <Route path="search" element={<SearchProduct />} />
+         <Route path="quotations" element={<Quotations />} />
       </Routes>
    );
 };

@@ -18,13 +18,14 @@ const useProductSearch = () => {
 
       try {
          const response = await services.getProduct(search.trim());
-         const product = response.data.product;
 
-         if (product) {
-            setProductSearch(product);
-            const exists = listProducts.some((p) => p.key === product.key);
-            if (!exists) {
-               setListProducts((prev) => [...prev, product]);
+         if (response && response.data) {
+            setProductSearch(response.data);
+            const exists = response.data
+               ? listProducts.some((p) => p.key === response.data!.key)
+               : false;
+            if (!exists && response.data) {
+               setListProducts((prev) => [...prev, response.data!]);
             }
          } else {
             setSearchError('Producto no encontrado');

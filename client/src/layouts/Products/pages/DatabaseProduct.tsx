@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Loading } from '@ui/index.ui';
 import { H1 } from '@components/semantic';
+import { Loading } from '@components/ui';
 import {
    useProcessFile,
    useLastUpdate,
@@ -19,6 +19,7 @@ const DatabaseProduct = () => {
       useProcessFile();
    const {
       lastUpdate,
+      totalProducts,
       isLoading: isLoadingUpdate,
       formatDate,
       refetch,
@@ -111,6 +112,7 @@ const DatabaseProduct = () => {
 
          <LastUpdateInfo
             lastUpdate={lastUpdate}
+            totalProducts={totalProducts}
             isLoading={isLoadingUpdate}
             formatDate={formatDate}
          />

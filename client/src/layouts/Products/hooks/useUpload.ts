@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ProductInt } from '@cmm_interfaces/index';
-import * as services from '@services/Product.services';
+import { ProductServices } from '../../../core/services';
 
 interface UseUploadReturn {
    isUploading: boolean;
@@ -16,7 +16,7 @@ const useUpload = (onSuccess?: () => void): UseUploadReturn => {
    const uploadProducts = async (products: ProductInt[]) => {
       setIsUploading(true);
       try {
-         await services.replaceAllProducts(products);
+         await ProductServices.replaceAllProducts(products);
          setUploadSuccess(true);
          onSuccess?.();
       } catch (error) {

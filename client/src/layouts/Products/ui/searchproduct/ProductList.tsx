@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Button, Icon } from '@ui/index.ui';
+import { Button, Icon } from '@ui/index';
 import { ProductInt } from '@cmm_interfaces/index';
 import { ProductCard } from '../../index';
 

@@ -2,6 +2,7 @@ export { default as useProductSearch } from './hooks/useProductSearch';
 export { default as useSearchOptions } from './hooks/useSearchOptions';
 export { default as useProcessFile } from './hooks/useProcessFile';
 export { default as useUpload } from './hooks/useUpload';
+export { default as useLastUpdate } from './hooks/useLastUpdate';
 
 export { default as SearchForm } from './ui/searchproduct/SearchForm';
 export { default as ProductCard } from './ui/searchproduct/ProductCard';
