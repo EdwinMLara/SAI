@@ -113,3 +113,23 @@ export async function replaceAllProducts(
       return next(new AppError(responses.System.serverError, 500, error));
    }
 }
+
+export async function lastUpdate(
+   req: Request,
+   res: Response,
+   next: NextFunction
+): Promise<void> {
+   try {
+      const lastUpdate = await services.lastUpdate();
+
+      res.status(200).json({
+         message: responses.Product.replaced,
+         data: { lastUpdate },
+      });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
+}

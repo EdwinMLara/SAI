@@ -72,3 +72,8 @@ export async function replaceAllProducts(data: ProductInt[]): Promise<void> {
       session.endSession();
    }
 }
+
+export async function lastUpdate(): Promise<ProductInt | null> {
+   const [product] = await ProductModel.aggregate([{ $sample: { size: 1 } }]);
+   return product ? (product as ProductInt) : null;
+}
