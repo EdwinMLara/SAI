@@ -44,7 +44,13 @@ export async function deleteProduct(key: string): Promise<StandardResponse> {
 export async function replaceAllProducts(
    productsData: ProductInt[]
 ): Promise<StandardResponse> {
-   return await apiClient.post(apiPaths.products.replaceAll, {
-      products: productsData,
-   });
+   return await apiClient.post(apiPaths.products.replaceAll, productsData);
+}
+
+/**
+ * Gets the last update information and total products count.
+ * @returns {Promise<StandardResponse<{lastUpdate: string | null, totalProducts: number}>>} Standard backend response with last update data.
+ */
+export async function getLastUpdate(): Promise<StandardResponse> {
+   return await apiClient.get(apiPaths.products.lastUpdate);
 }
