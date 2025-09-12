@@ -1,9 +1,0 @@
-export { default as Alert } from './Alert';
-export { default as Button } from './Button';
-export { default as Icon } from './Icon';
-export { default as IconButton } from './IconButton';
-export { default as Input } from './Input';
-export { default as InputFile } from './InputFile';
-export { default as Loading } from './Loading';
-export { default as Message } from './Message';
-export { default as Checkbox } from './Checkbox';
