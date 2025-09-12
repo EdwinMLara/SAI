@@ -44,6 +44,6 @@ export async function logout(): Promise<StandardResponse> {
  * Gets the current session of the authenticated user.
  * @returns {Promise<StandardResponse<PublicUserInt>>} Standard backend response with session user data.
  */
-export async function getSession(): Promise<StandardResponse<PublicUserInt>> {
+export async function getSession(): Promise<StandardResponse> {
    return await apiClient.get(apiPaths.auth.session);
 }
