@@ -2,6 +2,8 @@ import { Types } from 'mongoose';
 
 import InviteModel from '@models/Invite.model';
 import { InviteInt, NewInviteInt } from '@cmm_interfaces/index';
+import AppError from '@utils/system/AppError';
+import responses from '@utils/system/responses';
 
 /* ------------------ Code ------------------ */
 
@@ -54,5 +56,10 @@ export async function hasInvite(email: string): Promise<boolean> {
  */
 export async function getInvite(email: string): Promise<InviteInt> {
    const invite = await InviteModel.findOne({ invitedEmail: email }).lean();
+
+   if (!invite) {
+      throw new AppError(responses.User.inviteNotFound, 404);
+   }
+
    return invite as InviteInt;
 }
