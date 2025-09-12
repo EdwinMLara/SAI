@@ -4,10 +4,12 @@ import { useAuth } from '@/context/Auth.context';
 import { useSidebar } from '@context/Sidebar.context';
 
 import { Logo } from '../helpers/Brand';
+import { useNavigate } from 'react-router-dom';
 import { Icon, IconButton } from '@ui/index.ui';
 import ThemeToggle from '../helpers/ToggleTheme';
 
 const Header: React.FC = () => {
+   const navigate = useNavigate();
    const { user, logout } = useAuth();
    const { toggle } = useSidebar();
 
@@ -134,7 +136,10 @@ const Header: React.FC = () => {
                               </div>
 
                               <div className="p-2">
-                                 <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors">
+                                 <button
+                                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors"
+                                    onClick={() => navigate('/profile')}
+                                 >
                                     <Icon
                                        name="FaUser"
                                        size={16}
@@ -143,7 +148,10 @@ const Header: React.FC = () => {
                                     Mi perfil
                                  </button>
 
-                                 <button className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors">
+                                 <button
+                                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors"
+                                    onClick={() => navigate('/configuration')}
+                                 >
                                     <Icon
                                        name="FaCog"
                                        size={16}
