@@ -11,7 +11,10 @@ import {
    updatedUser,
    changeRole,
    changeImageProfile,
+   userByIndexed,
+   returnUser,
 } from '@services/User.services';
+import { compareHash, encrypt } from '@utils/auth/crypt';
 
 /* ------------------ Code ------------------ */
 
@@ -34,6 +37,41 @@ export async function updateUser(
 
       const changes = await updatedUser(updates, req.user.id);
       res.json({ message: responses.User.updated, data: { user: changes } });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
+}
+
+export async function changePassword(
+   req: Request<
+      unknown,
+      unknown,
+      { currentPassword: string; newPassword: string }
+   >,
+   res: Response,
+   next: NextFunction
+): Promise<void> {
+   try {
+      const { currentPassword, newPassword } = req.body;
+
+      if (!currentPassword || !newPassword) {
+         return next(new AppError(responses.System.missingFieldBody, 400));
+      }
+
+      const user = await returnUser(req.user.id);
+      const isValidPassword = await compareHash(currentPassword, user.password);
+
+      if (!isValidPassword) {
+         return next(new AppError(responses.User.invalidpassword, 400));
+      }
+
+      const hashedPassword = await encrypt(newPassword);
+      await updatedUser({ password: hashedPassword }, req.user.id);
+
+      res.json({ message: responses.User.updated });
    } catch (error) {
       if (error instanceof AppError) {
          return next(error);

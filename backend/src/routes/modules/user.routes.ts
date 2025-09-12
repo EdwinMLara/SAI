@@ -10,10 +10,11 @@ import * as Invite from '@controllers/Invite.controller';
 const router = Router();
 
 router.patch('/', Auth('user'), User.updateUser);
+router.patch('/password', Auth('user'), User.changePassword);
 router.post('role/:role', Auth('user'), User.changeUserRole);
+router.patch('/image', Auth('user'), FileFilter, User.changeImage);
 router.post('/invites', Auth('admin'), Invite.createInvite);
 router.get('/invites', Auth('admin'), Invite.getInvites);
 router.delete('/invites', Auth('admin'), Invite.removeInvite);
-router.patch('imgprofile', Auth('user'), FileFilter, User.changeImage);
 
 export default router;
