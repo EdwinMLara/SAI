@@ -12,6 +12,8 @@ import supabase from '@config/supabase';
 import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
+import { encrypt } from '@utils/auth/crypt';
+
 /* ------------------ Code ------------------ */
 
 /**
@@ -21,6 +23,7 @@ import responses from '@utils/system/responses';
  */
 export async function createUser(user: NewUserInt): Promise<void> {
    const newUser = new UserModel(user);
+   newUser.password = await encrypt(user.password);
    await newUser.save();
 }
 
