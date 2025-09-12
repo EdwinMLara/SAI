@@ -73,7 +73,22 @@ export async function replaceAllProducts(data: ProductInt[]): Promise<void> {
    }
 }
 
-export async function lastUpdate(): Promise<ProductInt | null> {
-   const [product] = await ProductModel.aggregate([{ $sample: { size: 1 } }]);
-   return product ? (product as ProductInt) : null;
+export async function lastUpdate(): Promise<{
+   lastUpdate: Date | null;
+   totalProducts: number;
+}> {
+   const latestProduct = await ProductModel.findOne(
+      {},
+      {},
+      { sort: { createdAt: -1 } }
+   );
+
+   const totalProducts = await ProductModel.countDocuments();
+
+   return {
+      lastUpdate: latestProduct
+         ? (latestProduct as any).createdAt || null
+         : null,
+      totalProducts,
+   };
 }
