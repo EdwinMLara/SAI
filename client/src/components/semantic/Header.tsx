@@ -138,7 +138,7 @@ const Header: React.FC = () => {
                               <div className="p-2">
                                  <button
                                     className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors"
-                                    onClick={() => navigate('/profile')}
+                                    onClick={() => navigate('/user/profile')}
                                  >
                                     <Icon
                                        name="FaUser"
@@ -150,7 +150,9 @@ const Header: React.FC = () => {
 
                                  <button
                                     className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors"
-                                    onClick={() => navigate('/configuration')}
+                                    onClick={() =>
+                                       navigate('/user/configuration')
+                                    }
                                  >
                                     <Icon
                                        name="FaCog"
