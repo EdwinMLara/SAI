@@ -13,6 +13,7 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
 import { encrypt } from '@utils/auth/crypt';
+import { getInvite, removeInvite } from '@services/Invite.services';
 
 /* ------------------ Code ------------------ */
 
@@ -23,8 +24,14 @@ import { encrypt } from '@utils/auth/crypt';
  */
 export async function createUser(user: NewUserInt): Promise<void> {
    const newUser = new UserModel(user);
+
+   const invite = await getInvite(user.email);
+   newUser.role = invite.asignedRole;
+
    newUser.password = await encrypt(user.password);
+
    await newUser.save();
+   await removeInvite(user.email);
 }
 
 /**
