@@ -120,11 +120,11 @@ export async function lastUpdate(
    next: NextFunction
 ): Promise<void> {
    try {
-      const lastUpdate = await services.lastUpdate();
+      const metadata = await services.lastUpdate();
 
       res.status(200).json({
          message: responses.Product.replaced,
-         data: { lastUpdate },
+         data: { metadata },
       });
    } catch (error) {
       if (error instanceof AppError) {
