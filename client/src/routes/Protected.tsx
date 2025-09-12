@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import { useAuth } from '@/context/Auth.context';
-import { Loading } from '@ui/index.ui';
+import { Loading } from '@ui/index';
 
 /* ------------------ Code ------------------ */
 

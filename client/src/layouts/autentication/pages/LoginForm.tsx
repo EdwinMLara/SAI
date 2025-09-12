@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-import { Input, Button } from '@ui/index.ui';
+import { Input, Button } from '@ui/index';
 import { useLogin } from '../index';
 
 const containerVariants = {

@@ -1,7 +1,7 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
+import { Loading } from '@ui/index';
 import { useAuth } from '@/context/Auth.context';
-import { Loading } from '@ui/index.ui';
 
 interface AdminProtectedProps {
    children?: React.ReactNode;
