@@ -132,7 +132,6 @@ export async function userByIndexed(index: string): Promise<PublicUserInt> {
       : { email: index };
 
    const user = await UserModel.findOne(query).lean();
-
    if (!user) {
       throw new AppError(responses.User.notfound, 404);
    }
@@ -150,8 +149,12 @@ export async function userByIndexed(index: string): Promise<PublicUserInt> {
    return publicUser;
 }
 
-export async function returnUser(email: string): Promise<UserInt> {
-   const user = await UserModel.findOne({ email }).lean();
+export async function returnUser(index: string): Promise<UserInt> {
+   const query = isValidObjectId(index)
+      ? { _id: new Types.ObjectId(index) }
+      : { email: index };
+
+   const user = await UserModel.findOne(query).lean();
    if (!user) {
       throw new AppError(responses.User.notfound, 404);
    }
