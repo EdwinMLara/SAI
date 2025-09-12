@@ -23,6 +23,7 @@ interface AuthContextType {
    login: (credentials: UserCredentialsInt) => Promise<StandardResponse>;
    register: (data: NewUserInt) => Promise<StandardResponse>;
    logout: () => Promise<StandardResponse>;
+   updateUser: (data: Partial<PublicUserInt>) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -95,6 +96,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return res;
    }, []);
 
+   const updateUser = (data: Partial<PublicUserInt>) => {
+      setUser((prev) => (prev ? { ...prev, ...data } : prev));
+   };
+
    const value: AuthContextType = {
       user,
       isAuthenticated,
@@ -102,6 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       login,
       register,
       logout,
+      updateUser,
    };
 
    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
