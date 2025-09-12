@@ -44,7 +44,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
          setLoading(true);
          const res = await AuthServices.getSession();
          if (res.success && res.data) {
-            setUser(res.data);
+            setUser(res.data.publicUser);
             setIsAuthenticated(true);
          } else {
             setUser(null);
