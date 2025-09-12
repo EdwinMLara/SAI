@@ -47,9 +47,16 @@ const InputFile: React.FC<InputFileProps> = ({
       if (!accept) return true;
       const acceptList = accept.split(',').map((a) => a.trim().toLowerCase());
       return acceptList.some((type) => {
-         if (type.startsWith('.'))
+         if (type.startsWith('.')) {
             return file.name.toLowerCase().endsWith(type);
-         if (type.includes('/')) return file.type === type;
+         }
+         if (type.endsWith('/*')) {
+            const prefix = type.replace('/*', '/');
+            return file.type.startsWith(prefix);
+         }
+         if (type.includes('/')) {
+            return file.type === type;
+         }
          return false;
       });
    };
