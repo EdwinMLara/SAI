@@ -5,7 +5,7 @@ import { useSidebar } from '@context/Sidebar.context';
 
 import { Logo } from '../helpers/Brand';
 import { useNavigate } from 'react-router-dom';
-import { Icon, IconButton } from '@ui/index.ui';
+import { Icon, IconButton } from '@ui/index';
 import ThemeToggle from '../helpers/ToggleTheme';
 
 const Header: React.FC = () => {
@@ -146,20 +146,6 @@ const Header: React.FC = () => {
                                        className="text-secondary-color"
                                     />
                                     Mi perfil
-                                 </button>
-
-                                 <button
-                                    className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors"
-                                    onClick={() =>
-                                       navigate('/user/configuration')
-                                    }
-                                 >
-                                    <Icon
-                                       name="FaCog"
-                                       size={16}
-                                       className="text-secondary-color"
-                                    />
-                                    Configuración
                                  </button>
 
                                  <div className="border-t border-light my-2"></div>
