@@ -11,7 +11,12 @@ import { UserInfoAtToken } from '@types';
  * @returns {UserInfoAtToken | null} The user information if the token is valid, otherwise null.
  */
 export function useAuthCookie(cookie: string): UserInfoAtToken | null {
-   if (!cookie) return null;
-   if (!tokens.verifyToken(cookie)) return null;
-   return tokens.decodeToken(cookie);
+   if (!cookie || !tokens.verifyToken(cookie)) {
+      return null;
+   }
+   const decoded = tokens.decodeToken(cookie);
+   if (!decoded || !decoded.id || !decoded.role) {
+      return null;
+   }
+   return decoded as UserInfoAtToken;
 }
