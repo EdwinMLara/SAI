@@ -42,6 +42,7 @@ const apiPaths = {
    // User management
    user: {
       update: '/user',
+      changePassword: '/user/password',
       changeRole: (role: string) => `/user/role/${role}`,
       changeImage: '/user/image',
       invites: {

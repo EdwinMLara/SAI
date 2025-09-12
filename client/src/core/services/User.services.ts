@@ -21,6 +21,22 @@ export async function updateUser(
 }
 
 /**
+ * Changes the current user's password.
+ * @param {string} currentPassword - Current password for validation.
+ * @param {string} newPassword - New password to set.
+ * @returns {Promise<StandardResponse>} Standard backend response.
+ */
+export async function changePassword(
+   currentPassword: string,
+   newPassword: string
+): Promise<StandardResponse> {
+   return await apiClient.patch(apiPaths.user.changePassword, {
+      currentPassword,
+      newPassword,
+   });
+}
+
+/**
  * Changes the current user's role.
  * @param {string} role - The new role to assign to the user.
  * @returns {Promise<StandardResponse>} Standard backend response.
