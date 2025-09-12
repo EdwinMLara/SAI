@@ -6,7 +6,6 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
 import { compareHash } from '@utils/auth/crypt';
-import { hasInvite, removeInvite } from '@services/Invite.services';
 import { comprobeUnicity } from '@helpers/User.helpers';
 import { NewUserInt, UserCredentialsInt } from '@cmm_interfaces/index';
 import { createUser, userByIndexed, returnUser } from '@services/User.services';
@@ -53,13 +52,7 @@ export async function register(
          throw new AppError(message, 401);
       }
 
-      const isInvited = await hasInvite(email);
-      if (!isInvited) {
-         throw new AppError(responses.User.inviteNotFound, 404);
-      }
-
       await createUser(req.body);
-      await removeInvite(email);
 
       const user = await userByIndexed(email);
       await cookies.setAuthCookie(res, user);
