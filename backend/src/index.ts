@@ -12,6 +12,7 @@ import env from '@config/env';
 import router from './routes/api.routes';
 import * as database from '@config/database';
 
+import DebugMiddleware from '@middlewares/Debug.middleware';
 import ErrorMiddleware from '@middlewares/Error.middleware';
 import ResponseMiddleware from '@middlewares/Response.middleware';
 
@@ -24,9 +25,11 @@ const app = express();
    await database.connect();
 })();
 
-/**
- * Middleware configuration
- */
+// Debug middleware for request logging
+if (env.NODE_ENV !== 'production') {
+   app.use(DebugMiddleware);
+}
+
 // Body parsing with increased limits for file uploads
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
