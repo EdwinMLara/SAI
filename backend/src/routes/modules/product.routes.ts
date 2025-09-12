@@ -11,5 +11,6 @@ router.post('/', Auth('user'), Product.createProduct);
 router.get('/:key', Auth('user'), Product.getProduct);
 router.delete('/:key', Auth('admin'), Product.deleteProduct);
 router.post('/replaceAll', Auth('admin'), Product.replaceAllProducts);
+router.get('/lastUpdate', Auth('user'), Product.lastUpdate);
 
 export default router;

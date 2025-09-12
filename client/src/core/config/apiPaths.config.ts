@@ -29,6 +29,7 @@ const apiPaths = {
       get: (key: string) => `/products/${key}`,
       delete: (key: string) => `/products/${key}`,
       replaceAll: '/products/replaceAll',
+      lastUpdate: '/products/lastUpdate',
    },
 
    // Ticket management
