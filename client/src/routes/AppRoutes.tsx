@@ -8,6 +8,8 @@ import Authentication from '@/pages/Authentication';
 
 import Home from '@/pages/Home';
 
+import UserRouting from '@/layouts/user/config/Routing';
+
 /* ------------------ Code ------------------ */
 
 const AppRoutes = () => {
@@ -20,6 +22,7 @@ const AppRoutes = () => {
                <Route index element={<Home />} />
             </Route>
          </Route>
+         <Route path="user/*" element={<UserRouting />}></Route>
          <Route path="*" element={<NotFound />} />
       </Routes>
    );
