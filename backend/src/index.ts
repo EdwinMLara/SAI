@@ -25,17 +25,16 @@ const app = express();
    await database.connect();
 })();
 
-// Debug middleware for request logging
-if (env.NODE_ENV !== 'production') {
-   app.use(DebugMiddleware);
-}
+app.use(cookieParser());
 
 // Body parsing with increased limits for file uploads
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
-// Cookie parsing for authentication tokens
-app.use(cookieParser());
+// Debug middleware for request logging
+if (env.NODE_ENV !== 'production') {
+   app.use(DebugMiddleware);
+}
 
 // CORS configuration for client-server communication
 app.use(
