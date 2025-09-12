@@ -35,12 +35,20 @@ const axiosInstance = axios.create({
 const toStandardResponse = <T = any>(
    response: AxiosResponse
 ): StandardResponse<T> => {
-   return {
+   const standardResponse = {
       status: response.status,
       success: response.data.success,
       message: response.data.message,
       data: response.data.data,
    } as StandardResponse<T>;
+
+   console.log('✅ StandardResponse:', {
+      url: response.config.url,
+      method: response.config.method?.toUpperCase(),
+      response: standardResponse,
+   });
+
+   return standardResponse;
 };
 
 /**
@@ -57,6 +65,8 @@ const toStandardResponse = <T = any>(
 const errorToStandardResponse = <T = any>(
    error: AxiosError
 ): StandardResponse<T> => {
+   let standardResponse: StandardResponse<T>;
+
    // Error with server response (4xx, 5xx)
    if (error.response && error.response.data) {
       const data = error.response.data;
@@ -70,35 +80,44 @@ const errorToStandardResponse = <T = any>(
          'message' in data &&
          'data' in data
       ) {
-         return data as StandardResponse<T>;
+         standardResponse = data as StandardResponse<T>;
+      } else {
+         // Create StandardResponse from non-standard backend response
+         standardResponse = {
+            status: error.response.status,
+            success: error.response.status < 400,
+            message: 'Ocurrió un error inesperado',
+            data: data as T,
+         } as StandardResponse<T>;
       }
-
-      // Create StandardResponse from non-standard backend response
-      return {
-         status: error.response.status,
-         success: error.response.status < 400,
-         message: 'Ocurrió un error inesperado',
-         data: data as T,
-      } as StandardResponse<T>;
    }
-
    // Network, timeout, or server unavailable error
-   if (error.request) {
-      return {
+   else if (error.request) {
+      standardResponse = {
          status: 0,
          success: false,
          message: 'Error de comunicación. Intente más tarde',
          data: null,
       } as StandardResponse<T>;
    }
-
    // Config or unknown error
-   return {
-      status: 500,
-      success: false,
-      message: 'Ocurrió un error inesperado. Vuelva a intentar',
-      data: null,
-   } as StandardResponse<T>;
+   else {
+      standardResponse = {
+         status: 500,
+         success: false,
+         message: 'Ocurrió un error inesperado. Vuelva a intentar',
+         data: null,
+      } as StandardResponse<T>;
+   }
+
+   console.log('❌ StandardResponse Error:', {
+      url: error.config?.url,
+      method: error.config?.method?.toUpperCase(),
+      error: error.message,
+      response: standardResponse,
+   });
+
+   return standardResponse;
 };
 
 /**
