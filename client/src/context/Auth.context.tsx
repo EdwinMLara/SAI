@@ -18,11 +18,11 @@ import * as AuthServices from '../core/services/Auth.services';
 
 interface AuthContextType {
    isAuthenticated: boolean;
+   isLoading: boolean;
    user: PublicUserInt | null;
    login: (credentials: UserCredentialsInt) => Promise<StandardResponse>;
    register: (data: NewUserInt) => Promise<StandardResponse>;
    logout: () => Promise<StandardResponse>;
-   refresh: () => Promise<StandardResponse>;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(
@@ -43,9 +43,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const fetchSession = async () => {
          setLoading(true);
          const res = await AuthServices.getSession();
-         if (res.success && res.data?.user) {
-            setUser(res.data.user);
-            setIsAuthenticated(res.data.isAuthenticated ?? true);
+         if (res.success && res.data) {
+            setUser(res.data);
+            setIsAuthenticated(true);
          } else {
             setUser(null);
             setIsAuthenticated(false);
@@ -59,8 +59,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    const login = useCallback(async (credentials: UserCredentialsInt) => {
       setLoading(true);
       const res = await AuthServices.login(credentials);
-      if (res.success && res.data?.user) {
-         setUser(res.data.user);
+      if (res.success && res.data) {
+         setUser(res.data);
          setIsAuthenticated(true);
       } else {
          setUser(null);
@@ -74,8 +74,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
    const register = useCallback(async (data: NewUserInt) => {
       setLoading(true);
       const res = await AuthServices.register(data);
-      if (res.success && res.data?.user) {
-         setUser(res.data.user);
+      if (res.success && res.data) {
+         setUser(res.data);
          setIsAuthenticated(true);
       } else {
          setUser(null);
@@ -95,28 +95,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       return res;
    }, []);
 
-   // Refrescar tokens
-   const refresh = useCallback(async () => {
-      setLoading(true);
-      const res = await AuthServices.refresh();
-      if (res.success && res.data?.user) {
-         setUser(res.data.user);
-         setIsAuthenticated(true);
-      } else {
-         setUser(null);
-         setIsAuthenticated(false);
-      }
-      setLoading(false);
-      return res;
-   }, []);
-
    const value: AuthContextType = {
       user,
       isAuthenticated,
+      isLoading: loading,
       login,
       register,
       logout,
-      refresh,
    };
 
    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
