@@ -41,7 +41,6 @@ if (isProduction) {
             metadata: metadata,
          });
 
-         console.log(log);
          log.save();
       }
    }
@@ -50,20 +49,6 @@ if (isProduction) {
       level: 'info',
       format: winston.format.combine(winston.format.json()),
       transports: [new MongoTransport()],
-   });
-} else {
-   /**
-    * Development logging configuration
-    * Uses console output for immediate debugging feedback
-    */
-   logger = winston.createLogger({
-      level: 'debug',
-      format: winston.format.combine(
-         winston.format.printf(({ level, message }) => {
-            return `[${level}]: ${message}`;
-         })
-      ),
-      transports: [new winston.transports.Console()],
    });
 }
 
@@ -82,11 +67,6 @@ function log({ level, message, metadata }: LogInput) {
          level,
          message,
          metadata,
-      });
-   } else {
-      logger.log({
-         level,
-         message,
       });
    }
 }
