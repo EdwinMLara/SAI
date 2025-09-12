@@ -45,12 +45,14 @@ const Alert: React.FC<AlertProps> = ({
                   transition={{ type: 'spring', stiffness: 300, damping: 24 }}
                >
                   <div className="flex flex-col items-center gap-4">
-                     <div className="flex justify-center w-full pb-5">
-                        <Icon
-                           name={displayIcon}
-                           size={64}
-                           className="text-info"
-                        />
+                     <div className="w-full flex justify-center">
+                        <span className="inline-flex items-center justify-center rounded-full bg-info/15 border-2 border-info/30 p-4 shadow-lg transition-all duration-300">
+                           <Icon
+                              name={displayIcon}
+                              size={34}
+                              className="text-info drop-shadow-md"
+                           />
+                        </span>
                      </div>
                      <span className="text-lg text-primary-color text-center">
                         {message}
