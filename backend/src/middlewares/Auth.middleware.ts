@@ -28,8 +28,10 @@ function Auth(access: accessType): RequestHandler {
          const dataOnCookie = helpers.useAuthCookie(authCookie);
          if (!dataOnCookie) throw new AppError(responses.Auth.authError, 401);
 
-         req.user.id = dataOnCookie.id;
-         req.user.role = dataOnCookie.role;
+         req.user = {
+            id: dataOnCookie.id,
+            role: dataOnCookie.role,
+         };
          const userRole = req.user.role;
 
          if (access === 'admin' && userRole !== 'admin')
