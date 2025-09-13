@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Button from '@ui/Button';
 import { useAuth } from '@/context/Auth.context';
 
-import { LoginForm, RegisterForm } from '@layouts/autentication/index';
+// import { LoginForm, RegisterForm } from '@layouts/autentication/index';
 
 /* ------------------ Code ------------------ */
 
@@ -110,7 +110,7 @@ const Authentication = () => {
                   </motion.div>
                </div>
                <div className="px-6 pb-6">
-                  {isLoginForm ? <LoginForm /> : <RegisterForm />}
+                  {/* {isLoginForm ? <LoginForm /> : <RegisterForm />} */}
                </div>
             </motion.div>
          </div>

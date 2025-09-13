@@ -4,16 +4,69 @@ import Icon from './Icon';
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
    icon?: string;
    error?: string;
+   only?: 'number' | 'letters';
 }
 
 const Input: React.FC<InputProps> = ({
    icon,
    className = '',
    error,
+   only,
    ...props
 }) => {
    const isPassword = props.type === 'password';
    const [show, setShow] = useState(false);
+   const handleInput = (e: React.FormEvent<HTMLInputElement>) => {
+      const input = e.target as HTMLInputElement;
+      let value = input.value;
+      if (only === 'number') {
+         value = value.replace(/[^0-9]/g, '');
+         input.value = value;
+      } else if (only === 'letters') {
+         value = value.replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+         input.value = value;
+      }
+      if (props.type === 'email' || props.type === 'password') {
+         if (value.includes(' ')) {
+            input.value = value.replace(/\s/g, '');
+         }
+      }
+      if (props.onInput) props.onInput(e);
+   };
+   const handlePaste = (e: React.ClipboardEvent<HTMLInputElement>) => {
+      if (only === 'number') {
+         e.preventDefault();
+         const text = e.clipboardData.getData('text').replace(/[^0-9]/g, '');
+         (e.target as HTMLInputElement).value = text;
+         if (props.onChange) {
+            const event = new Event('input', { bubbles: true });
+            e.target.dispatchEvent(event);
+         }
+         return;
+      } else if (only === 'letters') {
+         e.preventDefault();
+         const text = e.clipboardData
+            .getData('text')
+            .replace(/[^a-zA-ZáéíóúÁÉÍÓÚñÑüÜ\s]/g, '');
+         (e.target as HTMLInputElement).value = text;
+         if (props.onChange) {
+            const event = new Event('input', { bubbles: true });
+            e.target.dispatchEvent(event);
+         }
+         return;
+      }
+      if (props.type === 'email' || props.type === 'password') {
+         e.preventDefault();
+         const text = e.clipboardData.getData('text').replace(/\s/g, '');
+         (e.target as HTMLInputElement).value = text;
+         if (props.onChange) {
+            const event = new Event('input', { bubbles: true });
+            e.target.dispatchEvent(event);
+         }
+      } else {
+         if (props.onPaste) props.onPaste(e);
+      }
+   };
    return (
       <div className="relative flex flex-col gap-1">
          <div className="relative flex items-center">
@@ -32,31 +85,8 @@ const Input: React.FC<InputProps> = ({
                      ? 'border-error focus:border-error focus:ring-error/20'
                      : ''
                } ${className}`}
-               onInput={(e) => {
-                  if (props.type === 'email' || props.type === 'password') {
-                     const input = e.target as HTMLInputElement;
-                     const value = input.value;
-                     if (value.includes(' ')) {
-                        input.value = value.replace(/\s/g, '');
-                     }
-                  }
-                  if (props.onInput) props.onInput(e);
-               }}
-               onPaste={(e) => {
-                  if (props.type === 'email' || props.type === 'password') {
-                     e.preventDefault();
-                     const text = e.clipboardData
-                        .getData('text')
-                        .replace(/\s/g, '');
-                     (e.target as HTMLInputElement).value = text;
-                     if (props.onChange) {
-                        const event = new Event('input', { bubbles: true });
-                        e.target.dispatchEvent(event);
-                     }
-                  } else {
-                     if (props.onPaste) props.onPaste(e);
-                  }
-               }}
+               onInput={handleInput}
+               onPaste={handlePaste}
             />
             {isPassword && (
                <button
