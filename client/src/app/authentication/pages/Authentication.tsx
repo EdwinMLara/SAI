@@ -13,7 +13,7 @@ const Authentication = () => {
 
    const { isAuthenticated } = useAuth();
    if (isAuthenticated) {
-      const from = location.state.from.pathname || '/';
+      const from = location.state?.from?.pathname || '/';
       return <Navigate to={from} replace />;
    }
 
