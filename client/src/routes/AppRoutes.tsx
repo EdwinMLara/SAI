@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 
+import Home from '@/pages/Home';
 import Protected from './Protected';
 import NotFound from '@pages/NotFound';
-import Restricted from '@pages/Restricted';
 import MainLayout from '@/pages/MainLayout';
-import Authentication from '@/pages/Authentication';
 
-import Home from '@/pages/Home';
+import { Authentication, Restricted } from '@app/authentication';
 
 /* ------------------ Code ------------------ */
 
