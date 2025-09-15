@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useAuth } from '@/context/Auth.context';
 import { UserChangesInt } from '@common/interfaces';
-import { Button, Message } from '@ui/index';
+import { Button, Message, Loading } from '@ui/index';
+
 import {
    ProfileHeader,
    ProfileImageUpload,
@@ -21,7 +22,11 @@ function Profile() {
    const [showImageUpload, setShowImageUpload] = useState<boolean>(false);
 
    if (!user) {
-      return <p>Usuario no encontrado</p>;
+      return (
+         <div className="flex justify-center items-center h-96">
+            <Loading message="Cargando datos del usuario..." />
+         </div>
+      );
    }
 
    const initialData: Partial<UserChangesInt> = {
