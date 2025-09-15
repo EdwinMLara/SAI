@@ -26,6 +26,7 @@ export default defineConfig(({ mode }) => {
             '@context': resolve(__dirname, './src/context'),
             '@layouts': resolve(__dirname, './src/layouts'),
             '@routes': resolve(__dirname, './src/routes'),
+            '@app': resolve(__dirname, './src/app'),
 
             // Common paths
             '@cmm': resolve(__dirname, '../common'),

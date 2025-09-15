@@ -31,7 +31,8 @@
          "@hooks/*": ["src/hooks/*"],
          "@contexts/*": ["src/contexts/*"],
          "@layouts/*": ["src/layouts/*"],
-         "@routes/*": ["src/routes/*"]
+         "@routes/*": ["src/routes/*"],
+         "@app/*": ["src/app/*"]
       }
    },
    "include": ["src", "../common"],
