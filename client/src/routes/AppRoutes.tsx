@@ -6,6 +6,7 @@ import MainLayout from '@/pages/MainLayout';
 import Protected from './Protected';
 
 import { Profile } from '@app/user';
+import RoutingUser from '@app/user/config/Routing';
 import { Authentication, Restricted } from '@app/authentication';
 
 /* ------------------ Code ------------------ */
@@ -19,6 +20,7 @@ const AppRoutes = () => {
          <Route path="/" element={<MainLayout />}>
             <Route element={<Protected />}>
                <Route index element={<Home />} />
+               <Route path="/users/*" element={<RoutingUser />} />
             </Route>
          </Route>
          <Route path="*" element={<NotFound />} />
