@@ -19,7 +19,7 @@ const variantBase = {
 const variantHover = {
    primary: 'hover:bg-brand-600',
    secondary: 'hover-bg-secondary',
-   ghost: 'hover:bg-brand-light',
+   ghost: 'hover:bg-brand-light dark:hover:bg-brand-800/10',
 };
 const disabledClass =
    'bg-gray-200 text-gray-400 cursor-not-allowed dark:bg-gray-700 dark:text-gray-500';
