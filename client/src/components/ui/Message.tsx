@@ -65,14 +65,13 @@ const Message: React.FC<MessageProps> = ({
          setVisible(true);
          setProgress(100);
          let start = Date.now();
-         const duration = 5000;
+         const duration = 3000;
          timerRef.current = setInterval(() => {
             const elapsed = Date.now() - start;
             const percent = Math.max(0, 100 - (elapsed / duration) * 100);
             setProgress(percent);
             if (elapsed >= duration) {
                setVisible(false);
-               if (onClose) onClose();
                if (timerRef.current) clearInterval(timerRef.current);
             }
          }, 50);
@@ -82,8 +81,16 @@ const Message: React.FC<MessageProps> = ({
       } else {
          setVisible(false);
       }
-      // eslint-disable-next-line
    }, [show]);
+
+   useEffect(() => {
+      if (!visible && show) {
+         const timeout = setTimeout(() => {
+            if (onClose) onClose();
+         }, 300);
+         return () => clearTimeout(timeout);
+      }
+   }, [visible, show, onClose]);
 
    return (
       <AnimatePresence>
@@ -91,7 +98,7 @@ const Message: React.FC<MessageProps> = ({
             <motion.div
                initial={{ opacity: 0, y: 10, scale: 0.95 }}
                animate={{ opacity: 1, y: 0, scale: 1 }}
-               exit={{ opacity: 0, y: 10, scale: 0.95 }}
+               exit={{ opacity: 0, y: 30, scale: 0.9 }}
                transition={{
                   duration: 0.3,
                   ease: [0.25, 0.1, 0.25, 1],
@@ -132,7 +139,7 @@ const Message: React.FC<MessageProps> = ({
                   </span>
                   {onClose && (
                      <button
-                        onClick={onClose}
+                        onClick={() => setVisible(false)}
                         className="ml-2 opacity-70 hover:opacity-100 transition-opacity"
                         aria-label="Cerrar mensaje"
                      >
