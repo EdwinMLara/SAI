@@ -40,11 +40,17 @@ const useLogin = () => {
       setMessage(res.message);
       setStatus(res.status);
 
+      if (res.status === 200) {
+         const from = location.state?.from?.pathname || '/';
+         navigate(from);
+      }
+
       setIsLoading(false);
    };
 
-   const handleInputChange = (field: keyof UserCredentialsInt) => {
-      return (e: React.ChangeEvent<HTMLInputElement>) => {
+   const handleInputChange =
+      (field: keyof UserCredentialsInt) =>
+      (e: React.ChangeEvent<HTMLInputElement>) => {
          let value = e.target.value;
          if (field === 'email' || field === 'password') {
             value = value.replace(/\s/g, '');
@@ -55,7 +61,6 @@ const useLogin = () => {
             [field]: value,
          }));
       };
-   };
 
    return {
       loginData,

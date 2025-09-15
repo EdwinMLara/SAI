@@ -23,11 +23,10 @@ interface UseRegister {
 }
 
 const useRegister = (): UseRegister => {
-   const [confirmPassword, setConfirmPassword] = useState('');
-   const [isLoading, setIsLoading] = useState(false);
    const [status, setStatus] = useState<number>();
    const [message, setMessage] = useState<string>();
-   const [messageId, setMessageId] = useState(0);
+   const [isLoading, setIsLoading] = useState(false);
+   const [confirmPassword, setConfirmPassword] = useState('');
 
    const navigate = useNavigate();
    const { register } = useAuth();
@@ -79,12 +78,6 @@ const useRegister = (): UseRegister => {
    const handleRegister = async (e: React.FormEvent) => {
       e.preventDefault();
 
-      if (!validateRegister()) {
-         setMessage('');
-         setMessageId((id) => id + 1);
-         return;
-      }
-
       setIsLoading(true);
 
       const res = await register({
@@ -97,7 +90,6 @@ const useRegister = (): UseRegister => {
 
       setMessage(res.message);
       setStatus(res.status);
-      setMessageId((id) => id + 1);
 
       if (res.status === 200) {
          setTimeout(() => {
