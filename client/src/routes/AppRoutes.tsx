@@ -3,12 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 import Home from '@/pages/Home';
 import NotFound from '@pages/NotFound';
 import MainLayout from '@/pages/MainLayout';
+import Protected from './Protected';
 
-import {
-   Authentication,
-   Restricted,
-   AdminProtected,
-} from '@app/authentication';
+import { Authentication, Restricted } from '@app/authentication';
 
 /* ------------------ Code ------------------ */
 
@@ -18,7 +15,7 @@ const AppRoutes = () => {
          <Route path="/auth" element={<Authentication />} />
          <Route path="/restricted" element={<Restricted />} />
          <Route path="/" element={<MainLayout />}>
-            <Route element={<AdminProtected />}>
+            <Route element={<Protected />}>
                <Route index element={<Home />} />
             </Route>
          </Route>
