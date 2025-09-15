@@ -5,6 +5,7 @@ export * from './common/containerVariants';
 import useLogin from './hooks/useLogin';
 import useRegister from './hooks/useRegister';
 import Restricted from './pages/Restricted';
+import AdminProtected from './pages/AdminProtected';
 
 export {
    Authentication,
@@ -13,4 +14,5 @@ export {
    useLogin,
    useRegister,
    Restricted,
+   AdminProtected,
 };
