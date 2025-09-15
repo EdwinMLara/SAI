@@ -84,7 +84,7 @@ const Input: React.FC<InputProps> = ({
                   error
                      ? 'border-error focus:border-error focus:ring-error/20'
                      : ''
-               } ${className}`}
+               } disabled:bg-gray-100 disabled:dark:bg-gray-800 disabled:text-gray-400 disabled:dark:text-gray-500 disabled:cursor-not-allowed disabled:border-gray-200 disabled:dark:border-gray-600 ${className}`}
                onInput={handleInput}
                onPaste={handlePaste}
             />
