@@ -35,64 +35,67 @@ interface AuthProviderProps {
 }
 
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+   const [loading, setLoading] = useState<boolean>(false);
    const [user, setUser] = useState<PublicUserInt | null>(null);
-   const [isAuthenticated, setIsAuthenticated] = useState(false);
-   const [loading, setLoading] = useState(true);
+   const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-   // Cargar sesión al montar
+   const fetchSession = useCallback(async () => {
+      setLoading(true);
+      const res = await AuthServices.getSession();
+      if (res.success && res.data) {
+         setUser(res.data.publicUser);
+         setIsAuthenticated(true);
+      } else {
+         setIsAuthenticated(false);
+      }
+      setLoading(false);
+   }, []);
+
    useEffect(() => {
-      const fetchSession = async () => {
+      fetchSession();
+   }, [fetchSession]);
+
+   // Login
+   const login = useCallback(
+      async (credentials: UserCredentialsInt) => {
          setLoading(true);
-         const res = await AuthServices.getSession();
-         if (res.success && res.data) {
-            setUser(res.data.publicUser);
+         const res = await AuthServices.login(credentials);
+         if (res.success) {
             setIsAuthenticated(true);
+            await fetchSession();
          } else {
-            setUser(null);
             setIsAuthenticated(false);
          }
          setLoading(false);
-      };
-      fetchSession();
-   }, []);
-
-   // Login
-   const login = useCallback(async (credentials: UserCredentialsInt) => {
-      setLoading(true);
-      const res = await AuthServices.login(credentials);
-      if (res.success && res.data) {
-         setUser(res.data);
-         setIsAuthenticated(true);
-      } else {
-         setUser(null);
-         setIsAuthenticated(false);
-      }
-      setLoading(false);
-      return res;
-   }, []);
+         return res;
+      },
+      [fetchSession]
+   );
 
    // Registro
-   const register = useCallback(async (data: NewUserInt) => {
-      setLoading(true);
-      const res = await AuthServices.register(data);
-      if (res.success && res.data) {
-         setUser(res.data);
-         setIsAuthenticated(true);
-      } else {
-         setUser(null);
-         setIsAuthenticated(false);
-      }
-      setLoading(false);
-      return res;
-   }, []);
+   const register = useCallback(
+      async (data: NewUserInt) => {
+         setLoading(true);
+         const res = await AuthServices.register(data);
+         if (res.success && res.data) {
+            setIsAuthenticated(true);
+            await fetchSession();
+         } else {
+            setIsAuthenticated(false);
+         }
+         setLoading(false);
+         return res;
+      },
+      [fetchSession]
+   );
 
    // Logout
    const logout = useCallback(async () => {
       setLoading(true);
       const res = await AuthServices.logout();
-      setUser(null);
       setIsAuthenticated(false);
       setLoading(false);
+      setUser(null);
       return res;
    }, []);
 
