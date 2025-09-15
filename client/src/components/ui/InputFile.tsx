@@ -11,6 +11,7 @@ interface InputFileProps {
    multiple?: boolean;
    disabled?: boolean;
    onContinue?: () => void;
+   onCancel?: () => void;
    resetKey?: string | number;
 }
 
@@ -23,6 +24,7 @@ const InputFile: React.FC<InputFileProps> = ({
    multiple = false,
    disabled = false,
    onContinue,
+   onCancel,
    resetKey,
 }) => {
    if (!accept)
@@ -171,7 +173,32 @@ const InputFile: React.FC<InputFileProps> = ({
                disabled={disabled}
             />
          </motion.label>
-         <div className="flex justify-center mt-2">
+         {helperText && !error && (
+            <span className="block py-2 text-xs text-text-secondary dark:text-text-dark-secondary">
+               {helperText}
+            </span>
+         )}
+         {error && (
+            <span className="block mt-1 text-xs text-error dark:text-error">
+               {error}
+            </span>
+         )}
+         <div className="flex gap-2 justify-center mt-2">
+            <Button
+               type="button"
+               variant="secondary"
+               onClick={() => {
+                  setFileNames([]);
+                  setInvalidFile(false);
+                  if (inputRef.current) inputRef.current.value = '';
+                  onChange?.(null);
+                  if (onCancel) onCancel();
+               }}
+               disabled={disabled}
+               className="w-full text-xs py-1.5"
+            >
+               Cancelar
+            </Button>
             <Button
                type="button"
                variant="primary"
@@ -182,16 +209,6 @@ const InputFile: React.FC<InputFileProps> = ({
                Continuar
             </Button>
          </div>
-         {helperText && !error && (
-            <span className="block mt-1 text-xs text-text-secondary dark:text-text-dark-secondary">
-               {helperText}
-            </span>
-         )}
-         {error && (
-            <span className="block mt-1 text-xs text-error dark:text-error">
-               {error}
-            </span>
-         )}
       </div>
    );
 };
