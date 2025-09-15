@@ -5,6 +5,7 @@ import NotFound from '@pages/NotFound';
 import MainLayout from '@/pages/MainLayout';
 import Protected from './Protected';
 
+import { Profile } from '@app/user';
 import { Authentication, Restricted } from '@app/authentication';
 
 /* ------------------ Code ------------------ */
@@ -14,6 +15,7 @@ const AppRoutes = () => {
       <Routes>
          <Route path="/auth" element={<Authentication />} />
          <Route path="/restricted" element={<Restricted />} />
+         <Route path="/profile" element={<Profile />} />
          <Route path="/" element={<MainLayout />}>
             <Route element={<Protected />}>
                <Route index element={<Home />} />
