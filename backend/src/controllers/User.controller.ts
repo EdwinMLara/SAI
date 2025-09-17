@@ -13,6 +13,7 @@ import {
    changeImageProfile,
    userByIndexed,
    returnUser,
+   searchUsers,
 } from '@services/User.services';
 import { compareHash, encrypt } from '@utils/auth/crypt';
 
@@ -120,6 +121,23 @@ export async function changeImage(
          message: responses.User.updated,
          data: publicUser,
       });
+   } catch (error) {
+      if (error instanceof AppError) {
+         return next(error);
+      }
+      return next(new AppError(responses.System.serverError, 500, error));
+   }
+}
+
+export async function getUsers(
+   req: Request,
+   res: Response,
+   next: NextFunction
+): Promise<void> {
+   try {
+      const result = await searchUsers(req.query);
+
+      res.status(200).json({ message: responses.System.ok, data: result });
    } catch (error) {
       if (error instanceof AppError) {
          return next(error);

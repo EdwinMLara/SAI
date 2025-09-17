@@ -15,7 +15,39 @@ import responses from '@utils/system/responses';
 import { encrypt } from '@utils/auth/crypt';
 import { getInvite, removeInvite } from '@services/Invite.services';
 
+import { QueryResInt } from '@interfaces/QueryResponse';
+import { pagination, sorting } from '@utils/request';
+
 /* ------------------ Code ------------------ */
+
+export async function searchUsers(
+   query: any
+): Promise<QueryResInt<PublicUserInt>> {
+   const sorter = sorting(query);
+   const { page, limit } = pagination(query);
+   const skip = (page - 1) * limit;
+
+   const alerts = await UserModel.find().skip(skip).sort(sorter).limit(limit);
+   const total = await UserModel.countDocuments();
+
+   return {
+      data: alerts.map((user: any) => ({
+         _id: user._id.toString(),
+         image: user.image ?? '',
+         name: user.name,
+         username: user.username,
+         phone: user.phone,
+         email: user.email,
+         role: user.role,
+      })),
+      pagination: {
+         total,
+         page,
+         limit,
+         totalPages: Math.ceil(total / limit),
+      },
+   };
+}
 
 /**
  * Creates a new user in the database

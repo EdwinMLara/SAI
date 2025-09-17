@@ -13,6 +13,7 @@ router.patch('/', Auth('user'), User.updateUser);
 router.patch('/password', Auth('user'), User.changePassword);
 router.post('role/:role', Auth('user'), User.changeUserRole);
 router.patch('/image', Auth('user'), FileFilter, User.changeImage);
+router.get('/', Auth('admin'), User.getUsers);
 router.post('/invites', Auth('admin'), Invite.createInvite);
 router.get('/invites', Auth('admin'), Invite.getInvites);
 router.delete('/invites', Auth('admin'), Invite.removeInvite);
