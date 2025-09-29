@@ -5,6 +5,8 @@ import {
    StandardResponse,
    UserChangesInt,
    InviteInt,
+   PublicUserInt,
+   ChangeUserRoleInt,
 } from '@common/interfaces';
 
 /* ------------------ Code ------------------ */
@@ -37,12 +39,14 @@ export async function changePassword(
 }
 
 /**
- * Changes the current user's role.
- * @param {string} role - The new role to assign to the user.
+ * Changes user role for specified user.
+ * @param {ChangeUserRoleInt} data - Object containing userId and newRole.
  * @returns {Promise<StandardResponse>} Standard backend response.
  */
-export async function changeUserRole(role: string): Promise<StandardResponse> {
-   return await apiClient.post(apiPaths.user.changeRole(role));
+export async function changeUserRole(
+   data: ChangeUserRoleInt
+): Promise<StandardResponse> {
+   return await apiClient.post(apiPaths.user.changeRole, data);
 }
 
 /* ------------------ Invite Management ------------------ */
@@ -95,4 +99,19 @@ export async function updateProfileImage(
          'Content-Type': 'multipart/form-data',
       },
    });
+}
+
+export async function getUsers(query?: Record<string, any>): Promise<
+   StandardResponse<{
+      data: PublicUserInt[];
+      pagination: {
+         total: number;
+         page: number;
+         limit: number;
+         totalPages: number;
+      };
+   }>
+> {
+   const params = new URLSearchParams(query);
+   return await apiClient.get(`${apiPaths.user.get}?${params.toString()}`);
 }
