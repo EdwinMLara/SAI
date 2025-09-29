@@ -5,7 +5,7 @@ import AppError from '@utils/system/AppError';
 import responses from '@utils/system/responses';
 
 import supabase from '@config/supabase';
-import { UserChangesInt } from '@cmm_interfaces/index';
+import { UserChangesInt, ChangeUserRoleInt } from '@cmm_interfaces/index';
 import { comprobeUnicity } from '@helpers/User.helpers';
 import {
    updatedUser,
@@ -82,19 +82,31 @@ export async function changePassword(
 }
 
 export async function changeUserRole(
-   req: Request,
+   req: Request<unknown, unknown, ChangeUserRoleInt>,
    res: Response,
    next: NextFunction
 ): Promise<void> {
    try {
-      const newRole = getParam(req.params.role);
-      if (newRole !== 'admin' && newRole !== 'user') {
+      const { userId, newRole } = req.body;
+
+      if (!userId || !newRole) {
          return next(new AppError(responses.System.missingFieldBody, 400));
       }
 
-      const user = await changeRole(newRole, req.user.id);
+      if (newRole !== 'admin' && newRole !== 'user') {
+         return next(new AppError('Rol inválido', 400));
+      }
 
-      res.status(200).json({ message: responses.System.ok });
+      if (userId === req.user.id) {
+         return next(new AppError('No puedes cambiar tu propio rol', 400));
+      }
+
+      await changeRole(newRole, userId);
+
+      res.status(200).json({
+         message: `Rol de usuario actualizado a ${newRole}`,
+         success: true,
+      });
    } catch (error) {
       if (error instanceof AppError) {
          return next(error);

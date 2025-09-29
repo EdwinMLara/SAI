@@ -40,3 +40,8 @@ export interface UserCredentialsInt {
    email: string;
    password: string;
 }
+
+export interface ChangeUserRoleInt {
+   userId: string;
+   newRole: 'admin' | 'user';
+}
