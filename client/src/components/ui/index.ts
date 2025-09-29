@@ -7,3 +7,4 @@ export { default as Alert } from './Alert';
 export { default as Loading } from './Loading';
 export { default as Message } from './Message';
 export { default as Checkbox } from './Checkbox';
+export { default as Select } from './Select';
