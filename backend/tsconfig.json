@@ -3,9 +3,16 @@
    "compilerOptions": {
       "outDir": "./dist",
       "rootDir": "../",
+      "baseUrl": "./src",
       "paths": {
+         /* --- base workspaces --- */
          "@shared/*": ["../shared/*"],
-         "@backend/*": ["./src/*"]
+         "@backend/*": ["./src/*"],
+
+         /* --- backend route paths --- */
+         "@config/*": ["config/*"],
+         "@utils/*": ["utils/*"],
+         "@system/*": ["utils/system/*"]
       }
    },
    "include": ["src/**/*", "../shared/**/*"],
