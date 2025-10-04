@@ -8,6 +8,8 @@ const envOptions = [
    'SERVER_PORT',
    'ORIGIN_SERVER',
    'ORIGIN_CLIENT',
+   'MONGO_URI',
+   'MONGO_URI',
 ];
 
 envOptions.forEach((key) => {
@@ -22,6 +24,7 @@ const env = {
    SERVER_PORT: process.env.SERVER_PORT || '',
    ORIGIN_SERVER: process.env.ORIGIN_SERVER || '',
    ORIGIN_CLIENT: process.env.ORIGIN_CLIENT || '',
+   MONGO_URI: process.env.MONGO_URI || '',
 };
 
 export default env;
