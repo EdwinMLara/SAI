@@ -9,7 +9,7 @@
    },
    "workspaces": [
       "backend",
-      "shared"
+      "common"
    ],
    "scripts": {
       "dev": "npm run dev --workspace=backend",
