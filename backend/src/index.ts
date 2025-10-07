@@ -3,6 +3,8 @@ import express from 'express';
 import env from '@config/env';
 import * as database from '@config/database';
 
+import { UserAccountBaseInfo } from '@cmm_interfaces';
+
 /* ------------------ Code ------------------ */
 
 const app = express();

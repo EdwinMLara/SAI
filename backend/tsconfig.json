@@ -3,18 +3,22 @@
    "compilerOptions": {
       "outDir": "./dist",
       "rootDir": "../",
-      "baseUrl": "./src",
+   "baseUrl": "./",
       "paths": {
          /* --- base workspaces --- */
-         "@shared/*": ["../shared/*"],
+         "@common/*": ["../common/*"],
          "@backend/*": ["./src/*"],
 
          /* --- backend route paths --- */
          "@config/*": ["config/*"],
          "@utils/*": ["utils/*"],
-         "@system/*": ["utils/system/*"]
+         "@system/*": ["utils/system/*"],
+
+         /* --- common route paths --- */
+         "@cmm/interfaces": ["../common/interfaces/index.ts"],
+         "@cmm/types/*": ["../common/types/"]
       }
    },
-   "include": ["src/**/*", "../shared/**/*"],
+   "include": ["src/**/*", "../common/**/*"],
    "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.spec.ts"]
 }
