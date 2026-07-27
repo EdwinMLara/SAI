@@ -71,9 +71,7 @@ export async function replaceAllProducts(
     await services.replaceAllProducts(req.body);
     res.status(200).json({ message: responses.Product.replaced });
   } catch (error) {
-    if (error instanceof AppError) {
-      return next(error);
-    }
+    console.error('REPLACE_ALL_ERROR:', error);
     return next(new AppError(responses.System.serverError, 500, error));
   }
 }
