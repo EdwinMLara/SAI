@@ -80,7 +80,10 @@ function log({ level, message, metadata }: LogInput) {
   } else {
     logger.log({
       level,
-      message,
+      message:
+        metadata?.stackTrace && metadata.stackTrace !== '-'
+          ? `${message}\n${metadata.stackTrace}`
+          : message,
     });
   }
 }

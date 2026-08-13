@@ -4,7 +4,7 @@ import authRoutes from './modules/auth.routes';
 import adminRoutes from './modules/admin.routes';
 import documentRoutes from './modules/document.routes';
 import ticketRoutes from './modules/ticket.routes';
-import invoiceRoutes from './modules/user.routes';
+import invoiceRoutes from './modules/invoice.routes';
 import productRoutes from './modules/product.routes';
 import userRoutes from './modules/user.routes';
 

@@ -7,6 +7,15 @@ export interface PublicUser {
   role: 'admin' | 'user';
 }
 
+export interface AdminUser {
+  image?: string;
+  name: string;
+  userName: string;
+  phone: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
 export interface NewUser {
   name: string;
   username: string;

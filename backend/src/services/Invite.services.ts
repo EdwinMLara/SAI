@@ -6,7 +6,7 @@ import { InviteInterface } from '@interfaces/Invite.interfaces';
 /* ------------------ Code ------------------ */
 
 export async function createInvite(
-  ref: ObjectId,
+  ref: ObjectId | string,
   email: string,
   role: 'admin' | 'user'
 ): Promise<void> {

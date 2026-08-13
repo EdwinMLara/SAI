@@ -10,6 +10,7 @@ export interface NavigationItem {
     path: string;
     isActive?: boolean;
     adminOnly?: boolean;
+    exact?: boolean;
   }[];
 }
 
@@ -31,6 +32,19 @@ const navigationItems: NavigationItem[] = [
     label: 'Facturas',
     iconName: 'FaFileInvoice',
     path: '/invoices',
+    subItems: [
+      {
+        id: 'listar-facturas',
+        label: 'Lista de facturas',
+        path: '/invoices',
+        exact: true,
+      },
+      {
+        id: 'subir-factura',
+        label: 'Subir factura',
+        path: '/invoices/upload',
+      },
+    ],
   },
   {
     id: 'tickets',

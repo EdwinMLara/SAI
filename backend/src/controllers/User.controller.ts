@@ -11,6 +11,25 @@ import AppError from '@utils/AppError';
 
 /* ------------------ Code ------------------ */
 
+export async function getAllUsers(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const users = await services.getAllUsers();
+    res.status(200).json({
+      message: responses.System.ok,
+      users: users,
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
 export async function updateUser(
   req: Request<{}, {}, Partial<UserChanges>>,
   res: Response,

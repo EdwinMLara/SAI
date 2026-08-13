@@ -14,7 +14,13 @@ const upload = multer({
     file: Express.Multer.File,
     callback: FileFilterCallback
   ): void => {
-    if (file.mimetype === 'application/pdf' || file.mimetype === 'image/jpeg') {
+    if (
+      file.originalname.toLowerCase().endsWith('.xml') ||
+      file.mimetype === 'application/xml' ||
+      file.mimetype === 'text/xml' ||
+      file.mimetype === 'application/pdf' ||
+      file.mimetype === 'image/jpeg'
+    ) {
       callback(null, true);
     } else {
       callback(new AppError('archivo no permitido'));

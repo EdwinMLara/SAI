@@ -15,6 +15,8 @@ interface User {
 
 interface Prices {
   payment: number;
+  iva: number;
+  priceWithIva: number;
   distribution: number;
   wholesale: number;
   mid_wholesale: number;
@@ -23,6 +25,8 @@ interface Prices {
 
 interface Product {
   key: string;
+  claveProdServ: string;
+  claveUnidad: string;
   description: string;
   quantity: number;
   status: string;
@@ -42,9 +46,24 @@ interface Payments {
 export interface InvoiceInterface extends Document {
   invoiceId: string;
   reference: string;
+  emisorRfc: string;
+  emisorNombre: string;
+  receptorRfc: string;
+  receptorNombre: string;
   date: Date;
   expiration: Date;
+  subtotal: number;
+  total: number;
   products: Product[];
   payments: Payments[];
   document: string;
 }
+/*Interfaz para la paginacion */
+export interface PaginatedInvoicesResponse {
+  invoices: InvoiceInterface[];
+  total: number;
+  totalPages: number;
+  page: number;
+  limit: number;
+}
+

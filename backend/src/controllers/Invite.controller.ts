@@ -15,13 +15,15 @@ export async function createInvite(
   next: NextFunction
 ): Promise<void> {
   try {
-    const { auth, email, role } = req.body;
+    const { email, role } = req.body;
 
-    await helpers.validateAuthToken(auth);
     await helpers.validateState(email);
-    const ref = await helpers.getRef(auth);
 
-    await services.createInvite(ref, email, role);
+    if (!role || (role !== 'admin' && role !== 'user')) {
+      throw new AppError(responses.System.missingFieldBody, 400);
+    }
+
+    await services.createInvite(req.user.id, email, role);
     res.status(201).json({
       message: responses.Invite.successfull,
     });
@@ -65,7 +67,7 @@ export async function removeInvite(
       throw new AppError(responses.System.missingFieldBody, 409);
     }
 
-    await helpers.validateState(email);
+    await helpers.validateExistence(email);
     await services.removeInvite(email);
 
     res.status(200).json({

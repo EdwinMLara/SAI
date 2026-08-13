@@ -20,7 +20,9 @@ const RequestMiddleware = (
     }
 
     if (
-      (req.path.startsWith('/tickets') || req.path.startsWith('/documents')) &&
+      ['/tickets', '/documents', '/invoices'].some((route) =>
+        req.path.includes(route)
+      ) &&
       req.is('multipart/form-data')
     ) {
       return next();

@@ -1,7 +1,11 @@
 import { ObjectId } from 'mongoose';
 
 import UserModel from '@models/User.model';
-import { UserChanges, UserInterface } from '@interfaces/User.interfaces';
+import {
+  UserChanges,
+  UserInterface,
+  PublicUserData,
+} from '@interfaces/User.interfaces';
 
 import responses from '@responses';
 import AppError from '@utils/AppError';
@@ -13,6 +17,17 @@ export async function createUser(user: UserInterface): Promise<void> {
   try {
     const newUser = new UserModel(user);
     await newUser.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function getAllUsers(): Promise<PublicUserData[]> {
+  try {
+    const users = await UserModel.find({})
+      .select('-password -__v')
+      .lean();
+    return users as unknown as PublicUserData[];
   } catch (error) {
     throw error;
   }

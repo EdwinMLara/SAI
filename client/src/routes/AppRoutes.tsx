@@ -8,7 +8,9 @@ import Authentication from '@/pages/Authentication';
 
 import Home from '@/pages/Home';
 
-import RoutingProducts from '@/layouts/products/config/Routing';
+import RoutingProducts from '@/layouts/Products/config/Routing';
+import RoutingInvoices from '@/layouts/Invoices/config/Routing';
+import RoutingUsers from '@/layouts/Users/config/Routing';
 
 /* ------------------ Code ------------------ */
 
@@ -21,6 +23,8 @@ const AppRoutes = () => {
         <Route element={<Protected />}>
           <Route index element={<Home />} />
           <Route path="products/*" element={<RoutingProducts />} />
+          <Route path="invoices/*" element={<RoutingInvoices />} />
+          <Route path="users/*" element={<RoutingUsers />} />
         </Route>
       </Route>
       <Route path="*" element={<NotFound />} />

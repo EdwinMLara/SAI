@@ -305,7 +305,9 @@ const Sidebar: React.FC = () => {
                             (subItem) => !subItem.adminOnly || isAdmin
                           )
                           .map((subItem) => {
-                            const isSubActive = isActiveRoute(subItem.path);
+                            const isSubActive = subItem.exact
+                              ? location.pathname === subItem.path
+                              : isActiveRoute(subItem.path);
                             return (
                               <li key={subItem.id}>
                                 <Link
