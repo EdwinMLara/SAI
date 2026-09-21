@@ -82,7 +82,7 @@ const InvoicesList = () => {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-4 flex-wrap">
-        <H1>Facturas 1</H1>
+        <H1>Facturas</H1>
         <Link
           to="/invoices/upload"
           className="text-brand font-semibold hover:underline text-sm"

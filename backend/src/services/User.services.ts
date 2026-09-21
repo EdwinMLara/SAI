@@ -52,7 +52,7 @@ export async function updatedUser(
 
 export async function getIdUser(email: string): Promise<ObjectId> {
   try {
-    const user = await UserModel.findOne({ email });
+    const user = await UserModel.findOne({ email: email.trim().toLowerCase() });
     if (!user) {
       throw new AppError(responses.User.notfound, 404);
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Icon, IconButton } from '@ui/index.ui';
 import { ProductInterface } from '@interfaces/Procuct.interface';
@@ -16,6 +16,20 @@ const ProductCard: React.FC<ProductCardProps> = ({
   showImages,
   onRemove,
 }) => {
+  const [hiddenPrices, setHiddenPrices] = useState<Set<number>>(new Set());
+
+  const togglePrice = (idx: number) => {
+    setHiddenPrices((prev) => {
+      const next = new Set(prev);
+      if (next.has(idx)) {
+        next.delete(idx);
+      } else {
+        next.add(idx);
+      }
+      return next;
+    });
+  };
+
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement;
     target.src =
@@ -94,19 +108,33 @@ const ProductCard: React.FC<ProductCardProps> = ({
       </div>
 
       <div className="grid grid-cols-2 gap-3 mb-4">
-        {priceCards.map((priceCard, idx) => (
-          <div
-            key={idx}
-            className={`${priceCard.bgColor} p-3 rounded-md border ${priceCard.borderColor}`}
-          >
-            <p className={`text-xs ${priceCard.textColor} font-medium mb-1`}>
-              {priceCard.label}
-            </p>
-            <p className={`text-lg font-bold ${priceCard.valueColor}`}>
-              ${priceCard.value.toFixed(2)}
-            </p>
-          </div>
-        ))}
+        {priceCards.map((priceCard, idx) => {
+          const isHidden = hiddenPrices.has(idx);
+          return (
+            <div
+              key={idx}
+              onClick={() => togglePrice(idx)}
+              style={{
+                transform: isHidden ? 'scale(0.78)' : 'scale(1)',
+                transformOrigin: 'center center',
+              }}
+              className={`${priceCard.bgColor} p-3 rounded-md border ${priceCard.borderColor} cursor-pointer select-none transition-transform duration-300 ease-in-out`}
+            >
+              <p className={`text-xs ${priceCard.textColor} font-medium mb-1`}>
+                {priceCard.label}
+              </p>
+              <div
+                className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                  isHidden ? 'max-h-0 opacity-0' : 'max-h-20 opacity-100'
+                }`}
+              >
+                <p className={`text-lg font-bold ${priceCard.valueColor}`}>
+                  ${priceCard.value.toFixed(2)}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {showImages && (
@@ -119,9 +147,22 @@ const ProductCard: React.FC<ProductCardProps> = ({
           <img
             src={`https://www.truper.com/media/import/imagenes/${product.clave}.jpg`}
             alt={product.description}
-            className="w-full h-32 object-cover rounded-md border border-light"
+            className="w-full h-auto object-content rounded-md border border-light"
             onError={handleImageError}
           />
+
+          
+
+          <a href="https://www.truper.com/banco-contenido-digital/mx/products" 
+          target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 mt-3 text-sm text-brand hover:text-brand-hover transition-colors">
+            <Icon name="FaExternalLinkAlt" size={12} /> Ver banco de imágenes 
+            </a>
+  
+          <p className="text-xs text-secondary-color mt-1">
+            Escribe manualmente el codigo "{product.key}".  En el buscador de Truper para tener
+            acceso al banco de imagenes de dicho producto.
+          </p>
+          
         </motion.div>
       )}
     </motion.div>

@@ -108,7 +108,9 @@ const useRegister = (): UseRegisterReturn => {
     (field: keyof NewUser) => (e: React.ChangeEvent<HTMLInputElement>) => {
       let value = e.target.value;
 
-      if (field === 'email' || field === 'password') {
+      if (field === 'email') {
+        value = value.replace(/\s/g, '').toLowerCase();
+      } else if (field === 'password') {
         value = value.replace(/\s/g, '');
       }
 

@@ -20,17 +20,21 @@ export async function register(
   next: NextFunction
 ): Promise<void> {
   try {
-    await helpers.comprobeUnicity(req.body);
-    await helpers.comprobeInvite(req.body.email);
-    req.body.password = await auth.encrypt(req.body.password);
-    req.body.role = await helpers.findRole(req.body.email);
-    await userServices.createUser(req.body);
-    await cookies.setAuthToken(res, req.body);
-    await cookies.setRefreshToken(res, req.body);
+    const body = req.body as UserInterface & { username?: string };
+    body.email = body.email.trim().toLowerCase();
+    body.userName = body.username ?? '';
+    delete body.username;
+    await helpers.comprobeUnicity(body);
+    await helpers.comprobeInvite(body.email);
+    body.password = await auth.encrypt(body.password);
+    body.role = await helpers.findRole(body.email);
+    await userServices.createUser(body);
+    await cookies.setAuthToken(res, body);
+    await cookies.setRefreshToken(res, body);
 
     res.status(200).json({
       message: responses.User.created,
-      user: await helpers.returnUser(req.body),
+      user: await helpers.returnUser(body),
     });
   } catch (error) {
     if (error instanceof AppError) {
@@ -46,7 +50,8 @@ export async function login(
   next: NextFunction
 ): Promise<void> {
   try {
-    const { email, password } = req.body;
+    const { password } = req.body;
+    const email = req.body.email?.trim().toLowerCase();
     if (!email || !password) {
       throw new AppError(responses.System.missingFieldBody, 400);
     }

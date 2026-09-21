@@ -21,7 +21,16 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: env.ORIGIN_SERVER,
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const allowed =
+        /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i.test(origin) ||
+        /^https?:\/\/192\.168\.\d{1,3}\.\d{1,3}(:\d+)?$/i.test(origin) ||
+        /^https?:\/\/10\.\d{1,3}\.\d{1,3}\.\d{1,3}(:\d+)?$/i.test(origin) ||
+        /^https?:\/\/172\.(1[6-9]|2\d|3[01])\.\d{1,3}\.\d{1,3}(:\d+)?$/i.test(origin);
+      if (allowed) return callback(null, true);
+      return callback(new Error('Origin not allowed by CORS'));
+    },
     credentials: true,
   })
 );

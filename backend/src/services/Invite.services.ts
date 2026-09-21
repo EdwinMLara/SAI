@@ -5,13 +5,23 @@ import { InviteInterface } from '@interfaces/Invite.interfaces';
 
 /* ------------------ Code ------------------ */
 
+const normalizeEmail = (email: string): string => email.trim().toLowerCase();
+
+const findInviteByEmail = (email: string) => {
+  const normalized = normalizeEmail(email).replace(
+    /[.*+?^${}()|[\]\\]/g,
+    '\\$&'
+  );
+  return { email: new RegExp(`^${normalized}$`, 'i') };
+};
+
 export async function createInvite(
   ref: ObjectId | string,
   email: string,
   role: 'admin' | 'user'
 ): Promise<void> {
   try {
-    const invite = { ref, email, role };
+    const invite = { ref, email: normalizeEmail(email), role };
     const newInvite = new InviteModel(invite);
     await newInvite.save();
   } catch (error) {
@@ -32,7 +42,7 @@ export async function getInvites(user: ObjectId): Promise<{
 
 export async function removeInvite(email: string): Promise<void> {
   try {
-    await InviteModel.findOneAndDelete({ email });
+    await InviteModel.findOneAndDelete(findInviteByEmail(email));
   } catch (error) {
     throw error;
   }
@@ -40,7 +50,7 @@ export async function removeInvite(email: string): Promise<void> {
 
 export async function hasInvite(email: string): Promise<boolean> {
   try {
-    const found = await InviteModel.findOne({ email }).lean();
+    const found = await InviteModel.findOne(findInviteByEmail(email)).lean();
     return !!found;
   } catch (error) {
     throw error;
@@ -49,7 +59,7 @@ export async function hasInvite(email: string): Promise<boolean> {
 
 export async function getInvite(email: string): Promise<InviteInterface> {
   try {
-    const invite = await InviteModel.findOne({ email }).lean();
+    const invite = await InviteModel.findOne(findInviteByEmail(email)).lean();
     return invite as InviteInterface;
   } catch (error) {
     throw error;

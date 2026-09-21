@@ -122,6 +122,7 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                     key={invoice.invoiceId}
                     className="border-b border-border-light last:border-0"
                   >
+                   
                     <td className="py-3 px-2 font-medium text-primary-color">
                       {invoice.reference || '—'}
                     </td>
