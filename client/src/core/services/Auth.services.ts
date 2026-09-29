@@ -4,6 +4,9 @@ import {
   UserCredentials,
   PublicUser,
   NewUser,
+  ForgotPasswordData,
+  ResetPasswordData,
+  ChangePasswordData
 } from '@interfaces/User.interfaces';
 
 /* ------------------ Code ------------------ */
@@ -106,4 +109,39 @@ export async function refresh(): Promise<{
       isAuthenticated: false,
     };
   }
+}
+
+export async function forgotPassword(user: ForgotPasswordData): Promise<{
+  status: number;
+  message: string;
+}> {
+  const response = await axios.post('/auth/forgot-password', user);
+  return {
+    status: response.status,
+    message: response.data.message,
+  };
+}
+
+export async function resetPassword(data: ResetPasswordData): Promise<{
+  status: number;
+  message: string;
+}> {
+  const response = await axios.post('/auth/reset-password', data);
+  return {
+    status: response.status,
+    message: response.data.message,
+  };
+}
+
+export async function changePassword(data: ChangePasswordData): Promise<{
+  status: number;
+  message: string;
+  user: PublicUser | null;
+}> {
+  const response = await axios.post('/user/change-password', data);
+  return {
+    status: response.status,
+    message: response.data.message,
+    user: response.data.all?.user || null,
+  };
 }

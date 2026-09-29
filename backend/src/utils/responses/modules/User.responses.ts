@@ -6,6 +6,9 @@ const User = {
   notfound: 'No se encontró ningún usuario con la información proporcionada',
   invalidpassword: 'La contraseña ingresada es incorrecta',
   updateError: 'Hubo un error a guardar el usuario',
+  passwordChanged: 'Tu contraseña ha sido cambiada exitosamente',
+  invalidToken: 'El enlace de recuperación no es válido o ha expirado',
+  resetSent: 'Si el correo existe, recibirás un enlace para restablecer tu contraseña',
 };
 
 export default User;

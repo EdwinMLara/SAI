@@ -12,6 +12,11 @@ const envOptions = [
   'SERVER_IP',
   'SERVER_PORT',
   'ORIGIN_SERVER',
+  'SMTP_HOST',
+  'SMTP_PORT',
+  'SMTP_USER',
+  'SMTP_PASS',
+  'SMTP_FROM',
 ];
 
 envOptions.forEach((key) => {
@@ -31,6 +36,11 @@ const env = {
   SERVER_IP: process.env.SERVER_IP || '',
   SERVER_PORT: process.env.SERVER_PORT || '',
   ORIGIN_SERVER: process.env.ORIGIN_SERVER || '',
+  SMTP_HOST: process.env.SMTP_HOST || '',
+  SMTP_PORT: process.env.SMTP_PORT || '',
+  SMTP_USER: process.env.SMTP_USER || '',
+  SMTP_PASS: process.env.SMTP_PASS || '',
+  SMTP_FROM: process.env.SMTP_FROM || '',
 };
 
 export default env;

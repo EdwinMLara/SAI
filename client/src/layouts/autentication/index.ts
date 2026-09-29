@@ -1,5 +1,11 @@
 export { default as useLogin } from './hooks/useLogin';
 export { default as useRegister } from './hooks/useRegister';
 export { default as useValidations } from './hooks/useValidations';
+export { default as useForgotPassword } from './hooks/useForgotPassword';
+export { default as useResetPassword } from './hooks/useResetPassword';
+export { default as useChangePassword } from './hooks/useChangePassword';
 export { default as LoginForm } from './pages/LoginForm';
 export { default as RegisterForm } from './pages/RegisterForm';
+export { default as ForgotPasswordForm } from './pages/ForgotPasswordForm';
+export { default as ResetPasswordForm } from './pages/ResetPasswordForm';
+export { default as ChangePasswordForm } from './pages/ChangePasswordForm';

@@ -13,13 +13,18 @@ const ErrorMiddleware = (
 ) => {
   const returnCode = err instanceof AppError ? err.statusCode || 500 : 500;
 
+  const originalError =
+    err instanceof AppError ? (err.originalError as Error) : undefined;
+
   log({
     level: 'error',
-    message: err.message,
+    message: originalError
+      ? `${err.message} | ORIGINAL: ${originalError.message}`
+      : err.message,
     metadata: {
       user: req.user?.name || 'Undefined',
       clientIp: req.ip as string,
-      stackTrace: err.stack as string,
+      stackTrace: (originalError?.stack || err.stack) as string,
       endpoint: req.path,
       method: req.method,
       statusCode: returnCode,

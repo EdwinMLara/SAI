@@ -7,5 +7,6 @@ const router = Router();
 
 router.get('/list', Identity, Authorize('admin'), User.getAllUsers);
 router.put('/', Identity, User.updateUser);
+router.post('/change-password', Identity, User.changePassword);
 
 export default router;

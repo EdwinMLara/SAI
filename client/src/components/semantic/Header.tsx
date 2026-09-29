@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@context/Auth.context';
 import { useSidebar } from '@context/Sidebar.context';
 
@@ -10,6 +11,7 @@ import ThemeToggle from '../helpers/ToggleTheme';
 const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const { toggle } = useSidebar();
+  const navigate = useNavigate();
 
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [isNotificationOpen, setIsNotificationOpen] = useState(false);
@@ -138,6 +140,21 @@ const Header: React.FC = () => {
                           className="text-secondary-color"
                         />
                         Configuración
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          navigate('/account/change-password');
+                          setIsUserMenuOpen(false);
+                        }}
+                        className="w-full flex items-center gap-3 px-3 py-2 text-sm text-primary-color hover-bg-secondary rounded-md transition-colors"
+                      >
+                        <Icon
+                          name="FaLock"
+                          size={16}
+                          className="text-secondary-color"
+                        />
+                        Cambiar contraseña
                       </button>
 
                       <div className="border-t border-light my-2"></div>

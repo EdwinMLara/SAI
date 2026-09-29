@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 import { Input, Button } from '@ui/index.ui';
 import { useLogin } from '../index';
@@ -89,6 +90,15 @@ const LoginForm: React.FC = () => {
                 'Iniciar Sesión'
               )}
             </Button>
+          </motion.div>
+
+          <motion.div variants={itemVariants} className="text-center">
+            <Link
+              to="/auth/forgot-password"
+              className="text-sm text-brand hover:underline"
+            >
+              ¿Olvidaste tu contraseña?
+            </Link>
           </motion.div>
         </motion.form>
 

@@ -10,5 +10,7 @@ router.post('/login', Auth.login);
 router.get('/refresh', Auth.refreshToken);
 router.post('/logout', Auth.logout);
 router.get('/session', SessionChecker, Auth.sessionState);
+router.post('/forgot-password', Auth.forgotPassword);
+router.post('/reset-password', Auth.resetPassword);
 
 export default router;

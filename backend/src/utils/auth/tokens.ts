@@ -39,3 +39,7 @@ export function getPayload(token: string): any | null {
     return null;
   }
 }
+
+export function generateResetToken(payload: object): string {
+  return jwt.sign(payload, jwtSecret, { expiresIn: '15m' });
+}

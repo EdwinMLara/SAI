@@ -1,4 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
+import * as tokens from '@auth/tokens';
+import * as emailServices from '@services/Email.services';
 
 import * as auth from '@auth/crypt';
 import * as services from '@services/Auth.services';
@@ -145,6 +147,63 @@ export async function sessionState(
       access: tokenStatus.hasValidAccess,
       refresh: tokenStatus.hasValidRefresh,
     });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
+export async function forgotPassword(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const email = req.body.email?.trim().toLowerCase();
+    if (!email) {
+      throw new AppError(responses.System.missingFieldBody, 400);
+    }
+    const user = await userServices.getUserByObject(
+      await userServices.getIdUser(email)
+    );
+    const resetToken = tokens.generateResetToken({
+      id: user._id,
+      email: user.email,
+    });
+    await emailServices.sendPasswordResetEmail(user.email, resetToken);
+    res.status(200).json({ message: responses.User.resetSent });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
+export async function resetPassword(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) {
+      throw new AppError(responses.System.missingFieldBody, 400);
+    }
+    if (!authHelpers.verifyToken(token)) {
+      throw new AppError(responses.User.invalidToken, 401);
+    }
+    const data = authHelpers.userData(token);
+    if (!data || !data.id) {
+      throw new AppError(responses.User.invalidToken, 401);
+    }
+    await userServices.getUserById(data.id);
+    const hashedPassword = await auth.encrypt(newPassword);
+    await userServices.updatedUser(data.id, { password: hashedPassword });
+    cookies.clearAuthCookies(res);
+    res.status(200).json({ message: responses.User.passwordChanged });
   } catch (error) {
     if (error instanceof AppError) {
       return next(error);
