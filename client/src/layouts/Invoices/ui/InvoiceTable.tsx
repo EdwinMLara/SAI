@@ -1,14 +1,21 @@
 import React from 'react';
 
 import { Button, Message } from '@ui/index.ui';
-import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
+import { InvoiceInterface, MonthTotals } from '@interfaces/Invoice.interfaces';
 
 interface InvoiceTableProps {
   invoices: InvoiceInterface[];
+  monthTotals: MonthTotals[];
   error: string;
+  exportingMonth?: string | null;
   onView: (id: string) => void;
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
+  onExport: (
+    monthKey: string,
+    monthLabel: string,
+    invoices: InvoiceInterface[]
+  ) => void;
 }
 
 interface InvoiceGroup {
@@ -42,6 +49,15 @@ const formatDate = (date: Date) => {
   });
 };
 
+const formatCurrency = (value: number) =>
+  `$${(Number(value) || 0).toFixed(2)}`;
+
+const getInvoiceIva = (invoice: InvoiceInterface) =>
+  (invoice.products || []).reduce(
+    (acc, product) => acc + (Number(product.prices?.iva) || 0),
+    0
+  );
+
 const groupByMonth = (invoices: InvoiceInterface[]): InvoiceGroup[] => {
   const groups = new Map<string, InvoiceGroup>();
 
@@ -73,10 +89,13 @@ const groupByMonth = (invoices: InvoiceInterface[]): InvoiceGroup[] => {
 
 const InvoiceTable: React.FC<InvoiceTableProps> = ({
   invoices,
+  monthTotals,
   error,
+  exportingMonth = null,
   onView,
   onEdit,
   onDelete,
+  onExport,
 }) => {
   if (error) {
     return <Message type="error" message={error} />;
@@ -92,11 +111,28 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
   }
 
   const groups = groupByMonth(invoices);
+  const totalsByMonth = new Map<string, MonthTotals>(
+    (monthTotals || []).map((total) => [total.month, total])
+  );
 
   return (
     <div className="bg-card p-6 border border-light rounded-md overflow-x-auto">
       <div className="space-y-8">
-        {groups.map((group) => (
+        {groups.map((group) => {
+          const groupTotals =
+            totalsByMonth.get(group.key) ??
+            group.invoices.reduce(
+              (acc, invoice) => {
+                acc.subtotal += Number(invoice.subtotal) || 0;
+                acc.iva += getInvoiceIva(invoice);
+                acc.total += Number(invoice.total) || 0;
+                acc.count += 1;
+                return acc;
+              },
+              { month: group.key, subtotal: 0, iva: 0, total: 0, count: 0 }
+            );
+
+          return (
           <div key={group.key}>
             <h4 className="font-semibold text-primary-color mb-3 flex items-center gap-2">
               {group.label}
@@ -113,6 +149,9 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                   <th className="py-3 px-2">Receptor</th>
                   <th className="py-3 px-2">Fecha</th>
                   <th className="py-3 px-2">Vencimiento</th>
+                  <th className="py-3 px-2 text-right">Total sin IVA</th>
+                  <th className="py-3 px-2 text-right">IVA</th>
+                  <th className="py-3 px-2 text-right">Total con IVA</th>
                   <th className="py-3 px-2 text-right">Acciones</th>
                 </tr>
               </thead>
@@ -135,6 +174,15 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                     <td className="py-3 px-2">{formatDate(invoice.date)}</td>
                     <td className="py-3 px-2">
                       {formatDate(invoice.expiration)}
+                    </td>
+                    <td className="py-3 px-2 text-right tabular-nums">
+                      {formatCurrency(invoice.subtotal)}
+                    </td>
+                    <td className="py-3 px-2 text-right tabular-nums">
+                      {formatCurrency(getInvoiceIva(invoice))}
+                    </td>
+                    <td className="py-3 px-2 text-right tabular-nums font-medium text-primary-color">
+                      {formatCurrency(invoice.total)}
                     </td>
                     <td className="py-3 px-2">
                       <div className="flex gap-2 justify-end">
@@ -163,9 +211,42 @@ const InvoiceTable: React.FC<InvoiceTableProps> = ({
                   </tr>
                 ))}
               </tbody>
+              <tfoot>
+                <tr className="border-t-2 border-border-light font-semibold text-primary-color">
+                  <td className="py-3 px-2" colSpan={5}>
+                    Total {group.label}
+                  </td>
+                  <td className="py-3 px-2 text-right tabular-nums">
+                    {formatCurrency(groupTotals.subtotal)}
+                  </td>
+                  <td className="py-3 px-2 text-right tabular-nums">
+                    {formatCurrency(groupTotals.iva)}
+                  </td>
+                  <td className="py-3 px-2 text-right tabular-nums">
+                    {formatCurrency(groupTotals.total)}
+                  </td>
+                  <td className="py-3 px-2" />
+                </tr>
+              </tfoot>
             </table>
+
+            <div className="flex justify-end mt-3">
+              <Button
+                variant="secondary"
+                className="h-9 min-h-9 px-3 text-xs"
+                disabled={exportingMonth === group.key}
+                onClick={() =>
+                  onExport(group.key, group.label, group.invoices)
+                }
+              >
+                {exportingMonth === group.key
+                  ? 'Generando Excel...'
+                  : 'Descargar facturas del mes'}
+              </Button>
+            </div>
           </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

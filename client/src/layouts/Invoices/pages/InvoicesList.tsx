@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
-import { Loading, Button } from '@ui/index.ui';
+import { Loading, Button, Message } from '@ui/index.ui';
 import { H1 } from '@components/semantic';
 
 import { useInvoices, InvoiceTable } from '../';
@@ -53,10 +53,14 @@ const InvoicesList = () => {
     page,
     limit,
     month,
+    monthTotals,
+    exportingMonth,
+    exportError,
     fetchInvoices,
     goToPage,
     changeMonth,
     deleteById,
+    exportMonth,
   } = useInvoices();
 
   useEffect(() => {
@@ -114,12 +118,17 @@ const InvoicesList = () => {
         <Loading message="Cargando facturas..." />
       ) : (
         <>
+          {exportError && <Message type="error" message={exportError} />}
+
           <InvoiceTable
             invoices={invoices}
+            monthTotals={monthTotals}
             error={error}
+            exportingMonth={exportingMonth}
             onView={(id) => navigate(`/invoices/${id}`)}
             onEdit={(id) => navigate(`/invoices/${id}`)}
             onDelete={handleDelete}
+            onExport={exportMonth}
           />
 
           {totalPages > 1 && (

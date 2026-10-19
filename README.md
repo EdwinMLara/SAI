@@ -1,4 +1,4 @@
-# SAI - Sistema de Administracón INSOEL
+# SAI - Sistema de Administración INSOEL
 
 This service is designed for processing and storing documents for INSOEL.
 
@@ -28,7 +28,11 @@ npm install -g nodemon
 
 ## Requirements
 
-1. Access to environment variables is required. You will need to request them.
+1. Environment variables are required. Each workspace includes a `.env.example` file as a template — copy it to `.env` and fill in the values, or request them from the team.
+
+## Documentation
+
+- [Backend documentation index](./backend/docs/index.docs.md)
 
 ## Internal Contributions
 

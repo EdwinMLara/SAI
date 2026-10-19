@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 
-import { InvoiceInterface } from '@interfaces/Invoice.interfaces';
+import { InvoiceInterface, MonthTotals } from '@interfaces/Invoice.interfaces';
 import * as services from '@services/Invoices.services';
 
 interface UseInvoicesReturn {
@@ -12,10 +12,18 @@ interface UseInvoicesReturn {
   page: number;
   limit: number;
   month: string;
+  monthTotals: MonthTotals[];
+  exportingMonth: string | null;
+  exportError: string;
   fetchInvoices: () => Promise<void>;
   goToPage: (page: number) => void;
   changeMonth: (month: string) => void;
   deleteById: (invoiceId: string) => Promise<{ status: number; message: string }>;
+  exportMonth: (
+    monthKey: string,
+    monthLabel: string,
+    fallbackInvoices: InvoiceInterface[]
+  ) => Promise<void>;
 }
 
 const DEFAULT_LIMIT = 5;
@@ -28,6 +36,9 @@ const useInvoices = (): UseInvoicesReturn => {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [page, setPage] = useState<number>(1);
   const [month, setMonth] = useState<string>('');
+  const [monthTotals, setMonthTotals] = useState<MonthTotals[]>([]);
+  const [exportingMonth, setExportingMonth] = useState<string | null>(null);
+  const [exportError, setExportError] = useState<string>('');
 
   const fetchInvoices = useCallback(async () => {
     setIsLoading(true);
@@ -41,6 +52,7 @@ const useInvoices = (): UseInvoicesReturn => {
 
       setTotal(response.total);
       setTotalPages(response.totalPages);
+      setMonthTotals(response.monthTotals ?? []);
 
       if (response.invoices.length === 0 && response.page > 1) {
         setPage(response.page - 1);
@@ -72,7 +84,30 @@ const useInvoices = (): UseInvoicesReturn => {
     await fetchInvoices();
     return response;
   };
-  
+
+  const exportMonth = async (
+    monthKey: string,
+    monthLabel: string,
+    fallbackInvoices: InvoiceInterface[]
+  ) => {
+    setExportingMonth(monthKey);
+    setExportError('');
+    try {
+      const isMonthKey = /^\d{4}-\d{2}$/.test(monthKey);
+      const invoicesToExport = isMonthKey
+        ? (await services.getInvoicesByMonth(monthKey)).invoices
+        : fallbackInvoices;
+
+      const { exportInvoicesToExcel } = await import(
+        '../utils/exportInvoicesToExcel'
+      );
+      exportInvoicesToExcel(invoicesToExport, monthLabel, monthKey);
+    } catch (err) {
+      setExportError('No se pudieron exportar las facturas del mes');
+    } finally {
+      setExportingMonth(null);
+    }
+  };
 
   return {
     invoices,
@@ -83,10 +118,14 @@ const useInvoices = (): UseInvoicesReturn => {
     page,
     limit: DEFAULT_LIMIT,
     month,
+    monthTotals,
+    exportingMonth,
+    exportError,
     fetchInvoices,
     goToPage,
     changeMonth,
     deleteById,
+    exportMonth,
   };
 };
 

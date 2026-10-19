@@ -8,6 +8,7 @@ const router = Router();
 
 router.post('/upload', Identity, FileFilter, Invoice.uploadXML);
 router.get('/list', Identity, Invoice.getAllInvoices);
+router.get('/by-month', Identity, Invoice.getInvoicesByMonth);
 router.post('/', Identity, Invoice.createInvoice);
 router.get('/', Identity, Invoice.getInvoice);
 router.put('/', Identity, Invoice.updateInvoice);

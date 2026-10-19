@@ -57,10 +57,19 @@ export interface InvoiceInterface {
   document: string | null;
 }
 
+export interface MonthTotals {
+  month: string;
+  subtotal: number;
+  iva: number;
+  total: number;
+  count: number;
+}
+
 export interface PaginatedInvoicesResponse {
   invoices: InvoiceInterface[];
   total: number;
   totalPages: number;
   page: number;
   limit: number;
+  monthTotals: MonthTotals[];
 }

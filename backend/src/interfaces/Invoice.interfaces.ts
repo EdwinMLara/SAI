@@ -58,6 +58,15 @@ export interface InvoiceInterface extends Document {
   payments: Payments[];
   document: string;
 }
+/*Totales agregados por mes */
+export interface MonthTotals {
+  month: string;
+  subtotal: number;
+  iva: number;
+  total: number;
+  count: number;
+}
+
 /*Interfaz para la paginacion */
 export interface PaginatedInvoicesResponse {
   invoices: InvoiceInterface[];
@@ -65,5 +74,6 @@ export interface PaginatedInvoicesResponse {
   totalPages: number;
   page: number;
   limit: number;
+  monthTotals: MonthTotals[];
 }
 

@@ -8,7 +8,7 @@ Contains the frontend of the SAI system, including UI components and client-side
 
 ## Setup
 
-Run `npm install` to install dependencies. Use `npm start` to run the development server.
+Run `npm install` to install dependencies. Use `npm run dev` to run the development server.
 
 ## Notes
 

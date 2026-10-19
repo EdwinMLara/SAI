@@ -68,6 +68,30 @@ export async function getAllInvoices(
       totalPages: result.totalPages,
       page: result.page,
       limit: result.limit,
+      monthTotals: result.monthTotals,
+    });
+  } catch (error) {
+    if (error instanceof AppError) {
+      return next(error);
+    }
+    return next(new AppError(responses.System.serverError, 500, error));
+  }
+}
+
+/*Funcion para traer todas las facturas de un mes (sin paginar) para exportar */
+export async function getInvoicesByMonth(
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> {
+  try {
+    const monthParam = req.query.month as string | undefined;
+
+    const invoices = await services.getInvoicesByMonth(monthParam);
+
+    res.status(200).json({
+      message: responses.System.ok,
+      invoices,
     });
   } catch (error) {
     if (error instanceof AppError) {

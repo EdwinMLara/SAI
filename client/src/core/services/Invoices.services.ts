@@ -26,6 +26,20 @@ export async function getAllInvoices(
     totalPages: all?.totalPages ?? 0,
     page: all?.page ?? 1,
     limit: all?.limit ?? 5,
+    monthTotals: all?.monthTotals ?? [],
+  };
+}
+
+export async function getInvoicesByMonth(
+  month: string
+): Promise<{ status: number; message: string; invoices: InvoiceInterface[] }> {
+  const response = await axios.get('/invoices/by-month', {
+    params: { month },
+  });
+  return {
+    status: response.status,
+    message: response.data.message,
+    invoices: response.data.all?.invoices ?? [],
   };
 }
 
