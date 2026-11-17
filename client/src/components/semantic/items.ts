@@ -47,6 +47,25 @@ const navigationItems: NavigationItem[] = [
     ],
   },
   {
+    id: 'sales-notes',
+    label: 'Notas de venta',
+    iconName: 'FaFileInvoiceDollar',
+    path: '/sales-notes',
+    subItems: [
+      {
+        id: 'sales-notes-list',
+        label: 'Lista de notas',
+        path: '/sales-notes',
+        exact: true,
+      },
+      {
+        id: 'sales-notes-new',
+        label: 'Nueva nota',
+        path: '/sales-notes/new',
+      },
+    ],
+  },
+  {
     id: 'tickets',
     label: 'Tickets',
     iconName: 'FaTicketAlt',

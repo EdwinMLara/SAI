@@ -19,7 +19,9 @@
 - [Sesión, renovación y cierre](./workflows/session.md)
 - [Recuperación y cambio de contraseña](./workflows/password-recovery.md)
 - [Invitaciones](./workflows/invites.md)
+- [Usuarios: listado y actualización de perfil](./workflows/users.md)
 - [Facturas: carga de XML CFDI y gestión](./workflows/invoice-upload.md)
+- [Notas de venta: creación, gestión y sello fiscal](./workflows/sales-notes.md)
 - [Productos: catálogo y reemplazo completo](./workflows/product-replace.md)
 - [Archivos: documentos y tickets (Supabase)](./workflows/files.md)
 
@@ -32,6 +34,7 @@ Segmentación de la base de datos y modelado de la lógica de negocio:
   - [Usuario](./datadase/models/users.model.md)
   - [Producto](./datadase/models/products.model.md)
   - [Factura](./datadase/models/invoice.model.md)
+  - [Nota de venta](./datadase/models/salesnote.model.md)
   - [Invitación](./datadase/models/invites.model.md)
   - [Log](./datadase/models/logs.model.md)
   - [Actualización de base de datos](./datadase/models/databaseupdate.model.md)

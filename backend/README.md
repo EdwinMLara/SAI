@@ -74,7 +74,7 @@ La documentación completa está en [docs/index.docs.md](./docs/index.docs.md):
 - [Referencia de la API](./docs/api-reference.md)
 - [Arquitectura del backend](./docs/architecture.md)
 - [Logging](./docs/Logging.md): configuración y uso del registro de eventos.
-- [Flujos de trabajo](./docs/workflows/register.md): registro, login, sesión, contraseñas, invitaciones, facturas, productos y archivos.
+- [Flujos de trabajo](./docs/workflows/register.md): registro, login, sesión, contraseñas, invitaciones, usuarios, facturas, notas de venta, productos y archivos.
 - [Modelado de la base de datos](./docs/datadase/modelado.md)
 
 ---

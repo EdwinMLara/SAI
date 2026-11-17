@@ -373,3 +373,46 @@
     }
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+
+  #sales-note-print,
+  #sales-note-print * {
+    visibility: visible;
+  }
+
+  #sales-note-print {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    padding: 24px;
+    background: #ffffff !important;
+    color: #111111 !important;
+    border: none !important;
+    box-shadow: none !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  #sales-note-print .bg-card,
+  #sales-note-print .bg-background-secondary {
+    background: #ffffff !important;
+    border-color: #d1d5db !important;
+    box-shadow: none !important;
+  }
+
+  #sales-note-print h2,
+  #sales-note-print h3,
+  #sales-note-print dt,
+  #sales-note-print dd,
+  #sales-note-print td,
+  #sales-note-print th,
+  #sales-note-print p,
+  #sales-note-print span {
+    color: #111111 !important;
+  }
+}

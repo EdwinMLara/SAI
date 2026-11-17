@@ -28,7 +28,11 @@ Autorizaciones previas al registro de nuevos usuarios, con el rol asignado. → 
 
 Auditoría de eventos y errores (sólo en producción). → [Modelo de Log](./models/logs.model.md)
 
-### 6. Actualizaciones de base de datos
+### 6. Notas de venta
+
+Ventas internas con cliente, partidas y sello fiscal opcional (borrador o timbrada). → [Modelo de Nota de venta](./models/salesnote.model.md)
+
+### 7. Actualizaciones de base de datos
 
 Registro histórico de las cargas masivas de productos. → [Modelo de Actualización de Base de Datos](./models/databaseupdate.model.md)
 
@@ -37,3 +41,4 @@ Registro histórico de las cargas masivas de productos. → [Modelo de Actualiza
 - **Invitación → Usuario**: `Invite.ref` almacena el `ObjectId` del administrador que creó la invitación.
 - **Factura → Producto**: `Invoice.products[].key` referencia la `key` del catálogo de productos (sin constraint de integridad referencial; es una referencia lógica).
 - **Factura → Usuario**: `Invoice.products[].user_config` y `Invoice.products[].payments` asocian registros por nombre/identificador de usuario.
+- **Nota de venta**: es una entidad **independiente**; el cliente y las partidas se guardan embebidos y la `reference` es su identificador funcional único.

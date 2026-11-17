@@ -6,42 +6,6 @@ import { H1 } from '@components/semantic';
 
 import { useInvoices, InvoiceTable } from '../';
 
-const MONTH_NAMES = [
-  'Enero',
-  'Febrero',
-  'Marzo',
-  'Abril',
-  'Mayo',
-  'Junio',
-  'Julio',
-  'Agosto',
-  'Septiembre',
-  'Octubre',
-  'Noviembre',
-  'Diciembre',
-];
-
-interface MonthOption {
-  value: string;
-  label: string;
-}
-
-const buildMonthOptions = (): MonthOption[] => {
-  const options: MonthOption[] = [];
-  const now = new Date();
-
-  for (let i = 0; i < 12; i += 1) {
-    const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-    const value = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}`;
-    options.push({
-      value,
-      label: `${MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`,
-    });
-  }
-
-  return options;
-};
-
 const InvoicesList = () => {
   const navigate = useNavigate();
   const {
@@ -79,7 +43,6 @@ const InvoicesList = () => {
     }
   };
 
-  const monthOptions = buildMonthOptions();
   const start = total === 0 ? 0 : (page - 1) * limit + 1;
   const end = Math.min(page * limit, total);
 
@@ -95,23 +58,26 @@ const InvoicesList = () => {
         </Link>
       </div>
 
-      <div className="flex items-center gap-2">
-        <label htmlFor="month-select" className="text-sm text-text-secondary">
+      <div className="flex items-center gap-2 flex-wrap">
+        <label htmlFor="month-input" className="text-sm text-text-secondary">
           Mes:
         </label>
-        <select
-          id="month-select"
+        <input
+          id="month-input"
+          type="month"
           value={month}
           onChange={(e) => changeMonth(e.target.value)}
           className="px-3 py-2 rounded-md border border-border-light bg-background-secondary dark:bg-background-dark-secondary text-text-primary dark:text-text-dark-primary focus:outline-none focus:ring-2 focus:ring-brand/40"
-        >
-          <option value="">Todos los meses</option>
-          {monthOptions.map((option) => (
-            <option key={option.value} value={option.value}>
-              {option.label}
-            </option>
-          ))}
-        </select>
+        />
+        {month && (
+          <Button
+            variant="secondary"
+            className="h-9 min-h-9 px-3 text-xs"
+            onClick={() => changeMonth('')}
+          >
+            Ver todos los meses
+          </Button>
+        )}
       </div>
 
       {isLoading ? (

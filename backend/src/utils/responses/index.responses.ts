@@ -2,6 +2,7 @@ import System from './modules/System.responses';
 import User from './modules/User.responses';
 import Product from './modules/Product.responses';
 import Invoice from './modules/Invoice.responses';
+import SalesNote from './modules/SalesNote.responses';
 import Invite from './modules/Invite.responses';
 import Document from './modules/Document.responses';
 import Ticket from './modules/Ticket.responses';
@@ -12,6 +13,7 @@ const responses = {
   User,
   Product,
   Invoice,
+  SalesNote,
   Invite,
   Document,
   Ticket,

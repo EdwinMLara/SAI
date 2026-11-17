@@ -5,6 +5,7 @@ import adminRoutes from './modules/admin.routes';
 import documentRoutes from './modules/document.routes';
 import ticketRoutes from './modules/ticket.routes';
 import invoiceRoutes from './modules/invoice.routes';
+import salesNoteRoutes from './modules/salesNote.routes';
 import productRoutes from './modules/product.routes';
 import userRoutes from './modules/user.routes';
 
@@ -15,6 +16,7 @@ router.use('/admin', adminRoutes);
 router.use('/documents', documentRoutes);
 router.use('/tickets', ticketRoutes);
 router.use('/invoices', invoiceRoutes);
+router.use('/sales-notes', salesNoteRoutes);
 router.use('/products', productRoutes);
 router.use('/user', userRoutes);
 

@@ -27,7 +27,7 @@ Cliente
 Se ejecuta **antes** de las rutas y decide si la petición es aceptable:
 
 - Exemptos: `GET`, `DELETE` y `POST /logout` (pasan directo).
-- `multipart/form-data` en rutas que contengan `/tickets`, `/documents` o `/invoices` (los uploads).
+- `multipart/form-data` en rutas que contengan `/tickets`, `/documents`, `/invoices` o `/sales-notes` (los uploads).
 - Para JSON: exige `Content-Type` y, en `POST`/`PUT`/`PATCH`, un body no vacío (`400` en caso contrario).
 - Para `multipart` en otras rutas: exige que exista `req.file` (`400`).
 - Cualquier otro `Content-Type`: `415`.
@@ -67,7 +67,7 @@ Los clientes deben leer siempre dentro de `data`.
 ## Utilidades transversales (`src/utils/`)
 
 - **`AppError.ts`**: clase de error con `statusCode` y `originalError` opcional; es el contrato entre helpers/servicios y el middleware de errores.
-- **`responses/`**: catálogo centralizado de mensajes (`System`, `User`, `Product`, `Invoice`, `Invite`, `Document`, `Ticket`, `Auth`). Los controladores nunca escriben mensajes "pelados": siempre referencian este catálogo, lo que unifica textos y facilita la localización.
+- **`responses/`**: catálogo centralizado de mensajes (`System`, `User`, `Product`, `Invoice`, `SalesNote`, `Invite`, `Document`, `Ticket`, `Auth`). Los controladores nunca escriben mensajes "pelados": siempre referencian este catálogo, lo que unifica textos y facilita la localización.
 - **`auth/crypt.ts`**: bcrypt con 10 rondas (`encrypt`, `compareHash`).
 - **`auth/tokens.ts`**: generación/verificación de JWT — access (1 h), refresh (15 d), genérico (30 d) y reset (15 min), todos firmados con `JWT_SECRET`.
 - **`cookies/`**: emisión y limpieza de cookies HTTPOnly + filtrado de datos públicos del usuario (nunca se retorna la contraseña).

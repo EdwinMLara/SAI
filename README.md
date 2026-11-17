@@ -33,6 +33,7 @@ npm install -g nodemon
 ## Documentation
 
 - [Backend documentation index](./backend/docs/index.docs.md)
+- [Client documentation index](./client/docs/index.docs.md)
 
 ## Internal Contributions
 

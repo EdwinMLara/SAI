@@ -13,6 +13,7 @@ import Home from '@/pages/Home';
 
 import RoutingProducts from '@/layouts/Products/config/Routing';
 import RoutingInvoices from '@/layouts/Invoices/config/Routing';
+import RoutingSalesNotes from '@/layouts/SalesNotes/config/Routing';
 import RoutingUsers from '@/layouts/Users/config/Routing';
 
 /* ------------------ Code ------------------ */
@@ -30,6 +31,7 @@ const AppRoutes = () => {
           <Route path="account/change-password" element={<ChangePassword />} />
           <Route path="products/*" element={<RoutingProducts />} />
           <Route path="invoices/*" element={<RoutingInvoices />} />
+          <Route path="sales-notes/*" element={<RoutingSalesNotes />} />
           <Route path="users/*" element={<RoutingUsers />} />
         </Route>
       </Route>

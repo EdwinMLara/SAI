@@ -40,6 +40,21 @@
 | PUT | `/invoices` | Actualiza por `invoiceId` |
 | DELETE | `/invoices?id=` | Elimina por `invoiceId` |
 
+### Notas de venta — `/api/sales-notes`
+
+| Método | Ruta | Descripción | Protección |
+|---|---|---|---|
+| GET | `/sales-notes/list` | Lista paginada (`page`, `limit`) | `Identity` |
+| GET | `/sales-notes?reference=` | Consulta por `reference` | `Identity` |
+| POST | `/sales-notes` | Alta de nota (borrador o timbrada) | `Identity` |
+| PUT | `/sales-notes` | Actualiza por `reference` | `Identity` |
+| DELETE | `/sales-notes?reference=` | Elimina por `reference` | `Identity` |
+| PATCH | `/sales-notes/fiscal` | Captura manual del sello fiscal | `Identity` |
+| POST | `/sales-notes/fiscal/xml/parse` | Extrae el sello de un XML (`multipart/form-data`) | `Identity` + Multer |
+| POST | `/sales-notes/fiscal/xml` | Guarda el sello extraído de un XML (`reference` + `file`) | `Identity` + Multer |
+
+> El detalle del flujo, el cálculo de importes y la extracción del sello fiscal están en [Notas de venta](./workflows/sales-notes.md).
+
 ### Productos — `/api/products`
 
 | Método | Ruta | Descripción |
@@ -76,6 +91,6 @@
 
 ## Documentación relacionada
 
-- Flujos: [registro](./workflows/register.md), [login](./workflows/login.md), [sesión](./workflows/session.md), [recuperación de contraseña](./workflows/password-recovery.md), [invitaciones](./workflows/invites.md), [facturas](./workflows/invoice-upload.md), [productos](./workflows/product-replace.md), [archivos](./workflows/files.md).
+- Flujos: [registro](./workflows/register.md), [login](./workflows/login.md), [sesión](./workflows/session.md), [recuperación de contraseña](./workflows/password-recovery.md), [invitaciones](./workflows/invites.md), [usuarios](./workflows/users.md), [facturas](./workflows/invoice-upload.md), [notas de venta](./workflows/sales-notes.md), [productos](./workflows/product-replace.md), [archivos](./workflows/files.md).
 - Arquitectura: [middlewares y pipeline](./architecture.md).
 - Logging: [Sistema de Logging](./Logging.md).

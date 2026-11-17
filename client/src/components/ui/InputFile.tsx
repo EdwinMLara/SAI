@@ -11,6 +11,7 @@ interface InputFileProps {
   multiple?: boolean;
   disabled?: boolean;
   onContinue?: () => void;
+  continueLabel?: string;
   resetKey?: string | number;
 }
 
@@ -23,6 +24,7 @@ const InputFile: React.FC<InputFileProps> = ({
   multiple = false,
   disabled = false,
   onContinue,
+  continueLabel = 'Continuar',
   resetKey,
 }) => {
   if (!accept) throw new Error('El prop "accept" es obligatorio en InputFile.');
@@ -170,7 +172,7 @@ const InputFile: React.FC<InputFileProps> = ({
           disabled={disabled || fileNames.length === 0}
           className="w-full text-xs py-1.5"
         >
-          Continuar
+          {continueLabel}
         </Button>
       </div>
       {helperText && !error && (
